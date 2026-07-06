@@ -13,9 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Fetch live gold price + FX rate and inject into pages
-        env:
-          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
+      - name: Fetch UK gold price + FX rate and inject into pages
         run: node update-data.js
       - name: Commit updated prices
         run: |

@@ -7,7 +7,6 @@ const CONFIG = JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), '
 const DATA_FILE = path.join(ROOT, 'gold-data.json');
 const SITEMAP_FILE = path.join(ROOT, 'sitemap.xml');
 
-const GOLDAPI_KEY = process.env.GOLDAPI_KEY;
 const MOCK_MODE = process.argv.includes('--mock');
 const FORCE_FAIL_GOLD = process.argv.includes('--force-fail-gold');
 const FORCE_FAIL_FX = process.argv.includes('--force-fail-fx');
@@ -35,19 +34,22 @@ function httpGetJson(urlStr, headers) {
   });
 }
 
+// Reads the UK site's already-published gold-data.json (public static file on
+// goldpricepergram.co.uk, served by GitHub Pages like any other file) instead of
+// calling goldapi.io directly. Both sites hitting goldapi.io on their own 3x/day
+// cron would double the call volume (~180/month) against a single 100/month free
+// quota — this way the USA site adds zero additional goldapi.io calls.
 function fetchGoldSpot() {
   if (FORCE_FAIL_GOLD) return Promise.reject(new Error('forced failure (--force-fail-gold test)'));
   if (MOCK_MODE) {
     return Promise.resolve({
-      timestamp: Math.floor(Date.now() / 1000),
-      metal: 'XAU', currency: 'GBP', price: 2380.5,
-      price_gram_24k: 76.52, price_gram_22k: 70.16, price_gram_21k: 66.96,
-      price_gram_20k: 63.77, price_gram_18k: 57.39, price_gram_16k: 51.01,
-      price_gram_14k: 44.77, price_gram_10k: 31.93,
+      lastUpdated: new Date().toISOString(),
+      isFallback: false,
+      spotPricePerOzGBP: 2380.5,
+      pricePerGram: { '24k': 76.52, '22k': 70.16, '21k': 66.96, '18k': 57.39, '14k': 44.77, '9ct': 28.7 },
     });
   }
-  if (!GOLDAPI_KEY) return Promise.reject(new Error('GOLDAPI_KEY env var not set'));
-  return httpGetJson(CONFIG.spotApiEndpoint, { 'x-access-token': GOLDAPI_KEY });
+  return httpGetJson(CONFIG.ukGoldDataUrl);
 }
 
 function fetchFxRate() {
@@ -56,13 +58,15 @@ function fetchFxRate() {
   return httpGetJson(CONFIG.fxApi.endpoint);
 }
 
-function computeUsdPrices(goldApiResponse, fxRate) {
+function computeUsdPrices(ukGoldData, fxRate) {
   const pricePerGram = {};
   const cashPricePerGram = {};
-  for (const [key, purity] of Object.entries(CONFIG.purities)) {
-    const gbpGramPrice = purity.apiField && goldApiResponse[purity.apiField] != null
-      ? goldApiResponse[purity.apiField]
-      : (goldApiResponse.price_gram_24k * purity.fraction);
+  for (const key of Object.keys(CONFIG.purities)) {
+    // 24k/22k/18k/14k exist directly in the UK site's data; 10k doesn't (UK's low
+    // end is 9ct, a different purity), so derive it from the UK 24k price × fraction.
+    const gbpGramPrice = ukGoldData.pricePerGram[key] != null
+      ? ukGoldData.pricePerGram[key]
+      : (ukGoldData.pricePerGram['24k'] * CONFIG.purities[key].fraction);
     const usdGramPrice = gbpGramPrice * fxRate;
     pricePerGram[key] = Number(usdGramPrice.toFixed(2));
     cashPricePerGram[key] = Number((usdGramPrice * CONFIG.dealerDiscountFactor).toFixed(2));
@@ -98,13 +102,14 @@ async function main() {
   console.log(`🪙 Gold Price Per Gram USA — update-data.js`);
   const previous = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 
-  // Two independent upstream calls: gold spot (goldapi.io, GBP) and FX rate (frankfurter.dev, GBP->USD).
+  // Two independent upstream calls: the UK site's published gold-data.json (GBP,
+  // no goldapi.io call of our own) and the FX rate (frankfurter.dev, GBP->USD).
   // Each can fail independently, so track them separately rather than treating the whole run as one unit.
   let goldApiResponse = null;
   let goldError = null;
   try {
     goldApiResponse = await fetchGoldSpot();
-    console.log(`  ✓ gold spot fetch OK — 24k = £${goldApiResponse.price_gram_24k}/g`);
+    console.log(`  ✓ UK gold-data.json fetch OK — 24k = £${goldApiResponse.pricePerGram['24k']}/g`);
   } catch (err) {
     goldError = err;
     console.error(`  ✗ gold spot fetch failed: ${err.message}`);
@@ -133,7 +138,7 @@ async function main() {
       fxLastUpdated: new Date().toISOString(),
       isFallback: false,
       fallbackComponent: null,
-      spotPricePerOzGBP: goldApiResponse.price,
+      spotPricePerOzGBP: goldApiResponse.spotPricePerOzGBP,
       fxRateGBPtoUSD: fxRate,
       pricePerGram,
       cashPricePerGram,
@@ -147,7 +152,7 @@ async function main() {
       fxLastUpdated: previous.fxLastUpdated,
       isFallback: true,
       fallbackComponent: 'fx',
-      spotPricePerOzGBP: goldApiResponse.price,
+      spotPricePerOzGBP: goldApiResponse.spotPricePerOzGBP,
       fxRateGBPtoUSD: previous.fxRateGBPtoUSD,
       pricePerGram,
       cashPricePerGram,
