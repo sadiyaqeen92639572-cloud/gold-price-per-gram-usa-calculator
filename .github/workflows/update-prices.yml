@@ -1,0 +1,26 @@
+name: Update Gold Prices
+on:
+  schedule:
+    - cron: '0 6,12,18 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Fetch live gold price + FX rate and inject into pages
+        env:
+          GOLDAPI_KEY: ${{ secrets.GOLDAPI_KEY }}
+        run: node update-data.js
+      - name: Commit updated prices
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add gold-data.json index.html sitemap.xml */index.html
+          git diff --staged --quiet || git commit -m "chore: update gold prices $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          git push

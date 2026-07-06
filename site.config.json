@@ -1,0 +1,35 @@
+{
+  "siteName": "Gold Price Per Gram USA",
+  "siteUrl": "https://usgoldpricepergram.com",
+  "sisterSiteUrl": "https://goldpricepergram.co.uk",
+  "displayCurrency": "USD",
+  "spotApiProvider": "goldapi.io",
+  "spotApiEndpoint": "https://www.goldapi.io/api/XAU/GBP",
+  "spotCurrency": "GBP",
+  "fxApi": {
+    "provider": "frankfurter.dev",
+    "endpoint": "https://api.frankfurter.dev/v1/latest?base=GBP&symbols=USD"
+  },
+  "troyOzToGrams": 31.1035,
+  "purities": {
+    "24k": { "fraction": 1.0,    "apiField": "price_gram_24k", "hallmark": "24K", "label": "24K Gold" },
+    "22k": { "fraction": 0.9167, "apiField": "price_gram_22k", "hallmark": "22K", "label": "22K Gold" },
+    "18k": { "fraction": 0.75,   "apiField": "price_gram_18k", "hallmark": "18K", "label": "18K Gold" },
+    "14k": { "fraction": 0.585,  "apiField": "price_gram_14k", "hallmark": "14K", "label": "14K Gold" },
+    "10k": { "fraction": 0.417,  "apiField": "price_gram_10k", "hallmark": "10K", "label": "10K Gold" }
+  },
+  "dealerDiscountFactor": 0.85,
+  "dealerDiscountNote": "Estimate only, adjustable — actual cash-for-gold/pawn offers vary by purity, volume, and buyer. Not a quote.",
+  "updateSchedule": "0 6,12,18 * * *",
+  "fallbackMaxAgeHours": 12,
+  "pages": [
+    { "slug": "",                                "file": "index.html" },
+    { "slug": "24k-gold-price-per-gram",         "file": "24k-gold-price-per-gram/index.html" },
+    { "slug": "22k-gold-price-per-gram",         "file": "22k-gold-price-per-gram/index.html" },
+    { "slug": "18k-gold-price-per-gram",         "file": "18k-gold-price-per-gram/index.html" },
+    { "slug": "14k-gold-price-per-gram",         "file": "14k-gold-price-per-gram/index.html" },
+    { "slug": "10k-gold-price-per-gram",         "file": "10k-gold-price-per-gram/index.html" },
+    { "slug": "cash-for-gold-price-per-gram",    "file": "cash-for-gold-price-per-gram/index.html" },
+    { "slug": "methodology",                      "file": "methodology/index.html" }
+  ]
+}

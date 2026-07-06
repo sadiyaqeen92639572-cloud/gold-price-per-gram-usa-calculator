@@ -1,0 +1,23 @@
+{
+  "lastUpdated": null,
+  "fxLastUpdated": null,
+  "isFallback": true,
+  "fallbackComponent": null,
+  "spotPricePerOzGBP": null,
+  "fxRateGBPtoUSD": null,
+  "pricePerGram": {
+    "24k": null,
+    "22k": null,
+    "18k": null,
+    "14k": null,
+    "10k": null
+  },
+  "cashPricePerGram": {
+    "24k": null,
+    "22k": null,
+    "18k": null,
+    "14k": null,
+    "10k": null
+  },
+  "note": "placeholder — no live fetch has run yet, populated by update-data.js"
+}

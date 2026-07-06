@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gold Price Per Gram Today (USD) — Live Calculator (24K, 22K, 18K, 14K, 10K)</title>
+<meta name="description" content="How much is gold per gram today? Live gold price per gram in USD, updated 3x daily. Enter grams and karat for an instant price — 24K, 22K, 18K, 14K, 10K.">
+<meta name="keywords" content="gold price per gram, gold price per gram today, gold price per gram usa, gold price per gram calculator, 24k gold price per gram, 22k gold price per gram, 18k gold price per gram, 14k gold price per gram, 10k gold price per gram, cash for gold price per gram">
+<link rel="canonical" href="https://usgoldpricepergram.com/">
+<link rel="alternate" hreflang="en-US" href="https://usgoldpricepergram.com/">
+<link rel="alternate" hreflang="en-GB" href="https://goldpricepergram.co.uk/">
+<meta property="og:title" content="Gold Price Per Gram Today (USD) — Live Calculator">
+<meta property="og:description" content="Live gold price per gram in USD, updated 3x daily. Enter grams and karat for an instant result.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://usgoldpricepergram.com/">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = {"lastUpdated":null,"fxLastUpdated":null,"isFallback":true,"fallbackComponent":null,"spotPricePerOzGBP":null,"fxRateGBPtoUSD":null,"pricePerGram":{"24k":null,"22k":null,"18k":null,"14k":null,"10k":null},"cashPricePerGram":{"24k":null,"22k":null,"18k":null,"14k":null,"10k":null},"note":"placeholder — no live fetch has run yet, populated by update-data.js"};</script>
+<!-- END_PRICE_DATA -->
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Gold Price Per Gram Calculator (USD)",
+      "url": "https://usgoldpricepergram.com/",
+      "description": "Free live gold price per gram calculator in USD. Enter weight in grams and karat for an instant price, updated three times daily from a live spot price and FX rate.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "HowTo",
+      "name": "How to calculate the gold price per gram",
+      "step": [
+        { "@type": "HowToStep", "position": 1, "name": "Enter the weight", "text": "Enter the weight of your gold item in grams." },
+        { "@type": "HowToStep", "position": 2, "name": "Choose the karat", "text": "Select the karat purity — 24K, 22K, 18K, 14K or 10K." },
+        { "@type": "HowToStep", "position": 3, "name": "Read the result", "text": "See the live price per gram in USD and the total value for your weight." }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How much is gold per gram today?", "acceptedAnswer": { "@type": "Answer", "text": "The gold price per gram changes throughout the trading day. This calculator updates three times daily from a live spot price, so the figure shown is today's gold price per gram in USD, not a fixed historical value." } },
+        { "@type": "Question", "name": "Is this the price I'll get if I sell my gold?", "acceptedAnswer": { "@type": "Answer", "text": "No. The price shown is the live spot rate — the wholesale market price. If you're looking to sell, pawn shops and gold buyers pay a discount to spot (see our cash-for-gold page), and the exact offer varies by buyer, purity and volume." } },
+        { "@type": "Question", "name": "Why does this site show USD if the price source is in GBP?", "acceptedAnswer": { "@type": "Answer", "text": "Gold's live feed here comes from a UK-based spot price provider, converted to USD using a live GBP-to-USD exchange rate. See our methodology page for the exact calculation and why this is disclosed rather than presented as a native USD feed." } },
+        { "@type": "Question", "name": "What karat is my gold jewelry?", "acceptedAnswer": { "@type": "Answer", "text": "In the US, gold jewelry is stamped directly with its karat — 24K, 22K, 18K, 14K or 10K — rather than a millesimal hallmark. 14K is the most common purity for everyday US jewelry; 10K is the lowest karat still legally sold as gold in most states." } }
+      ]
+    }
+  ]
+}
+</script>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root { --brand:#a8790a; --brand-dark:#6b4d05; --brand-light:#fbf3de; --text:#241f12; --muted:#7a6f5c; --border:#ece1c9; --bg:#faf8f2; --radius:12px; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; color:var(--text); background:var(--bg); font-size:16px; line-height:1.65; }
+.site-banner { position:sticky; top:0; z-index:200; display:flex; justify-content:center; gap:6px; padding:7px 10px; background:#2c2408; border-bottom:1px solid rgba(255,255,255,.08); }
+.sb-link { display:inline-flex; align-items:center; gap:5px; padding:5px 14px; border-radius:20px; font-size:.8rem; font-weight:600; text-decoration:none; color:#e9dcc0; border:1px solid rgba(255,255,255,.14); }
+.sb-link:hover { background:rgba(255,255,255,.10); }
+.sb-link.active { background:#fff; color:#2c2408; border-color:#fff; }
+header { background:linear-gradient(135deg,var(--brand-dark) 0%,var(--brand) 100%); color:#fff; padding:52px 20px 88px; text-align:center; }
+header .badge { display:inline-block; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.3); border-radius:20px; padding:4px 14px; font-size:.78rem; font-weight:600; letter-spacing:.4px; margin-bottom:16px; }
+header h1 { font-size:clamp(1.5rem,4vw,2.2rem); font-weight:800; margin-bottom:12px; }
+header p { color:rgba(255,255,255,.92); font-size:1rem; max-width:600px; margin:0 auto; }
+.container { max-width:840px; margin:0 auto; padding:0 20px; }
+.tool-wrapper { margin:-56px auto 48px; }
+.tool-card { background:#fff; border-radius:var(--radius); box-shadow:0 8px 40px rgba(107,77,5,.14); border:1px solid var(--border); padding:32px 28px; }
+@media (max-width:580px){ .tool-card{ padding:22px 16px; } }
+.refresh-line { font-size:.78rem; color:var(--muted); text-align:center; margin-bottom:18px; }
+.fallback-banner { display:none; background:#fff3cd; border:1px solid #f0c94a; color:#5c4a00; border-radius:8px; padding:10px 14px; font-size:.82rem; margin-bottom:16px; text-align:center; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:580px){ .form-grid{ grid-template-columns:1fr; } }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+label { font-size:.79rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+select, input[type=number] { border:2px solid var(--border); border-radius:8px; padding:12px 14px; font-size:1rem; color:var(--text); background:#fff; width:100%; }
+select:focus, input[type=number]:focus { outline:none; border-color:var(--brand); }
+.calc-btn { width:100%; margin-top:22px; padding:17px; background:var(--brand); color:#fff; border:none; border-radius:10px; font-size:1.08rem; font-weight:700; cursor:pointer; }
+.calc-btn:hover { background:var(--brand-dark); }
+.result { display:none; margin-top:26px; }
+.result-hero { background:linear-gradient(135deg,var(--brand-dark),var(--brand)); border-radius:10px; padding:26px; color:#fff; text-align:center; margin-bottom:14px; }
+.result-hero .rl { font-size:.76rem; font-weight:700; text-transform:uppercase; letter-spacing:.5px; opacity:.85; margin-bottom:4px; }
+.result-hero .ra { font-size:2.5rem; font-weight:900; line-height:1.1; }
+.result-hero .rs { font-size:.9rem; opacity:.9; margin-top:6px; }
+.result-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+@media (max-width:480px){ .result-grid{ grid-template-columns:1fr 1fr; } }
+.r-stat { background:var(--brand-light); border-radius:8px; padding:14px; text-align:center; }
+.r-stat .sv { font-size:1.15rem; font-weight:800; color:var(--brand-dark); }
+.r-stat .sl { font-size:.72rem; color:var(--muted); margin-top:2px; }
+.content { padding-bottom:64px; }
+h2.st { font-size:1.3rem; font-weight:800; margin:48px 0 16px; }
+p { color:#3d3520; margin-bottom:14px; line-height:1.75; }
+.link-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; margin:18px 0; }
+.link-card { display:block; background:#fff; border:1px solid var(--border); border-radius:10px; padding:16px; text-decoration:none; color:var(--text); }
+.link-card:hover { border-color:var(--brand); }
+.link-card .t { font-weight:700; font-size:.92rem; margin-bottom:3px; }
+.link-card .sub { font-size:.76rem; color:var(--muted); }
+.method { background:#fff; border:1px solid var(--border); border-radius:12px; padding:26px 26px 18px; margin:0 0 36px; font-size:.9rem; }
+.method .code { background:#2c2408; color:#f2e3c5; border-radius:8px; padding:16px 18px; font-family:'Courier New',monospace; font-size:.82rem; line-height:1.9; margin:14px 0; overflow-x:auto; }
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q { width:100%; background:none; border:none; text-align:left; padding:17px 0; font-size:.92rem; font-weight:600; cursor:pointer; display:flex; justify-content:space-between; align-items:center; color:var(--text); }
+.faq-q::after { content:'+'; font-size:1.3rem; color:var(--brand); flex-shrink:0; margin-left:12px; }
+.faq-q.open::after { content:'−'; }
+.faq-a { display:none; padding:0 0 16px; font-size:.88rem; color:#4b4326; line-height:1.75; }
+.faq-a.open { display:block; }
+.disc { background:#3a2f0e; border-radius:8px; padding:13px 18px; margin-bottom:16px; font-size:.78rem; color:#d9c9a3; line-height:1.6; }
+footer { background:#2c2408; color:#c9bd9c; text-align:center; padding:30px 20px; font-size:.8rem; }
+footer p { color:#c9bd9c; }
+footer a { color:#e9dcc0; }
+</style>
+</head>
+<body>
+
+<div class="site-banner"><a href="https://usgoldpricepergram.com/" class="sb-link active">🇺🇸 US site · USD</a><a href="https://goldpricepergram.co.uk/" class="sb-link">🇬🇧 UK site · GBP</a></div>
+
+<header>
+  <div class="container">
+    <div class="badge">🥇 Live spot price · updated 3x/day</div>
+    <h1>Gold Price Per Gram Today (USD)</h1>
+    <p>How much is gold per gram right now? Enter the weight and karat below for today's gold price, in USD.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="10" placeholder="e.g. 10">
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          <option value="24k">24K Gold</option>
+          <option value="22k">22K Gold</option>
+          <option value="18k">18K Gold</option>
+          <option value="14k">14K Gold</option>
+          <option value="10k">10K Gold</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Gold Price →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Total value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Price per gram</div></div>
+        <div class="r-stat"><div class="sv" id="r-per10g"></div><div class="sl">Price per 10g</div></div>
+        <div class="r-stat"><div class="sv" id="r-perOz"></div><div class="sl">Price per troy oz</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+
+  <p>This calculator shows <strong>today's gold price per gram</strong>, in USD — refreshed three times a day from a live spot price. Whether you want to know the gold price per gram calculator result for an insurance valuation, or the cash-for-gold price to sell an old piece, start here and use the karat dropdown to match your item's stamp.</p>
+  <p>Looking for a specific karat? Jump straight to the <a href="/24k-gold-price-per-gram/">24K</a>, <a href="/22k-gold-price-per-gram/">22K</a>, <a href="/18k-gold-price-per-gram/">18K</a>, <a href="/14k-gold-price-per-gram/">14K</a> or <a href="/10k-gold-price-per-gram/">10K</a> page, each with a dedicated calculator and karat guide.</p>
+
+  <h2 class="st">Gold Price Per Gram — By Karat</h2>
+  <div class="link-grid">
+    <a class="link-card" href="/24k-gold-price-per-gram/"><div class="t">24K Gold</div><div class="sub">Bullion &amp; investment coins</div></a>
+    <a class="link-card" href="/22k-gold-price-per-gram/"><div class="t">22K Gold</div><div class="sub">Wedding &amp; bridal jewelry</div></a>
+    <a class="link-card" href="/18k-gold-price-per-gram/"><div class="t">18K Gold</div><div class="sub">Engagement rings</div></a>
+    <a class="link-card" href="/14k-gold-price-per-gram/"><div class="t">14K Gold</div><div class="sub">America's everyday standard</div></a>
+    <a class="link-card" href="/10k-gold-price-per-gram/"><div class="t">10K Gold</div><div class="sub">Lowest karat sold as gold</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+  </div>
+
+  <h2 class="st">How This Calculator Works — Formula &amp; Method</h2>
+  <div class="method">
+    <p style="color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:6px;">Source: live spot feed, converted via live FX rate · applied deterministically · see full <a href="/methodology/">methodology</a></p>
+    <div class="code">
+<span>price_per_gram(24k, GBP) = spot_price_per_troy_oz(GBP) / 31.1035</span><br>
+<span>price_per_gram(karat, GBP) = price_per_gram(24k, GBP) × karat_fraction</span><br>
+<span>price_per_gram(karat, USD) = price_per_gram(karat, GBP) × GBP_to_USD_rate</span><br>
+<span>total_value = price_per_gram(karat, USD) × weight_in_grams</span>
+    </div>
+    <p style="font-size:.78rem;color:var(--muted);margin:0;">Live spot price and live FX rate, not an AI estimate — updated three times daily. This is an indicative price, not a dealer quote.</p>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How much is gold per gram today?</button>
+    <div class="faq-a">The gold price per gram changes throughout the trading day. This calculator updates three times daily from a live spot price, so the figure shown is today's gold price per gram in USD, not a fixed historical value.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is this the price I'll get if I sell my gold?</button>
+    <div class="faq-a">No. The price shown is the live spot rate — the wholesale market price. If you're looking to sell, pawn shops and gold buyers pay a discount to spot (see our <a href="/cash-for-gold-price-per-gram/">cash-for-gold page</a>), and the exact offer varies by buyer, purity and volume.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Why does this site show USD if the price source is in GBP?</button>
+    <div class="faq-a">Gold's live feed here comes from a UK-based spot price provider, converted to USD using a live GBP-to-USD exchange rate. See our <a href="/methodology/">methodology page</a> for the exact calculation and why this is disclosed rather than presented as a native USD feed.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What karat is my gold jewelry?</button>
+    <div class="faq-a">In the US, gold jewelry is stamped directly with its karat — 24K, 22K, 18K, 14K or 10K — rather than a millesimal hallmark. 14K is the most common purity for everyday US jewelry; 10K is the lowest karat still legally sold as gold in most states.</div></div>
+
+</div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote — always confirm with a buyer before selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+  </div>
+</footer>
+
+<script>
+const TROY_OZ_G = 31.1035;
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  if(gd.lastUpdated){
+    line.textContent = 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'});
+  } else {
+    line.textContent = 'Last refreshed: pending first update';
+  }
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  document.getElementById('r-total').textContent = fmtUSD(perGram*grams);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity+' gold';
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('r-per10g').textContent = fmtUSD(perGram*10);
+  document.getElementById('r-perOz').textContent = fmtUSD(perGram*TROY_OZ_G);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+</script>
+</body>
+</html>
