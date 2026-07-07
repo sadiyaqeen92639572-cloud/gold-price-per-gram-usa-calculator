@@ -1,23 +1,23 @@
 {
-  "lastUpdated": null,
-  "fxLastUpdated": null,
-  "isFallback": true,
+  "lastUpdated": "2026-07-07T09:34:35.891Z",
+  "fxLastUpdated": "2026-07-07T09:34:35.892Z",
+  "isFallback": false,
   "fallbackComponent": null,
-  "spotPricePerOzGBP": null,
-  "fxRateGBPtoUSD": null,
+  "spotPricePerOzGBP": 3108.96,
+  "fxRateGBPtoUSD": 1.3345,
   "pricePerGram": {
-    "24k": null,
-    "22k": null,
-    "18k": null,
-    "14k": null,
-    "10k": null
+    "24k": 133.4,
+    "22k": 122.28,
+    "18k": 100.05,
+    "14k": 77.81,
+    "10k": 55.63
   },
   "cashPricePerGram": {
-    "24k": null,
-    "22k": null,
-    "18k": null,
-    "14k": null,
-    "10k": null
+    "24k": 113.39,
+    "22k": 103.94,
+    "18k": 85.04,
+    "14k": 66.14,
+    "10k": 47.28
   },
-  "note": "placeholder — no live fetch has run yet, populated by update-data.js"
+  "note": null
 }
