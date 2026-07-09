@@ -22,6 +22,12 @@ Both this site's `update-prices.yml` and the UK site's run on the same 3×/day c
 - `update-data.js` — two-stage fetch: the UK site's published `gold-data.json` (GBP, no goldapi.io call), then frankfurter.dev FX rate, then derives USD prices. Tracks the two upstream calls independently (`lastUpdated` for the UK gold price, `fxLastUpdated` for the FX rate) so a failure in one doesn't silently misrepresent the freshness of the other — see `fallbackComponent` in `gold-data.json`.
 - `generate-pages.js` — regenerates the 7 satellite pages. Also emits reciprocal `hreflang` tags (`en-US`/`en-GB`) on the pillar and the 4 karats that genuinely exist on both sites (24K/22K/18K/14K — not 10K, which has no UK equivalent).
 
+## Free Companion Tools
+
+### [US Gold Melt Value Calculator](https://sadiyaqeen92639572-cloud.github.io/us-gold-melt-value-calculator/)
+
+Free tool to estimate what a gold item is worth from its weight and karat — accepts grams, pennyweight (dwt) or troy ounces, unlike most calculators that only take grams. Pulls a live per-gram price from this site's `gold-data.json` for the estimate. For the full live price broken out by karat (24K/22K/18K/14K/10K) and a cash-for-gold estimate, use the [main calculator](https://usgoldpricepergram.com) above.
+
 ## Cross-linking with the UK site
 
 No automatic geo-redirect between the two domains (safer than cross-domain redirect logic). Instead, a static "🇺🇸 US site" / "🇬🇧 UK site" banner link on every page of both sites, plus hreflang where a genuine page-level equivalent exists.
