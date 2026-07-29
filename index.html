@@ -143,6 +143,13 @@ footer a { color:#e9dcc0; }
 .eeat-compliance-text p { font-size:.88rem; color:var(--muted); line-height:1.5; margin-bottom:0; }
 .eeat-compliance-text a { color:var(--brand); text-decoration:underline; }
 .eeat-compliance-text a:hover { color:var(--brand-dark); }
+.weight-table-wrap { overflow-x:auto; margin:18px 0; }
+.weight-table { width:100%; border-collapse:collapse; font-size:.9rem; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.weight-table caption { caption-side:top; text-align:left; font-size:.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; padding-bottom:8px; }
+.weight-table th, .weight-table td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+.weight-table th { background:var(--brand-light); color:var(--brand-dark); font-size:.78rem; text-transform:uppercase; letter-spacing:.4px; }
+.weight-table td.wv { font-weight:700; color:var(--brand-dark); }
+.weight-table tr:last-child td { border-bottom:none; }
 </style>
 </head>
 <body>
@@ -200,6 +207,25 @@ footer a { color:#e9dcc0; }
   <p>This calculator shows <strong>today's gold price per gram</strong>, in USD — refreshed three times a day from a live spot price. Whether you want to know the gold price per gram calculator result for an insurance valuation, or the cash-for-gold price to sell an old piece, start here and use the karat dropdown to match your item's stamp.</p>
   <p>Looking for a specific karat? Jump straight to the <a href="/24k-gold-price-per-gram/">24K</a>, <a href="/22k-gold-price-per-gram/">22K</a>, <a href="/18k-gold-price-per-gram/">18K</a>, <a href="/14k-gold-price-per-gram/">14K</a> or <a href="/10k-gold-price-per-gram/">10K</a> page, each with a dedicated calculator and karat guide.</p>
 
+  <h2 class="st" id="weightTableTitle"><span id="weightTableKarat">24K</span> Gold Value by Weight</h2>
+  <div class="weight-table-wrap">
+    <table class="weight-table">
+      <caption>Value by weight</caption>
+      <thead><tr><th>Weight</th><th>Value (USD)</th></tr></thead>
+      <tbody>
+        <tr><td>1 g</td><td class="wv" id="wt-1"></td></tr>
+        <tr><td>2.5 g</td><td class="wv" id="wt-2_5"></td></tr>
+        <tr><td>5 g</td><td class="wv" id="wt-5"></td></tr>
+        <tr><td>10 g</td><td class="wv" id="wt-10"></td></tr>
+        <tr><td>20 g</td><td class="wv" id="wt-20"></td></tr>
+        <tr><td>50 g</td><td class="wv" id="wt-50"></td></tr>
+        <tr><td>100 g</td><td class="wv" id="wt-100"></td></tr>
+        <tr><td>1 troy oz</td><td class="wv" id="wt-ozt"></td></tr>
+        <tr><td>1 kg</td><td class="wv" id="wt-kg"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <h2 class="st">Gold Price Per Gram — By Karat</h2>
   <div class="link-grid">
     <a class="link-card" href="/24k-gold-price-per-gram/"><div class="t">24K Gold</div><div class="sub">Bullion &amp; investment coins</div></a>
@@ -208,6 +234,8 @@ footer a { color:#e9dcc0; }
     <a class="link-card" href="/14k-gold-price-per-gram/"><div class="t">14K Gold</div><div class="sub">America's everyday standard</div></a>
     <a class="link-card" href="/10k-gold-price-per-gram/"><div class="t">10K Gold</div><div class="sub">Lowest karat sold as gold</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
   </div>
 
@@ -319,6 +347,15 @@ function refreshBanner(){
   banner.style.display = gd.isFallback ? 'block' : 'none';
 }
 
+function renderWeightTable(perGram){
+  if(perGram == null) return;
+  const rows = { '1':1, '2_5':2.5, '5':5, '10':10, '20':20, '50':50, '100':100, 'ozt':TROY_OZ_G, 'kg':1000 };
+  for(const id in rows){
+    const el = document.getElementById('wt-'+id);
+    if(el) el.textContent = fmtUSD(perGram*rows[id]);
+  }
+}
+
 function calculate(){
   const gd = window.GOLD_DATA;
   const grams = parseFloat(document.getElementById('wGrams').value) || 0;
@@ -333,9 +370,12 @@ function calculate(){
   document.getElementById('r-perOz').textContent = fmtUSD(perGram*TROY_OZ_G);
   document.getElementById('result').style.display='block';
   document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.getElementById('weightTableKarat').textContent = purity.toUpperCase();
+  renderWeightTable(perGram);
 }
 function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
 refreshBanner();
+renderWeightTable(window.GOLD_DATA.pricePerGram[document.getElementById('purity').value]);
 </script>
 </body>
 </html>

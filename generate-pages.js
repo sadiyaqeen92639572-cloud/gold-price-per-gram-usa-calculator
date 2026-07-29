@@ -7,6 +7,7 @@ const SITE_URL = CONFIG.siteUrl;
 const UK_URL = CONFIG.sisterSiteUrl;
 
 const KARAT_KEYS = ['24k', '22k', '18k', '14k', '10k'];
+const CITIES = JSON.parse(fs.readFileSync(path.join(ROOT, 'cities.json'), 'utf8'));
 
 // hreflang counterpart on the UK site — only for karats that genuinely exist on both sites.
 // 10k has no UK equivalent (UK's low end is 9ct, a different purity), so it gets no hreflang pair.
@@ -117,6 +118,48 @@ const METHODOLOGY_PAGE = {
   title: 'Methodology — How Gold Price Per Gram (USD) Is Calculated',
   metaDesc: 'How usgoldpricepergram.com calculates its live gold price per gram in USD: data sources, FX conversion, update frequency, and a live worked example.',
   h1: 'Methodology',
+};
+
+// Actual Gold Weight (AGW) in troy oz — the pure-gold content of each coin, independent of
+// its total weight or fineness. Melt value = qty × agwOz × TROY_OZ_G × pricePerGram['24k'].
+// Standard mint specs, not derived from KARATS/purities (coin AGW is a fixed spec, not a
+// karat-fraction calculation like jewelry).
+const COINS = [
+  { id: 'eagle-1oz', name: 'American Gold Eagle', sub: '1 oz · .9167 fine', agwOz: 1.0000 },
+  { id: 'eagle-half', name: 'American Gold Eagle', sub: '1/2 oz · .9167 fine', agwOz: 0.5000 },
+  { id: 'eagle-quarter', name: 'American Gold Eagle', sub: '1/4 oz · .9167 fine', agwOz: 0.2500 },
+  { id: 'eagle-tenth', name: 'American Gold Eagle', sub: '1/10 oz · .9167 fine', agwOz: 0.1000 },
+  { id: 'buffalo-1oz', name: 'American Gold Buffalo', sub: '1 oz · .9999 fine', agwOz: 1.0000 },
+  { id: 'krugerrand-1oz', name: 'Krugerrand', sub: '1 oz · .9167 fine', agwOz: 1.0000 },
+  { id: 'maple-1oz', name: 'Canadian Gold Maple Leaf', sub: '1 oz · .9999 fine', agwOz: 1.0000 },
+  { id: 'sovereign', name: 'British Sovereign', sub: '.9170 fine', agwOz: 0.2354 },
+  { id: 'double-eagle-20', name: '$20 Liberty/Saint-Gaudens Double Eagle', sub: 'pre-1933 · .9000 fine', agwOz: 0.9675 },
+  { id: 'eagle-10', name: '$10 Liberty/Indian Head Eagle', sub: 'pre-1933 · .9000 fine', agwOz: 0.4838 },
+  { id: 'quarter-eagle-2-50', name: '$2.50 Liberty/Indian Head Quarter Eagle', sub: 'pre-1933 · .9000 fine', agwOz: 0.1209 },
+];
+
+const COIN_PAGE = {
+  slug: 'gold-coin-melt-value-calculator',
+  title: 'Gold Coin Melt Value Calculator — Eagle, Krugerrand, Sovereign & More',
+  metaDesc: 'Live melt value calculator for American Gold Eagle, Buffalo, Krugerrand, Maple Leaf, Sovereign and pre-1933 US gold coins — based on actual gold weight (AGW), updated 3x daily.',
+  keywords: 'gold coin melt value calculator, american gold eagle melt value, krugerrand melt value, gold sovereign price, double eagle melt value',
+  h1: 'Gold Coin Melt Value Calculator',
+  intro: 'Bullion and pre-1933 US gold coins carry a numismatic premium above their raw gold content — this calculator shows only the melt value: what the coin\'s actual gold weight (AGW) is worth at today\'s live spot price, before any collector premium, dealer markup or grading.',
+  angleTitle: 'Melt Value Is a Floor, Not a Sale Price',
+  angleBody: 'Every coin below lists its <strong>Actual Gold Weight (AGW)</strong> — the amount of pure gold it contains in troy ounces — which is what this calculator prices, not the coin\'s total weight or face value. Modern bullion coins (Eagle, Buffalo, Krugerrand, Maple Leaf) trade close to melt value plus a small premium. Pre-1933 US coins (Double Eagle, Eagle, Quarter Eagle) and coins with numismatic/collector value can sell well above melt — always check a coin\'s collector value before assuming melt is what it\'s worth.',
+  faq: [
+    { q: 'What is AGW (Actual Gold Weight)?', a: 'AGW is the amount of pure gold in a coin, measured in troy ounces — independent of the coin\'s total weight or karat fineness. A 1 oz American Gold Eagle weighs more than 1 troy oz in total (it\'s alloyed with copper and silver for durability), but its AGW — the pure gold content — is exactly 1.0000 oz.' },
+    { q: 'Is melt value what I can sell my coin for?', a: 'Melt value is a floor, not a sale price. Common bullion coins (Eagle, Krugerrand, Maple Leaf) typically sell for melt plus a small dealer premium. Pre-1933 US coins and coins in high collector grades can sell for well above melt — check numismatic value before assuming melt is the ceiling.' },
+    { q: 'Why don\'t you list total coin weight, only AGW?', a: 'Total weight includes alloy metals (copper, silver) that aren\'t gold and have negligible scrap value — pricing by AGW (pure gold content) is the industry-standard way to value a coin\'s gold content and matches how dealers and refiners actually calculate melt value.' },
+  ],
+};
+
+const CITY_HUB_PAGE = {
+  slug: 'sell-gold-near-me',
+  title: 'Sell Gold Near Me — Gold Price Per Gram by City (USD)',
+  metaDesc: 'Live gold price per gram calculator for 20 major US cities, plus generic guidance on pawn shops, jewelers and gold-buying services in your area.',
+  h1: 'Sell Gold Near Me — By City',
+  intro: 'Find today\'s live gold price per gram and general guidance on where to sell gold — pawn shops, local jewelers and dedicated gold-buying services — for your city.',
 };
 
 function relatedKaratLinks(excludeKey) {
@@ -230,6 +273,13 @@ footer a { color:#e9dcc0; }
 .eeat-compliance-text p { font-size:.88rem; color:var(--muted); line-height:1.5; margin-bottom:0; }
 .eeat-compliance-text a { color:var(--brand); text-decoration:underline; }
 .eeat-compliance-text a:hover { color:var(--brand-dark); }
+.weight-table-wrap { overflow-x:auto; margin:18px 0; }
+.weight-table { width:100%; border-collapse:collapse; font-size:.9rem; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.weight-table caption { caption-side:top; text-align:left; font-size:.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; padding-bottom:8px; }
+.weight-table th, .weight-table td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+.weight-table th { background:var(--brand-light); color:var(--brand-dark); font-size:.78rem; text-transform:uppercase; letter-spacing:.4px; }
+.weight-table td.wv { font-weight:700; color:var(--brand-dark); }
+.weight-table tr:last-child td { border-bottom:none; }
 </style>`;
 
 function faqJsonLd(faq) {
@@ -397,10 +447,31 @@ ${siteBanner()}
   <h2 class="st">${page.angleTitle}</h2>
   <p>${page.angleBody}</p>
 
+  <h2 class="st">${page.label} Gold Value by Weight</h2>
+  <div class="weight-table-wrap">
+    <table class="weight-table">
+      <caption>Value by weight</caption>
+      <thead><tr><th>Weight</th><th>Value (USD)</th></tr></thead>
+      <tbody>
+        <tr><td>1 g</td><td class="wv" id="wt-1"></td></tr>
+        <tr><td>2.5 g</td><td class="wv" id="wt-2_5"></td></tr>
+        <tr><td>5 g</td><td class="wv" id="wt-5"></td></tr>
+        <tr><td>10 g</td><td class="wv" id="wt-10"></td></tr>
+        <tr><td>20 g</td><td class="wv" id="wt-20"></td></tr>
+        <tr><td>50 g</td><td class="wv" id="wt-50"></td></tr>
+        <tr><td>100 g</td><td class="wv" id="wt-100"></td></tr>
+        <tr><td>1 troy oz</td><td class="wv" id="wt-ozt"></td></tr>
+        <tr><td>1 kg</td><td class="wv" id="wt-kg"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <h2 class="st">Other Karats &amp; Related Pages</h2>
   <div class="link-grid">
     ${relatedKaratLinks(key)}
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
   </div>
@@ -431,6 +502,14 @@ function refreshBanner(){
   line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
   banner.style.display = gd.isFallback ? 'block' : 'none';
 }
+function renderWeightTable(perGram){
+  if(perGram == null) return;
+  const rows = { '1':1, '2_5':2.5, '5':5, '10':10, '20':20, '50':50, '100':100, 'ozt':TROY_OZ_G, 'kg':1000 };
+  for(const id in rows){
+    const el = document.getElementById('wt-'+id);
+    if(el) el.textContent = fmtUSD(perGram*rows[id]);
+  }
+}
 function calculate(){
   const gd = window.GOLD_DATA;
   const grams = parseFloat(document.getElementById('wGrams').value) || 0;
@@ -446,6 +525,7 @@ function calculate(){
 }
 function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
 refreshBanner();
+renderWeightTable(window.GOLD_DATA.pricePerGram[PURITY]);
 </script>
 </body>
 </html>
@@ -552,6 +632,8 @@ ${siteBanner()}
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
     ${relatedKaratLinks('')}
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
   </div>
@@ -598,6 +680,484 @@ function calculate(){
 function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
 refreshBanner();
 </script>
+</body>
+</html>
+`;
+}
+
+function buildCoinPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Gold Coin Melt Value Calculator (USD)",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const options = COINS.map(c => `<option value="${c.id}">${c.name} — ${c.sub}</option>`).join('\n          ');
+  const coinTableRows = COINS.map(c => `        <tr><td>${c.name} <span style="color:var(--muted);font-size:.8em;">(${c.sub})</span></td><td>${c.agwOz.toFixed(4)} oz</td><td class="wv" id="coin-${c.id}"></td></tr>`).join('\n');
+  const coinDataJs = JSON.stringify(COINS.reduce((acc, c) => { acc[c.id] = c.agwOz; return acc; }, {}));
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">🪙 Melt value (AGW) · updated 3x/day</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Coin</label>
+        <select id="coin">
+          ${options}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Quantity</label>
+        <input type="number" id="qty" min="1" step="1" value="1" placeholder="e.g. 1">
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Melt Value →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Total melt value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-agw"></div><div class="sl">AGW (troy oz)</div></div>
+        <div class="r-stat"><div class="sv" id="r-perCoin"></div><div class="sl">Melt value / coin</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Melt value only — excludes numismatic/collector premium. Not a dealer quote.</p>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">${page.angleTitle}</h2>
+  <p>${page.angleBody}</p>
+
+  <h2 class="st">How Melt Value Is Calculated</h2>
+  <p>Every coin's melt value uses the same formula: its Actual Gold Weight (AGW, in troy oz — a fixed mint spec, not derived from karat) multiplied by the troy-oz-to-gram conversion and the live 24K (pure gold) price per gram. See the full <a href="/methodology/">methodology</a> for the underlying spot/FX calculation.</p>
+  <div class="method">
+    <div class="code">
+<span>melt_value(coin, USD) = coin_AGW_troy_oz × 31.1035 × price_per_gram(24k, USD)</span><br>
+<span>melt_value(qty) = melt_value(coin, USD) × quantity</span>
+    </div>
+    <p id="liveCoinExample" style="font-size:.85rem;color:var(--muted);"></p>
+  </div>
+
+  <h2 class="st">Melt Value by Coin (at Today's Spot Price)</h2>
+  <div class="weight-table-wrap">
+    <table class="weight-table">
+      <caption>Melt value by coin</caption>
+      <thead><tr><th>Coin</th><th>AGW</th><th>Melt Value (USD)</th></tr></thead>
+      <tbody>
+${coinTableRows}
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${relatedKaratLinks('')}
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Melt values are indicative, based on live spot × FX, not a dealer or refiner quote — always confirm with a buyer before selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const TROY_OZ_G = 31.1035;
+const COIN_AGW = ${coinDataJs};
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function renderCoinTable(perGram24k){
+  if(perGram24k == null) return;
+  for(const id in COIN_AGW){
+    const el = document.getElementById('coin-'+id);
+    if(el) el.textContent = fmtUSD(COIN_AGW[id]*TROY_OZ_G*perGram24k);
+  }
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const coinId = document.getElementById('coin').value;
+  const qty = parseInt(document.getElementById('qty').value, 10) || 0;
+  const perGram24k = gd.pricePerGram['24k'];
+  if(perGram24k == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(qty<=0){ alert('Please enter a quantity of 1 or more.'); return; }
+  const agw = COIN_AGW[coinId];
+  const perCoin = agw*TROY_OZ_G*perGram24k;
+  document.getElementById('r-total').textContent = fmtUSD(perCoin*qty);
+  document.getElementById('r-sub').textContent = qty+'x '+document.getElementById('coin').selectedOptions[0].text;
+  document.getElementById('r-agw').textContent = agw.toFixed(4)+' oz';
+  document.getElementById('r-perCoin').textContent = fmtUSD(perCoin);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+renderCoinTable(window.GOLD_DATA.pricePerGram['24k']);
+(function(){
+  const el = document.getElementById('liveCoinExample');
+  const g24 = window.GOLD_DATA.pricePerGram['24k'];
+  if(g24 != null){
+    const meltEagle = 1.0000*TROY_OZ_G*g24;
+    el.textContent = 'Live worked example: 1 oz American Gold Eagle (AGW 1.0000 oz) × 31.1035 × '+fmtUSD(g24)+'/g (24K) = '+fmtUSD(meltEagle)+' melt value.';
+  } else {
+    el.textContent = 'Live worked example will appear once the first price update has run.';
+  }
+})();
+</script>
+</body>
+</html>
+`;
+}
+
+// City pages target "gold price per gram in [city]" / "sell gold near me [city]" —
+// same live calculator + weight table as the homepage, plus generic (non-fake-business)
+// guidance on buyer types. CTA points at the existing /cash-for-gold-price-per-gram/
+// page for now; swap to a real affiliate/lead-gen link once that page is monetized.
+function buildCityPage(city) {
+  const slug = city.slug;
+  const title = `Gold Price Per Gram in ${city.city}, ${city.stateAbbr} — Live Calculator`;
+  const metaDesc = `Live gold price per gram today in ${city.city}, ${city.state} — USD calculator by karat (24K, 22K, 18K, 14K, 10K), updated 3x daily, plus where to sell gold locally.`;
+  const h1 = `Gold Price Per Gram in ${city.city}, ${city.stateAbbr}`;
+  const faq = [
+    { q: `What is the gold price per gram in ${city.city} today?`, a: `Gold is a national commodity market, so the live spot-based price shown here is the same benchmark used by buyers in ${city.city} and nationwide — it updates three times daily from a live spot price. Local pawn shops, jewelers and gold buyers in ${city.city} price off this same benchmark, then apply their own discount.` },
+    { q: `Where can I sell gold in ${city.city}?`, a: `The three common options are pawn shops, local jewelers, and dedicated gold-buying services or refiners. Each pays a different discount to spot — compare at least two quotes before selling, and ask whether they test purity in front of you.` },
+    { q: `Is the gold price different in ${city.city} than other US cities?`, a: `No — gold is priced off a single global spot market, so the live per-gram rate is the same across every US city, including ${city.city}. What differs by city and buyer is the discount to spot that a pawn shop, jeweler or gold-buying service applies.` },
+  ];
+
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Gold Price Per Gram Calculator — ${city.city}, ${city.stateAbbr} (USD)",
+      "url": "${SITE_URL}/${slug}/",
+      "description": "${metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const pageForHead = { slug, title, metaDesc, keywords: `gold price per gram ${city.city.toLowerCase()}, sell gold near me ${city.city.toLowerCase()}, gold price per gram ${city.stateAbbr.toLowerCase()}` };
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(pageForHead, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">📍 ${city.city}, ${city.stateAbbr} · updated 3x/day</div>
+    <h1>${h1}</h1>
+    <p>Today's live gold price per gram in USD for ${city.city}, ${city.state} — the same national spot-based benchmark used by buyers everywhere, plus generic guidance on where to sell locally.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="10" placeholder="e.g. 10">
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          <option value="24k">24K Gold</option>
+          <option value="22k">22K Gold</option>
+          <option value="18k">18K Gold</option>
+          <option value="14k">14K Gold</option>
+          <option value="10k">10K Gold</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Gold Price →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Total value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Price per gram</div></div>
+        <div class="r-stat"><div class="sv" id="r-perOz"></div><div class="sl">Price per troy oz</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st" id="weightTableTitle"><span id="weightTableKarat">24K</span> Gold Value by Weight — ${city.city}</h2>
+  <div class="weight-table-wrap">
+    <table class="weight-table">
+      <caption>Value by weight</caption>
+      <thead><tr><th>Weight</th><th>Value (USD)</th></tr></thead>
+      <tbody>
+        <tr><td>1 g</td><td class="wv" id="wt-1"></td></tr>
+        <tr><td>2.5 g</td><td class="wv" id="wt-2_5"></td></tr>
+        <tr><td>5 g</td><td class="wv" id="wt-5"></td></tr>
+        <tr><td>10 g</td><td class="wv" id="wt-10"></td></tr>
+        <tr><td>20 g</td><td class="wv" id="wt-20"></td></tr>
+        <tr><td>50 g</td><td class="wv" id="wt-50"></td></tr>
+        <tr><td>100 g</td><td class="wv" id="wt-100"></td></tr>
+        <tr><td>1 troy oz</td><td class="wv" id="wt-ozt"></td></tr>
+        <tr><td>1 kg</td><td class="wv" id="wt-kg"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 class="st">Where to Sell Gold in ${city.city}</h2>
+  <p>There's no single "best" place to sell gold in ${city.city} — the right choice depends on what you're selling and how quickly you need payment. Three common options, in general terms:</p>
+  <div class="link-grid">
+    <div class="link-card"><div class="t">Pawn Shops</div><div class="sub">Fast cash, often the lowest % of spot — good for quick, small sales.</div></div>
+    <div class="link-card"><div class="t">Local Jewelers</div><div class="sub">May pay better for wearable pieces they can resell rather than melt.</div></div>
+    <div class="link-card"><div class="t">Gold-Buying Services / Refiners</div><div class="sub">Often closer to spot for larger lots, but usually mail-in rather than in-person.</div></div>
+  </div>
+  <p>Whichever you choose, get at least two quotes, ask for a written breakdown by karat and weight, and see our <a href="/cash-for-gold-price-per-gram/">cash-for-gold estimate calculator</a> for what a discount-to-spot offer typically looks like.</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">All Cities</div><div class="sub">Sell gold near me — by city</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote — always confirm with a buyer before selling. This page provides general guidance only and does not endorse or recommend any specific business.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const TROY_OZ_G = 31.1035;
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function renderWeightTable(perGram){
+  if(perGram == null) return;
+  const rows = { '1':1, '2_5':2.5, '5':5, '10':10, '20':20, '50':50, '100':100, 'ozt':TROY_OZ_G, 'kg':1000 };
+  for(const id in rows){
+    const el = document.getElementById('wt-'+id);
+    if(el) el.textContent = fmtUSD(perGram*rows[id]);
+  }
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  document.getElementById('r-total').textContent = fmtUSD(perGram*grams);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity+' gold';
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('r-perOz').textContent = fmtUSD(perGram*TROY_OZ_G);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.getElementById('weightTableKarat').textContent = purity.toUpperCase();
+  renderWeightTable(perGram);
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+renderWeightTable(window.GOLD_DATA.pricePerGram['24k']);
+</script>
+</body>
+</html>
+`;
+}
+
+function buildCityHubPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "name": "${page.title}",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const cityLinks = CITIES.map(c => `<a class="link-card" href="/${c.slug}/"><div class="t">${c.city}, ${c.stateAbbr}</div><div class="sub">Live gold price &amp; where to sell</div></a>`).join('\n    ');
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${jsonLd}
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">📍 ${CITIES.length} US cities</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px;">
+<div class="content">
+  <h2 class="st">Choose Your City</h2>
+  <div class="link-grid">
+    ${cityLinks}
+  </div>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+  </div>
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Gold is priced off a national spot market — the live rate is the same across every city listed. This directory provides general guidance only and does not endorse or recommend any specific business.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
 </body>
 </html>
 `;
@@ -657,6 +1217,26 @@ ${siteBanner()}
   <h2 class="st">Cash-for-Gold Discount</h2>
   <p>The cash-for-gold estimate applies a configurable discount factor (currently ${CONFIG.dealerDiscountFactor}) to the live per-gram USD price. This is explicitly an <strong>estimate, not a market rule</strong> — real pawn shop and gold-buyer offers vary by karat, weight sold and the individual buyer. Always get a real quote before selling.</p>
 
+  <h2 class="st">Value-by-Weight Tables</h2>
+  <p>The "value by weight" tables shown on the homepage, each karat page and each city page use the exact same per-gram price as the main calculator above them — they simply multiply it by a fixed set of common weights, so they refresh from the same live data with no separate calculation:</p>
+  <div class="method">
+    <div class="code">
+<span>value(weight_g) = price_per_gram(karat, USD) × weight_g</span><br>
+<span>value(1 troy oz) = price_per_gram(karat, USD) × 31.1035</span>
+    </div>
+  </div>
+
+  <h2 class="st">Coin Melt Value Formula (AGW)</h2>
+  <p>The <a href="/gold-coin-melt-value-calculator/">coin melt value calculator</a> prices each coin by its <strong>Actual Gold Weight (AGW)</strong> — the pure-gold content in troy ounces, a fixed mint specification independent of the coin's total weight or face value — at the live 24K (pure gold) rate. Coin AGW figures are standard published mint specs, not derived from the karat-fraction table above:</p>
+  <div class="method">
+    <div class="code">
+<span>melt_value(coin, USD) = coin_AGW_troy_oz × 31.1035 × price_per_gram(24k, USD)</span><br>
+<span>melt_value(qty) = melt_value(coin, USD) × quantity</span>
+    </div>
+    <p id="liveCoinExample" style="font-size:.85rem;color:var(--muted);"></p>
+  </div>
+  <p style="font-size:.85rem;color:var(--muted);">Melt value is a floor, not a resale estimate — it excludes any numismatic/collector premium. See the coin page for AGW figures used for each listed coin.</p>
+
   <h2 class="st">Who Runs This Site</h2>
   <p>Gold Price Per Gram USA is an independent calculator site, and the US-market companion to <a href="https://goldpricepergram.co.uk/">Gold Price Per Gram UK</a>. It is not a dealer, refiner or financial adviser, and prices shown are indicative only — always confirm with a buyer or jeweler before any transaction.</p>
 
@@ -664,6 +1244,8 @@ ${siteBanner()}
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     ${relatedKaratLinks('')}
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
   </div>
 </div>
 </div>
@@ -688,6 +1270,14 @@ ${eeatBlock()}
   } else {
     el.textContent = 'Live worked example will appear once the first price update has run.';
   }
+  const coinEl = document.getElementById('liveCoinExample');
+  if(gd && gd.pricePerGram && gd.pricePerGram['24k'] != null){
+    const g24 = gd.pricePerGram['24k'];
+    const meltEagle = 1.0000 * 31.1035 * g24;
+    coinEl.textContent = 'Live worked example: 1 oz American Gold Eagle (AGW 1.0000 oz) × 31.1035 × $' + g24.toFixed(2) + '/g (24K) = $' + meltEagle.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' melt value.';
+  } else {
+    coinEl.textContent = 'Live worked example will appear once the first price update has run.';
+  }
 })();
 </script>
 </body>
@@ -707,6 +1297,21 @@ for (const key of KARAT_KEYS) {
 fs.mkdirSync(path.join(ROOT, CASH_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, CASH_PAGE.slug, 'index.html'), buildCashPage(CASH_PAGE));
 console.log(`✓ ${CASH_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, COIN_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, COIN_PAGE.slug, 'index.html'), buildCoinPage(COIN_PAGE));
+console.log(`✓ ${COIN_PAGE.slug}/index.html`);
+
+for (const city of CITIES) {
+  const dir = path.join(ROOT, city.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), buildCityPage(city));
+  console.log(`✓ ${city.slug}/index.html`);
+}
+
+fs.mkdirSync(path.join(ROOT, CITY_HUB_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, CITY_HUB_PAGE.slug, 'index.html'), buildCityHubPage(CITY_HUB_PAGE));
+console.log(`✓ ${CITY_HUB_PAGE.slug}/index.html`);
 
 fs.mkdirSync(path.join(ROOT, METHODOLOGY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, METHODOLOGY_PAGE.slug, 'index.html'), buildMethodologyPage(METHODOLOGY_PAGE));

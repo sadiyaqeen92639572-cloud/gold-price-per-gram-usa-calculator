@@ -98,6 +98,13 @@ footer a { color:#e9dcc0; }
 .eeat-compliance-text p { font-size:.88rem; color:var(--muted); line-height:1.5; margin-bottom:0; }
 .eeat-compliance-text a { color:var(--brand); text-decoration:underline; }
 .eeat-compliance-text a:hover { color:var(--brand-dark); }
+.weight-table-wrap { overflow-x:auto; margin:18px 0; }
+.weight-table { width:100%; border-collapse:collapse; font-size:.9rem; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.weight-table caption { caption-side:top; text-align:left; font-size:.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; padding-bottom:8px; }
+.weight-table th, .weight-table td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+.weight-table th { background:var(--brand-light); color:var(--brand-dark); font-size:.78rem; text-transform:uppercase; letter-spacing:.4px; }
+.weight-table td.wv { font-weight:700; color:var(--brand-dark); }
+.weight-table tr:last-child td { border-bottom:none; }
 </style>
 </head>
 <body>
@@ -146,6 +153,26 @@ footer a { color:#e9dcc0; }
   <h2 class="st">Cash-for-Gold Discount</h2>
   <p>The cash-for-gold estimate applies a configurable discount factor (currently 0.85) to the live per-gram USD price. This is explicitly an <strong>estimate, not a market rule</strong> — real pawn shop and gold-buyer offers vary by karat, weight sold and the individual buyer. Always get a real quote before selling.</p>
 
+  <h2 class="st">Value-by-Weight Tables</h2>
+  <p>The "value by weight" tables shown on the homepage, each karat page and each city page use the exact same per-gram price as the main calculator above them — they simply multiply it by a fixed set of common weights, so they refresh from the same live data with no separate calculation:</p>
+  <div class="method">
+    <div class="code">
+<span>value(weight_g) = price_per_gram(karat, USD) × weight_g</span><br>
+<span>value(1 troy oz) = price_per_gram(karat, USD) × 31.1035</span>
+    </div>
+  </div>
+
+  <h2 class="st">Coin Melt Value Formula (AGW)</h2>
+  <p>The <a href="/gold-coin-melt-value-calculator/">coin melt value calculator</a> prices each coin by its <strong>Actual Gold Weight (AGW)</strong> — the pure-gold content in troy ounces, a fixed mint specification independent of the coin's total weight or face value — at the live 24K (pure gold) rate. Coin AGW figures are standard published mint specs, not derived from the karat-fraction table above:</p>
+  <div class="method">
+    <div class="code">
+<span>melt_value(coin, USD) = coin_AGW_troy_oz × 31.1035 × price_per_gram(24k, USD)</span><br>
+<span>melt_value(qty) = melt_value(coin, USD) × quantity</span>
+    </div>
+    <p id="liveCoinExample" style="font-size:.85rem;color:var(--muted);"></p>
+  </div>
+  <p style="font-size:.85rem;color:var(--muted);">Melt value is a floor, not a resale estimate — it excludes any numismatic/collector premium. See the coin page for AGW figures used for each listed coin.</p>
+
   <h2 class="st">Who Runs This Site</h2>
   <p>Gold Price Per Gram USA is an independent calculator site, and the US-market companion to <a href="https://goldpricepergram.co.uk/">Gold Price Per Gram UK</a>. It is not a dealer, refiner or financial adviser, and prices shown are indicative only — always confirm with a buyer or jeweler before any transaction.</p>
 
@@ -157,6 +184,8 @@ footer a { color:#e9dcc0; }
     <a class="link-card" href="/14k-gold-price-per-gram/"><div class="t">14K Gold</div><div class="sub">Stamped 14K</div></a>
     <a class="link-card" href="/10k-gold-price-per-gram/"><div class="t">10K Gold</div><div class="sub">Stamped 10K</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
   </div>
 </div>
 </div>
@@ -237,6 +266,14 @@ footer a { color:#e9dcc0; }
     el.textContent = 'Live worked example (as of last refresh): GBP spot converted at 1 GBP = ' + gd.fxRateGBPtoUSD + ' USD → $' + g24.toFixed(2) + '/g at 24K.';
   } else {
     el.textContent = 'Live worked example will appear once the first price update has run.';
+  }
+  const coinEl = document.getElementById('liveCoinExample');
+  if(gd && gd.pricePerGram && gd.pricePerGram['24k'] != null){
+    const g24 = gd.pricePerGram['24k'];
+    const meltEagle = 1.0000 * 31.1035 * g24;
+    coinEl.textContent = 'Live worked example: 1 oz American Gold Eagle (AGW 1.0000 oz) × 31.1035 × $' + g24.toFixed(2) + '/g (24K) = $' + meltEagle.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' melt value.';
+  } else {
+    coinEl.textContent = 'Live worked example will appear once the first price update has run.';
   }
 })();
 </script>

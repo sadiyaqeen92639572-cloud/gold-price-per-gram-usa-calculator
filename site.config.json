@@ -29,6 +29,7 @@
     { "slug": "14k-gold-price-per-gram",         "file": "14k-gold-price-per-gram/index.html" },
     { "slug": "10k-gold-price-per-gram",         "file": "10k-gold-price-per-gram/index.html" },
     { "slug": "cash-for-gold-price-per-gram",    "file": "cash-for-gold-price-per-gram/index.html" },
+    { "slug": "gold-coin-melt-value-calculator", "file": "gold-coin-melt-value-calculator/index.html" },
     { "slug": "methodology",                      "file": "methodology/index.html" }
   ]
 }

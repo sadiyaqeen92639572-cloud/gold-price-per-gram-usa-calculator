@@ -1,0 +1,22 @@
+[
+  { "slug": "new-york-ny", "city": "New York", "state": "New York", "stateAbbr": "NY" },
+  { "slug": "los-angeles-ca", "city": "Los Angeles", "state": "California", "stateAbbr": "CA" },
+  { "slug": "chicago-il", "city": "Chicago", "state": "Illinois", "stateAbbr": "IL" },
+  { "slug": "houston-tx", "city": "Houston", "state": "Texas", "stateAbbr": "TX" },
+  { "slug": "phoenix-az", "city": "Phoenix", "state": "Arizona", "stateAbbr": "AZ" },
+  { "slug": "philadelphia-pa", "city": "Philadelphia", "state": "Pennsylvania", "stateAbbr": "PA" },
+  { "slug": "san-antonio-tx", "city": "San Antonio", "state": "Texas", "stateAbbr": "TX" },
+  { "slug": "san-diego-ca", "city": "San Diego", "state": "California", "stateAbbr": "CA" },
+  { "slug": "dallas-tx", "city": "Dallas", "state": "Texas", "stateAbbr": "TX" },
+  { "slug": "austin-tx", "city": "Austin", "state": "Texas", "stateAbbr": "TX" },
+  { "slug": "jacksonville-fl", "city": "Jacksonville", "state": "Florida", "stateAbbr": "FL" },
+  { "slug": "san-jose-ca", "city": "San Jose", "state": "California", "stateAbbr": "CA" },
+  { "slug": "fort-worth-tx", "city": "Fort Worth", "state": "Texas", "stateAbbr": "TX" },
+  { "slug": "columbus-oh", "city": "Columbus", "state": "Ohio", "stateAbbr": "OH" },
+  { "slug": "charlotte-nc", "city": "Charlotte", "state": "North Carolina", "stateAbbr": "NC" },
+  { "slug": "indianapolis-in", "city": "Indianapolis", "state": "Indiana", "stateAbbr": "IN" },
+  { "slug": "san-francisco-ca", "city": "San Francisco", "state": "California", "stateAbbr": "CA" },
+  { "slug": "seattle-wa", "city": "Seattle", "state": "Washington", "stateAbbr": "WA" },
+  { "slug": "denver-co", "city": "Denver", "state": "Colorado", "stateAbbr": "CO" },
+  { "slug": "boston-ma", "city": "Boston", "state": "Massachusetts", "stateAbbr": "MA" }
+]

@@ -129,6 +129,13 @@ footer a { color:#e9dcc0; }
 .eeat-compliance-text p { font-size:.88rem; color:var(--muted); line-height:1.5; margin-bottom:0; }
 .eeat-compliance-text a { color:var(--brand); text-decoration:underline; }
 .eeat-compliance-text a:hover { color:var(--brand-dark); }
+.weight-table-wrap { overflow-x:auto; margin:18px 0; }
+.weight-table { width:100%; border-collapse:collapse; font-size:.9rem; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.weight-table caption { caption-side:top; text-align:left; font-size:.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; padding-bottom:8px; }
+.weight-table th, .weight-table td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+.weight-table th { background:var(--brand-light); color:var(--brand-dark); font-size:.78rem; text-transform:uppercase; letter-spacing:.4px; }
+.weight-table td.wv { font-weight:700; color:var(--brand-dark); }
+.weight-table tr:last-child td { border-bottom:none; }
 </style>
 </head>
 <body>
@@ -174,6 +181,25 @@ footer a { color:#e9dcc0; }
   <h2 class="st">Why 24K Gold Is for Investment, Not Jewelry</h2>
   <p>At 99.9% pure, 24K gold is too soft for everyday jewelry — it scratches and bends easily, which is why rings and bracelets are almost always a lower karat alloyed with other metals. 24K gold is instead the standard for investment products: American Gold Eagle and Buffalo coins, bullion bars, and gold certificates. If you're pricing an investment coin or bar rather than a piece of jewelry, this is the karat you want.</p>
 
+  <h2 class="st">24K Gold Value by Weight</h2>
+  <div class="weight-table-wrap">
+    <table class="weight-table">
+      <caption>Value by weight</caption>
+      <thead><tr><th>Weight</th><th>Value (USD)</th></tr></thead>
+      <tbody>
+        <tr><td>1 g</td><td class="wv" id="wt-1"></td></tr>
+        <tr><td>2.5 g</td><td class="wv" id="wt-2_5"></td></tr>
+        <tr><td>5 g</td><td class="wv" id="wt-5"></td></tr>
+        <tr><td>10 g</td><td class="wv" id="wt-10"></td></tr>
+        <tr><td>20 g</td><td class="wv" id="wt-20"></td></tr>
+        <tr><td>50 g</td><td class="wv" id="wt-50"></td></tr>
+        <tr><td>100 g</td><td class="wv" id="wt-100"></td></tr>
+        <tr><td>1 troy oz</td><td class="wv" id="wt-ozt"></td></tr>
+        <tr><td>1 kg</td><td class="wv" id="wt-kg"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <h2 class="st">Other Karats &amp; Related Pages</h2>
   <div class="link-grid">
     <a class="link-card" href="/22k-gold-price-per-gram/"><div class="t">22K Gold</div><div class="sub">Stamped 22K</div></a>
@@ -181,6 +207,8 @@ footer a { color:#e9dcc0; }
     <a class="link-card" href="/14k-gold-price-per-gram/"><div class="t">14K Gold</div><div class="sub">Stamped 14K</div></a>
     <a class="link-card" href="/10k-gold-price-per-gram/"><div class="t">10K Gold</div><div class="sub">Stamped 10K</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
   </div>
@@ -271,6 +299,14 @@ function refreshBanner(){
   line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
   banner.style.display = gd.isFallback ? 'block' : 'none';
 }
+function renderWeightTable(perGram){
+  if(perGram == null) return;
+  const rows = { '1':1, '2_5':2.5, '5':5, '10':10, '20':20, '50':50, '100':100, 'ozt':TROY_OZ_G, 'kg':1000 };
+  for(const id in rows){
+    const el = document.getElementById('wt-'+id);
+    if(el) el.textContent = fmtUSD(perGram*rows[id]);
+  }
+}
 function calculate(){
   const gd = window.GOLD_DATA;
   const grams = parseFloat(document.getElementById('wGrams').value) || 0;
@@ -286,6 +322,7 @@ function calculate(){
 }
 function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
 refreshBanner();
+renderWeightTable(window.GOLD_DATA.pricePerGram[PURITY]);
 </script>
 </body>
 </html>

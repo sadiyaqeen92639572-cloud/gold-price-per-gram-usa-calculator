@@ -128,6 +128,13 @@ footer a { color:#e9dcc0; }
 .eeat-compliance-text p { font-size:.88rem; color:var(--muted); line-height:1.5; margin-bottom:0; }
 .eeat-compliance-text a { color:var(--brand); text-decoration:underline; }
 .eeat-compliance-text a:hover { color:var(--brand-dark); }
+.weight-table-wrap { overflow-x:auto; margin:18px 0; }
+.weight-table { width:100%; border-collapse:collapse; font-size:.9rem; background:#fff; border:1px solid var(--border); border-radius:10px; overflow:hidden; }
+.weight-table caption { caption-side:top; text-align:left; font-size:.78rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; padding-bottom:8px; }
+.weight-table th, .weight-table td { padding:10px 14px; text-align:left; border-bottom:1px solid var(--border); }
+.weight-table th { background:var(--brand-light); color:var(--brand-dark); font-size:.78rem; text-transform:uppercase; letter-spacing:.4px; }
+.weight-table td.wv { font-weight:700; color:var(--brand-dark); }
+.weight-table tr:last-child td { border-bottom:none; }
 </style>
 </head>
 <body>
@@ -173,6 +180,25 @@ footer a { color:#e9dcc0; }
   <h2 class="st">10K Gold — The US Legal Minimum</h2>
   <p>10K gold is only 41.7% pure gold, alloyed heavily with copper, silver and other metals — the legal minimum purity that can still be stamped and sold as "gold" in most US states (some states set the bar even lower, but 10K is the common floor in practice). That lower gold content makes it the most affordable and scratch-resistant option, which is why it shows up on the cheapest end of chain and class-ring jewelry. This plays a similar market role to the UK's 9ct gold, but at a genuinely different purity (41.7% vs 37.5%) — not the same karat under a different name.</p>
 
+  <h2 class="st">10K Gold Value by Weight</h2>
+  <div class="weight-table-wrap">
+    <table class="weight-table">
+      <caption>Value by weight</caption>
+      <thead><tr><th>Weight</th><th>Value (USD)</th></tr></thead>
+      <tbody>
+        <tr><td>1 g</td><td class="wv" id="wt-1"></td></tr>
+        <tr><td>2.5 g</td><td class="wv" id="wt-2_5"></td></tr>
+        <tr><td>5 g</td><td class="wv" id="wt-5"></td></tr>
+        <tr><td>10 g</td><td class="wv" id="wt-10"></td></tr>
+        <tr><td>20 g</td><td class="wv" id="wt-20"></td></tr>
+        <tr><td>50 g</td><td class="wv" id="wt-50"></td></tr>
+        <tr><td>100 g</td><td class="wv" id="wt-100"></td></tr>
+        <tr><td>1 troy oz</td><td class="wv" id="wt-ozt"></td></tr>
+        <tr><td>1 kg</td><td class="wv" id="wt-kg"></td></tr>
+      </tbody>
+    </table>
+  </div>
+
   <h2 class="st">Other Karats &amp; Related Pages</h2>
   <div class="link-grid">
     <a class="link-card" href="/24k-gold-price-per-gram/"><div class="t">24K Gold</div><div class="sub">Stamped 24K</div></a>
@@ -180,6 +206,8 @@ footer a { color:#e9dcc0; }
     <a class="link-card" href="/18k-gold-price-per-gram/"><div class="t">18K Gold</div><div class="sub">Stamped 18K</div></a>
     <a class="link-card" href="/14k-gold-price-per-gram/"><div class="t">14K Gold</div><div class="sub">Stamped 14K</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
   </div>
@@ -270,6 +298,14 @@ function refreshBanner(){
   line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
   banner.style.display = gd.isFallback ? 'block' : 'none';
 }
+function renderWeightTable(perGram){
+  if(perGram == null) return;
+  const rows = { '1':1, '2_5':2.5, '5':5, '10':10, '20':20, '50':50, '100':100, 'ozt':TROY_OZ_G, 'kg':1000 };
+  for(const id in rows){
+    const el = document.getElementById('wt-'+id);
+    if(el) el.textContent = fmtUSD(perGram*rows[id]);
+  }
+}
 function calculate(){
   const gd = window.GOLD_DATA;
   const grams = parseFloat(document.getElementById('wGrams').value) || 0;
@@ -285,6 +321,7 @@ function calculate(){
 }
 function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
 refreshBanner();
+renderWeightTable(window.GOLD_DATA.pricePerGram[PURITY]);
 </script>
 </body>
 </html>

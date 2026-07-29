@@ -198,6 +198,11 @@ async function main() {
     injectIntoPage(path.join(ROOT, page.file), data);
   }
 
+  const cities = JSON.parse(fs.readFileSync(path.join(ROOT, 'cities.json'), 'utf8'));
+  for (const city of cities) {
+    injectIntoPage(path.join(ROOT, city.slug, 'index.html'), data);
+  }
+
   updateSitemapLastmod(data.lastUpdated ? data.lastUpdated.slice(0, 10) : new Date().toISOString().slice(0, 10));
 
   console.log('Done.');
