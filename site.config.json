@@ -10,6 +10,8 @@
     "endpoint": "https://api.frankfurter.dev/v1/latest?base=GBP&symbols=USD"
   },
   "troyOzToGrams": 31.1035,
+  "dwtPerTroyOz": 20,
+  "tolaToGrams": 11.6638,
   "purities": {
     "24k": { "fraction": 1.0,    "hallmark": "24K", "label": "24K Gold" },
     "22k": { "fraction": 0.9167, "hallmark": "22K", "label": "22K Gold" },
@@ -31,6 +33,10 @@
     { "slug": "cash-for-gold-price-per-gram",    "file": "cash-for-gold-price-per-gram/index.html" },
     { "slug": "gold-coin-melt-value-calculator", "file": "gold-coin-melt-value-calculator/index.html" },
     { "slug": "gold-price-history",              "file": "gold-price-history/index.html" },
+    { "slug": "gold-price-per-ounce",            "file": "gold-price-per-ounce/index.html" },
+    { "slug": "gold-price-per-kg",               "file": "gold-price-per-kg/index.html" },
+    { "slug": "gold-price-per-pennyweight",      "file": "gold-price-per-pennyweight/index.html" },
+    { "slug": "gold-price-per-tola",             "file": "gold-price-per-tola/index.html" },
     { "slug": "methodology",                      "file": "methodology/index.html" }
   ]
 }

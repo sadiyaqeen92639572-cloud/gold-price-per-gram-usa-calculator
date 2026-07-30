@@ -116,6 +116,90 @@ const CASH_PAGE = {
   ],
 };
 
+const OUNCE_PAGE = {
+  slug: 'gold-price-per-ounce',
+  title: 'Gold Price Per Ounce Today — Live Troy Ounce Calculator (USD)',
+  metaDesc: 'Live gold price per troy ounce today, USD, by karat (24K, 22K, 18K, 14K, 10K). The bullion-industry standard unit — updated 3× daily.',
+  keywords: 'gold price per ounce, gold price per troy ounce, gold ounce price today usd, troy ounce gold price usd',
+  h1: 'Gold Price Per Ounce Today',
+  badgeText: 'Troy ounce · bullion standard',
+  intro: 'The gold price per troy ounce today, in USD — the standard unit used for bullion bars, American Gold Eagle/Buffalo coins, and interbank spot pricing, as opposed to the per-gram price used for jewelry.',
+  shortLabel: 'Per Ounce',
+  unitLabel: 'troy oz', unitLabelSingular: 'troy oz', unitLabelSingularCap: 'Troy Ounce',
+  gramsPerUnit: CONFIG.troyOzToGrams,
+  step: '0.01', defaultValue: '1',
+  angleTitle: 'Why Gold Is Priced Per Troy Ounce, Not a Standard Ounce',
+  angleBody: 'A troy ounce (31.1035g) is heavier than the everyday avoirdupois ounce (28.35g) used for food or postage — bullion, coins and the interbank spot price are always quoted in troy ounces, a convention dating back to medieval bullion trading. If you\'re pricing a bar or an American Gold Eagle/Buffalo coin rather than jewelry, this is the unit dealers and price charts will quote.',
+  faq: [
+    { q: 'How many grams are in a troy ounce of gold?', a: 'A troy ounce is 31.1035 grams — heavier than the 28.35g "standard" (avoirdupois) ounce used for everyday weights. All gold bullion and spot prices use the troy ounce.' },
+    { q: 'Is the gold price per ounce the same as the spot price?', a: 'For 24K (999.9 fine) gold, yes — the troy ounce price is the raw spot price. For lower karats (22K, 18K, 14K, 10K), the per-ounce price is the spot price scaled down by that karat\'s fine-gold fraction.' },
+    { q: 'Why do bullion dealers quote per ounce and jewelers quote per gram?', a: 'Bullion (bars, coins) is bought and sold in large enough units that the troy ounce is a practical, industry-standard size. Jewelry pieces are usually a few grams, so pricing per gram is more useful for valuing a ring, chain or bracelet.' },
+  ],
+};
+
+const KG_PAGE = {
+  slug: 'gold-price-per-kg',
+  title: 'Gold Price Per Kg Today — Live Kilogram Calculator (USD)',
+  metaDesc: 'Live gold price per kilogram today, USD, by karat. The wholesale/bulk unit for large bars and institutional trades — updated 3× daily.',
+  keywords: 'gold price per kg, gold price per kilogram today, gold kilo price usd, gold bar price per kg',
+  h1: 'Gold Price Per Kg Today',
+  badgeText: 'Kilogram · wholesale/bulk',
+  intro: 'The gold price per kilogram today, in USD — the unit used for large bullion bars (a standard COMEX/LBMA "good delivery" bar is roughly 400 troy oz, about 12.4kg) and bulk or institutional-scale gold trades.',
+  shortLabel: 'Per Kg',
+  unitLabel: 'kg', unitLabelSingular: 'kg', unitLabelSingularCap: 'Kilogram',
+  gramsPerUnit: 1000,
+  step: '0.001', defaultValue: '1',
+  angleTitle: 'Gold Price Per Kilogram — Bulk & Bar Pricing',
+  angleBody: 'A kilogram of gold is 1,000 grams — a size relevant to 1kg investment bars, or for scaling up a per-gram price to value a larger holding, estate or bulk lot without doing the multiplication by hand. Large "good delivery" bars used on COMEX/the London bullion market are around 400 troy oz (about 12.4kg), so this unit is also a useful reference point when that figure is quoted.',
+  faq: [
+    { q: 'How much does 1kg of 24K gold cost?', a: 'Multiply the live 24K price per gram by 1,000 — the calculator above does this instantly and updates with the live spot price.' },
+    { q: 'What is a "good delivery" gold bar?', a: 'The standard wholesale bar used on COMEX and the London bullion market, weighing approximately 400 troy ounces (about 12.4kg) of gold at a minimum 995 fineness — the benchmark unit for institutional gold trading, distinct from the smaller 1kg or 1oz bars sold to retail investors.' },
+    { q: 'Is buying gold by the kilogram cheaper per gram than buying small bars?', a: 'Generally yes — larger bars carry a smaller fabrication/premium markup per gram than small bars or coins, though this calculator shows the raw spot-based price only, not dealer premiums.' },
+  ],
+};
+
+const DWT_PAGE = {
+  slug: 'gold-price-per-pennyweight',
+  title: 'Gold Price Per Pennyweight (DWT) Today — Live Calculator (USD)',
+  metaDesc: 'Live gold price per pennyweight (dwt) today, USD, by karat. The unit US pawnshops and jewelers commonly use to weigh scrap gold — updated 3× daily.',
+  keywords: 'gold price per pennyweight, gold price per dwt, pennyweight gold calculator, dwt gold price usd',
+  h1: 'Gold Price Per Pennyweight (DWT) Today',
+  badgeText: 'Pennyweight (dwt) · pawnshop/jeweler standard',
+  intro: 'The gold price per pennyweight (dwt) today, in USD — a troy-weight unit that US pawnshops and jewelers commonly use when weighing scrap gold and jewelry, rather than grams or troy ounces.',
+  shortLabel: 'Per DWT',
+  unitLabel: 'dwt', unitLabelSingular: 'pennyweight', unitLabelSingularCap: 'Pennyweight',
+  gramsPerUnit: CONFIG.troyOzToGrams / CONFIG.dwtPerTroyOz,
+  step: '0.1', defaultValue: '1',
+  angleTitle: 'Why US Pawnshops and Jewelers Weigh Gold in Pennyweight',
+  angleBody: 'A pennyweight (dwt) is 1/20th of a troy ounce — about 1.555 grams — and is the everyday weighing unit at many US pawnshops and jewelry counters, where scales are often set to dwt rather than grams. If a buyer quotes you a price "per dwt" for scrap jewelry, this calculator converts that directly, so you can compare it against a per-gram or per-ounce quote from another buyer.',
+  faq: [
+    { q: 'How many grams is 1 pennyweight (dwt) of gold?', a: '1 pennyweight equals 1/20 of a troy ounce, or about 1.555 grams (31.1035g ÷ 20).' },
+    { q: 'Why do pawnshops use pennyweight instead of grams?', a: 'Pennyweight is a traditional troy-weight unit carried over from the jewelry and precious-metals trade in the US — many pawnshop and jeweler scales are still set to dwt by default, so it remains common even though grams are more widely used elsewhere.' },
+    { q: 'Is dwt the same as a "penny" of gold weight in other countries?', a: 'No — pennyweight (dwt) is a US/historical-British troy weight unit specific to precious metals, unrelated to coin currency. Other countries commonly use grams, tola, or baht for gold weight instead.' },
+  ],
+};
+
+const TOLA_PAGE = {
+  slug: 'gold-price-per-tola',
+  title: 'Gold Price Per Tola Today — Live Calculator (USD)',
+  metaDesc: 'Live gold price per tola today, USD, by karat. The traditional South Asian gold-weight unit (1 tola = 11.6638g) — updated 3× daily.',
+  keywords: 'gold price per tola, tola gold price usd, tola gold calculator, gold price per tola today',
+  h1: 'Gold Price Per Tola Today',
+  badgeText: 'Tola · South Asian standard',
+  intro: 'The gold price per tola today, in USD — the traditional gold-weight unit used across India, Pakistan, Bangladesh and Nepal, and widely quoted by jewelers serving South Asian communities in the US.',
+  shortLabel: 'Per Tola',
+  unitLabel: 'tola', unitLabelSingular: 'tola', unitLabelSingularCap: 'Tola',
+  gramsPerUnit: CONFIG.tolaToGrams,
+  step: '0.01', defaultValue: '1',
+  angleTitle: 'The Tola — A South Asian Gold-Weight Standard, Now Priced in USD',
+  angleBody: 'A tola (11.6638 grams) is the traditional unit gold is weighed and quoted in across India, Pakistan, Bangladesh, Nepal and their diaspora communities — jewelers serving South Asian-American customers in the US often price gold per tola rather than per gram or ounce, especially for bridal and 22K gold. This calculator converts the live USD per-gram price into a per-tola figure so it can be compared directly against a tola-quoted price.',
+  faq: [
+    { q: 'How many grams are in a tola of gold?', a: '1 tola = 11.6638 grams. This is the standard modern tola used across India, Pakistan, Bangladesh and most of South Asia (some regional variants historically differed slightly, but 11.6638g is the figure in common commercial use today).' },
+    { q: 'Why do some US jewelers quote gold per tola?', a: 'Jewelers serving South Asian-American communities often quote gold per tola because that is the unit customers compare prices in back home — it is especially common for 22K bridal and gifting jewelry.' },
+    { q: 'Is tola gold usually 22K?', a: 'Very often, yes — 22K is the traditional purity for South Asian wedding and bridal gold, though tola is a unit of weight, not purity, so tola gold can be quoted at any karat.' },
+  ],
+};
+
 const HISTORY_PAGE = {
   slug: 'gold-price-history',
   title: 'Gold Price History — Live Chart & Data Per Gram (USD)',
@@ -1399,6 +1483,172 @@ ${eeatBlock()}
 `;
 }
 
+function buildUnitPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "${page.h1} Calculator",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram USA",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const options = KARAT_KEYS.map(k => `<option value="${k}"${k === '24k' ? ' selected' : ''}>${KARATS[k].label} — ${KARATS[k].hallmark}</option>`).join('\n          ');
+  const tableRows = KARAT_KEYS.map(k => `<tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${KARATS[k].label}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);" id="row-${k}">—</td></tr>`).join('\n      ');
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">⚖️ ${page.badgeText} · updated 3x/day</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Weight (${page.unitLabel})</label>
+        <input type="number" id="wUnit" min="0.001" step="${page.step}" value="${page.defaultValue}" placeholder="e.g. ${page.defaultValue}">
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          ${options}
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate ${page.shortLabel} Gold Price →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Total value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-perUnit"></div><div class="sl">Price per ${page.unitLabelSingular}</div></div>
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Price per gram</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">Gold Price Per ${page.unitLabelSingularCap} — By Karat Today</h2>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Karat</th><th style="padding:10px 14px;text-align:left;">Price per ${page.unitLabelSingular} (USD)</th></tr></thead>
+    <tbody id="unitTable">
+      ${tableRows}
+    </tbody>
+  </table>
+
+  <h2 class="st">${page.angleTitle}</h2>
+  <p>${page.angleBody}</p>
+
+  <h2 class="st">Other Units &amp; Related Pages</h2>
+  <div class="link-grid">
+    ${relatedKaratLinks('')}
+    <a class="link-card" href="/gold-price-history/"><div class="t">Price History</div><div class="sub">Chart &amp; trend</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote — always confirm with a buyer before selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const GRAMS_PER_UNIT = ${page.gramsPerUnit};
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+  populateTable();
+}
+function populateTable(){
+  const gd = window.GOLD_DATA;
+  ${KARAT_KEYS.map(k => `if(gd.pricePerGram['${k}'] != null) document.getElementById('row-${k}').textContent = fmtUSD(gd.pricePerGram['${k}'] * GRAMS_PER_UNIT);`).join('\n  ')}
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const units = parseFloat(document.getElementById('wUnit').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(units<=0){ alert('Please enter a weight.'); return; }
+  const grams = units * GRAMS_PER_UNIT;
+  document.getElementById('r-total').textContent = fmtUSD(perGram*grams);
+  document.getElementById('r-sub').textContent = units+' ${page.unitLabel} · '+purity+' gold';
+  document.getElementById('r-perUnit').textContent = fmtUSD(perGram*GRAMS_PER_UNIT);
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+</script>
+</body>
+</html>
+`;
+}
+
 // --- Write files ---
 for (const key of KARAT_KEYS) {
   const page = KARATS[key];
@@ -1434,5 +1684,11 @@ console.log(`✓ ${METHODOLOGY_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, HISTORY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, HISTORY_PAGE.slug, 'index.html'), buildHistoryPage(HISTORY_PAGE));
 console.log(`✓ ${HISTORY_PAGE.slug}/index.html`);
+
+for (const unitPage of [OUNCE_PAGE, KG_PAGE, DWT_PAGE, TOLA_PAGE]) {
+  fs.mkdirSync(path.join(ROOT, unitPage.slug), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, unitPage.slug, 'index.html'), buildUnitPage(unitPage));
+  console.log(`✓ ${unitPage.slug}/index.html`);
+}
 
 console.log('Done. Run update-data.js next to inject live prices.');
