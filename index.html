@@ -244,12 +244,13 @@ footer a { color:#e9dcc0; }
   <div class="method">
     <p style="color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-bottom:6px;">Source: live spot feed, converted via live FX rate · applied deterministically · see full <a href="/methodology/">methodology</a></p>
     <div class="code">
-<span>price_per_gram(24k, GBP) = spot_price_per_troy_oz(GBP) / 31.1035</span><br>
-<span>price_per_gram(karat, GBP) = price_per_gram(24k, GBP) × karat_fraction</span><br>
+<span>// 24K, 22K, 18K, 14K — read directly from the UK site's own published per-karat price</span><br>
+<span>price_per_gram(karat, GBP) = UK_site.pricePerGram[karat]</span><br>
 <span>price_per_gram(karat, USD) = price_per_gram(karat, GBP) × GBP_to_USD_rate</span><br>
+<span>// 10K has no UK equivalent purity, so it's derived instead: 24K price × 0.417 fraction</span><br>
 <span>total_value = price_per_gram(karat, USD) × weight_in_grams</span>
     </div>
-    <p style="font-size:.78rem;color:var(--muted);margin:0;">Live spot price and live FX rate, not an AI estimate — updated three times daily. This is an indicative price, not a dealer quote.</p>
+    <p style="font-size:.78rem;color:var(--muted);margin:0;">Live spot price and live FX rate, not an AI estimate — updated three times daily. This is an indicative price, not a dealer quote. See the full <a href="/methodology/">methodology</a> for why most karats are read directly rather than derived by fraction.</p>
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>

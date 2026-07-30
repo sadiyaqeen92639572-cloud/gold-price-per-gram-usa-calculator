@@ -1820,21 +1820,28 @@ ${siteBanner()}
   <p>The gold spot price refreshes <strong>three times per day</strong>. The GBP→USD rate is sourced from the ECB, which publishes new reference rates once per working day (around 16:00 CET) — so on a typical day, our 3x/day polling of the FX rate mostly re-reads the same daily figure, while the gold spot price itself still updates three times. Every page shows the exact "Last refreshed" timestamp of the price data currently displayed. If either upstream source is temporarily unavailable, the site falls back to the last known value for that component specifically and shows a clear "using cached rate" banner, rather than a broken or zeroed page.</p>
 
   <h2 class="st">Calculation Formula</h2>
+  <p>The formula actually used depends on the karat — most karats are read directly from the UK site's own per-karat quote (which itself ultimately comes from goldapi.io's own per-karat pricing, not a simple fraction of the 24K rate), rather than being derived locally:</p>
   <div class="method">
     <div class="code">
-<span>price_per_gram(24k, GBP) = spot_price_per_troy_oz(GBP) / 31.1035</span><br>
-<span>price_per_gram(karat, GBP) = price_per_gram(24k, GBP) × karat_fraction</span><br>
+<span>// 24K, 22K, 18K, 14K — read directly from the UK site's own published per-karat price</span><br>
+<span>price_per_gram(karat, GBP) = UK_site.pricePerGram[karat]</span><br>
 <span>price_per_gram(karat, USD) = price_per_gram(karat, GBP) × GBP_to_USD_rate</span><br>
+<br>
+<span>// 10K has no UK equivalent purity, so it's the one karat actually derived by fraction</span><br>
+<span>price_per_gram(10k, GBP) = UK_site.pricePerGram['24k'] × 0.417</span><br>
+<span>price_per_gram(10k, USD) = price_per_gram(10k, GBP) × GBP_to_USD_rate</span><br>
+<br>
 <span>cash_estimate(karat, USD) = price_per_gram(karat, USD) × buyer_discount_factor</span>
     </div>
     <p id="liveExample" style="font-size:.85rem;color:var(--muted);"></p>
   </div>
+  <p style="font-size:.85rem;color:var(--muted);">The "fine gold fraction" table below is accurate as a reference (it's the standard fineness for each karat), but it is <strong>not</strong> the formula actually applied for 24K/22K/18K/14K — those come straight from the UK site's own per-karat feed, which can differ very slightly (typically well under 0.5%) from a naive 24K × fraction calculation, since goldapi.io quotes each karat independently rather than deriving it from a fixed fraction.</p>
 
-  <h2 class="st">Karat Fractions Used</h2>
+  <h2 class="st">Karat Fractions — Reference &amp; Fallback Values</h2>
   <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;">
-    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Karat</th><th style="padding:10px 14px;text-align:left;">Stamp</th><th style="padding:10px 14px;text-align:left;">Fine gold fraction</th></tr></thead>
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Karat</th><th style="padding:10px 14px;text-align:left;">Stamp</th><th style="padding:10px 14px;text-align:left;">Fine gold fraction</th><th style="padding:10px 14px;text-align:left;">Price source</th></tr></thead>
     <tbody>
-      ${KARAT_KEYS.map(k => `<tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${KARATS[k].label}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${KARATS[k].hallmark}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${CONFIG.purities[k].fraction}</td></tr>`).join('\n      ')}
+      ${KARAT_KEYS.map(k => `<tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${KARATS[k].label}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${KARATS[k].hallmark}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${CONFIG.purities[k].fraction}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${k === '10k' ? 'Derived: 24K × fraction (fallback, no UK equivalent)' : "UK site's own per-karat quote (direct)"}</td></tr>`).join('\n      ')}
     </tbody>
   </table>
 
