@@ -8,6 +8,9 @@ const UK_URL = CONFIG.sisterSiteUrl;
 
 const KARAT_KEYS = ['24k', '22k', '18k', '14k', '10k'];
 const CITIES = JSON.parse(fs.readFileSync(path.join(ROOT, 'cities.json'), 'utf8'));
+const HISTORY_FILE = path.join(ROOT, 'history.json');
+const HISTORY = fs.existsSync(HISTORY_FILE) ? JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8')) : [];
+const { buildSVG, buildStats } = require('./history-chart.js');
 
 // hreflang counterpart on the UK site — only for karats that genuinely exist on both sites.
 // 10k has no UK equivalent (UK's low end is 9ct, a different purity), so it gets no hreflang pair.
@@ -110,6 +113,19 @@ const CASH_PAGE = {
     { q: 'Will I get the full spot price for cash for gold?', a: 'No. Pawn shops and gold buyers pay below the live spot price to cover refining costs and their margin. The exact discount varies by buyer, karat and the weight you\'re selling — this calculator shows an adjustable estimate, not a guaranteed quote.' },
     { q: 'How can I get the best price when selling gold for cash?', a: 'Get quotes from at least two or three buyers (pawn shops, jewelers, and dedicated gold-buying services), ask them to test purity in front of you, and sell items separated by karat rather than as a mixed lot, since mixed-karat gold is often valued at the lowest karat present.' },
     { q: 'Do pawn shops and gold-buying services pay differently?', a: 'Often yes — dedicated gold-buying services and refiners sometimes pay closer to spot than a general pawn shop, since gold is their core business rather than a side category. Comparing at least one of each type before selling is worthwhile.' },
+  ],
+};
+
+const HISTORY_PAGE = {
+  slug: 'gold-price-history',
+  title: 'Gold Price History — Live Chart & Data Per Gram (USD)',
+  metaDesc: 'Gold price history per gram in USD, charted from real live-tracked data — not a scraped estimate. See the trend, high/low and % change since tracking began.',
+  keywords: 'gold price history, gold price chart usa, gold price per gram history, gold price today vs yesterday',
+  h1: 'Gold Price History',
+  faq: [
+    { q: 'Where does this historical gold price data come from?', a: 'Every point on this chart is a real price this site fetched and published live, three times a day, since tracking began — not a scraped or reconstructed estimate. The archive grows automatically with each update, so the further back in time you look, the more of the chart is genuine recorded history.' },
+    { q: 'Why does the chart only cover a few weeks/months so far?', a: 'The tracker is actively building its own historical archive in real time rather than backfilling with third-party data of unknown accuracy. Longer ranges (6 months, 1 year, 5 years) will appear automatically as the site continues running — check the "tracking since" date on this page.' },
+    { q: 'How often is the gold price history updated?', a: 'A new data point is added roughly three times a day, in step with the live price refresh — see the methodology page for the exact schedule.' },
   ],
 };
 
@@ -1285,6 +1301,104 @@ ${eeatBlock()}
 `;
 }
 
+function buildHistoryPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram USA",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const stats = buildStats(HISTORY, 'g24k');
+  const svg = buildSVG(HISTORY, 'g24k');
+  const statsSummary = stats
+    ? `Since ${stats.fromDate}, the live-tracked 24K gold price per gram has moved between <strong>$${stats.min.toFixed(2)}</strong> and <strong>$${stats.max.toFixed(2)}</strong>, a ${stats.changePct >= 0 ? 'rise' : 'fall'} of ${Math.abs(stats.changePct).toFixed(1)}% over ${stats.days} day${stats.days === 1 ? '' : 's'} (${stats.points} tracked data points).`
+    : 'The historical archive is just starting to build — check back after a few days of tracking for a chart.';
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>.chart-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;margin:0 0 8px;box-shadow:0 8px 40px rgba(107,77,5,.10);} .chart-card svg{width:100%;height:auto;display:block;} .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;} @media (max-width:480px){.stat-row{grid-template-columns:1fr;}} .stat-row .r-stat{background:var(--brand-light);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">📈 Real tracked data · updated 3×/day · tracking since ${stats ? stats.fromDate : 'launch'}</div>
+    <h1>${page.h1}</h1>
+    <p>The gold price per gram in the US, charted from data this site has actually recorded live — no scraped or reconstructed history.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="chart-card">
+    <!-- START_HISTORY_CHART -->
+${svg}
+<script>window.GOLD_HISTORY_STATS = ${JSON.stringify(stats)};</script>
+    <!-- END_HISTORY_CHART -->
+    <p style="font-size:.82rem;color:var(--muted);margin-top:10px;text-align:center;">24K gold price per gram, USD — tracking since ${stats ? stats.fromDate : 'launch'}. This is a young, still-growing archive, not a multi-year history yet.</p>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">Gold Price Per Gram USA — Trend Summary</h2>
+  <p>${statsSummary}</p>
+  <p>Want today's exact figure instead of the trend? Use the <a href="/">live calculator</a> for the current price by karat, or the <a href="/cash-for-gold-price-per-gram/">cash-for-gold page</a> if you're pricing jewelry to sell.</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${relatedKaratLinks('')}
+    <a class="link-card" href="/gold-price-per-ounce/"><div class="t">Per Troy Ounce</div><div class="sub">Bullion-unit pricing</div></a>
+    <a class="link-card" href="/gold-price-per-kg/"><div class="t">Per Kilogram</div><div class="sub">Bulk/wholesale pricing</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote — always confirm with a buyer before selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }</script>
+</body>
+</html>
+`;
+}
+
 // --- Write files ---
 for (const key of KARAT_KEYS) {
   const page = KARATS[key];
@@ -1316,5 +1430,9 @@ console.log(`✓ ${CITY_HUB_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, METHODOLOGY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, METHODOLOGY_PAGE.slug, 'index.html'), buildMethodologyPage(METHODOLOGY_PAGE));
 console.log(`✓ ${METHODOLOGY_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, HISTORY_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, HISTORY_PAGE.slug, 'index.html'), buildHistoryPage(HISTORY_PAGE));
+console.log(`✓ ${HISTORY_PAGE.slug}/index.html`);
 
 console.log('Done. Run update-data.js next to inject live prices.');

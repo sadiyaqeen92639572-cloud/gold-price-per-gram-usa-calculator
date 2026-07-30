@@ -6,6 +6,9 @@ const ROOT = __dirname;
 const CONFIG = JSON.parse(fs.readFileSync(path.join(ROOT, 'site.config.json'), 'utf8'));
 const DATA_FILE = path.join(ROOT, 'gold-data.json');
 const SITEMAP_FILE = path.join(ROOT, 'sitemap.xml');
+const HISTORY_FILE = path.join(ROOT, 'history.json');
+const HISTORY_MAX_POINTS = 3000;
+const { buildSVG, buildStats } = require('./history-chart.js');
 
 const MOCK_MODE = process.argv.includes('--mock');
 const FORCE_FAIL_GOLD = process.argv.includes('--force-fail-gold');
@@ -88,6 +91,46 @@ function injectIntoPage(filePath, data) {
   }
   fs.writeFileSync(filePath, html.replace(marker, block));
   console.log(`  ✓ injected: ${filePath}`);
+}
+
+function appendHistory(data) {
+  if (data.isFallback) return; // don't record a repeated stale price as a new data point
+  let history = [];
+  if (fs.existsSync(HISTORY_FILE)) {
+    try { history = JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8')); } catch (e) { history = []; }
+  }
+  const last = history[history.length - 1];
+  if (last && last.t === data.lastUpdated) return history; // already recorded
+  history.push({
+    t: data.lastUpdated,
+    spotGBP: data.spotPricePerOzGBP,
+    fx: data.fxRateGBPtoUSD,
+    g24k: data.pricePerGram['24k'],
+    g22k: data.pricePerGram['22k'],
+    g18k: data.pricePerGram['18k'],
+    g14k: data.pricePerGram['14k'],
+    g10k: data.pricePerGram['10k'],
+  });
+  if (history.length > HISTORY_MAX_POINTS) history = history.slice(history.length - HISTORY_MAX_POINTS);
+  fs.writeFileSync(HISTORY_FILE, JSON.stringify(history));
+  return history;
+}
+
+function injectHistoryChart(history) {
+  const filePath = path.join(ROOT, 'gold-price-history', 'index.html');
+  if (!history || !fs.existsSync(filePath)) return;
+  const html = fs.readFileSync(filePath, 'utf8');
+  const marker = /<!-- START_HISTORY_CHART -->[\s\S]*?<!-- END_HISTORY_CHART -->/;
+  if (!marker.test(html)) {
+    console.warn('  ⚠ no history-chart markers found');
+    return;
+  }
+  const svg = buildSVG(history, 'g24k');
+  const stats = buildStats(history, 'g24k');
+  const statsScript = `<script>window.GOLD_HISTORY_STATS = ${JSON.stringify(stats)};</script>`;
+  const block = `<!-- START_HISTORY_CHART -->\n${svg}\n${statsScript}\n<!-- END_HISTORY_CHART -->`;
+  fs.writeFileSync(filePath, html.replace(marker, block));
+  console.log('  ✓ history chart injected');
 }
 
 function updateSitemapLastmod(todayISO) {
@@ -202,6 +245,9 @@ async function main() {
   for (const city of cities) {
     injectIntoPage(path.join(ROOT, city.slug, 'index.html'), data);
   }
+
+  const history = appendHistory(data);
+  injectHistoryChart(history || (fs.existsSync(HISTORY_FILE) ? JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8')) : null));
 
   updateSitemapLastmod(data.lastUpdated ? data.lastUpdated.slice(0, 10) : new Date().toISOString().slice(0, 10));
 
