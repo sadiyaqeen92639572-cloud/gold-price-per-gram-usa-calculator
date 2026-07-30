@@ -246,6 +246,11 @@ async function main() {
     injectIntoPage(path.join(ROOT, city.slug, 'index.html'), data);
   }
 
+  const states = JSON.parse(fs.readFileSync(path.join(ROOT, 'states.json'), 'utf8'));
+  for (const state of states) {
+    injectIntoPage(path.join(ROOT, state.slug, 'index.html'), data);
+  }
+
   const history = appendHistory(data);
   injectHistoryChart(history || (fs.existsSync(HISTORY_FILE) ? JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8')) : null));
 

@@ -1,0 +1,171 @@
+[
+  {
+    "slug": "texas",
+    "state": "Texas",
+    "stateAbbr": "TX",
+    "salesTaxExemption": {
+      "status": "full_exempt",
+      "thresholdUSD": null,
+      "note": "Gold, silver and platinum bullion and coins are exempt from Texas sales tax with no minimum purchase amount (the prior $1,000 threshold was removed in 2013).",
+      "citation": "Tex. Tax Code § 151.336",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Texas-specific data." }
+  },
+  {
+    "slug": "california",
+    "state": "California",
+    "stateAbbr": "CA",
+    "salesTaxExemption": {
+      "status": "exempt_above_threshold",
+      "thresholdUSD": 2000,
+      "note": "Monetized bullion, non-monetized gold/silver/platinum bullion (90%+ pure) and numismatic coins are exempt from California sales tax only when a single transaction totals $2,000 or more (raised from $1,500 in 2023). Smaller purchases are fully taxable at the local rate.",
+      "citation": "Cal. Rev. & Tax. Code § 6355",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not California-specific data." }
+  },
+  {
+    "slug": "new-york",
+    "state": "New York",
+    "stateAbbr": "NY",
+    "salesTaxExemption": {
+      "status": "exempt_above_threshold",
+      "thresholdUSD": 1000,
+      "note": "Precious metal bullion (bars, ingots, coins) is exempt from New York sales tax when a single invoice totals $1,000 or more. Coins priced well above their metal value (over ~115-140% depending on metal/size) are treated as collectibles and remain taxable regardless of amount; South African coins are excluded from the exemption.",
+      "citation": "N.Y. Tax Law § 1115(a)(15)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not New York-specific data." }
+  },
+  {
+    "slug": "illinois",
+    "state": "Illinois",
+    "stateAbbr": "IL",
+    "salesTaxExemption": {
+      "status": "exempt_conditional",
+      "thresholdUSD": null,
+      "note": "Gold, silver or platinum bullion at .980 fineness or higher, plus legal tender coins of any purity, are exempt from Illinois sales tax with no dollar minimum. Palladium bullion and South African Krugerrands are specifically excluded and remain taxable.",
+      "citation": "35 ILCS 120/2-5(29)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Illinois-specific data." }
+  },
+  {
+    "slug": "arizona",
+    "state": "Arizona",
+    "stateAbbr": "AZ",
+    "salesTaxExemption": {
+      "status": "full_exempt",
+      "thresholdUSD": null,
+      "note": "Precious metal bullion and monetized bullion sold to the end consumer are exempt from Arizona's Transaction Privilege Tax (the state's sales-tax equivalent), with no minimum purchase amount.",
+      "citation": "Ariz. Rev. Stat. § 42-5061(A)(57)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Arizona-specific data." }
+  },
+  {
+    "slug": "pennsylvania",
+    "state": "Pennsylvania",
+    "stateAbbr": "PA",
+    "salesTaxExemption": {
+      "status": "exempt_conditional",
+      "thresholdUSD": null,
+      "note": "Investment metal bullion (smelted/refined gold, silver, platinum or palladium valued by metal content) and investment coins (legal tender priced above face value) are exempt from Pennsylvania sales tax with no dollar minimum. Jewelry, colorized coins, accessories and non-legal-tender novelty items remain taxable.",
+      "citation": "72 P.S. § 7204(65) (Tax Reform Code of 1971)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Pennsylvania-specific data." }
+  },
+  {
+    "slug": "florida",
+    "state": "Florida",
+    "stateAbbr": "FL",
+    "salesTaxExemption": {
+      "status": "full_exempt",
+      "thresholdUSD": null,
+      "note": "Gold, silver and platinum bullion, rounds and coins are exempt from Florida sales tax with no minimum purchase amount — the prior $500-per-transaction threshold was repealed effective August 1, 2025.",
+      "citation": "Fla. Admin. Code r. 12A-1.0371; HB 7031 (2025)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Florida-specific data." }
+  },
+  {
+    "slug": "ohio",
+    "state": "Ohio",
+    "stateAbbr": "OH",
+    "salesTaxExemption": {
+      "status": "exempt_conditional",
+      "thresholdUSD": null,
+      "note": "Investment bullion (gold ≥.995 fine, silver ≥.999, platinum/palladium ≥.9995) and coins with at least 50% precious metal content are exempt from Ohio sales tax with no dollar minimum, effective July 1, 2021. Collectible coins made of other materials and paper currency don't qualify.",
+      "citation": "Ohio Rev. Code § 5739.02 (as amended by H.B. 110)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Ohio-specific data." }
+  },
+  {
+    "slug": "north-carolina",
+    "state": "North Carolina",
+    "stateAbbr": "NC",
+    "salesTaxExemption": {
+      "status": "full_exempt",
+      "thresholdUSD": null,
+      "note": "Investment metal bullion and investment coins (gold, silver, platinum, palladium) are exempt from North Carolina sales and use tax with no minimum purchase amount, effective since July 1, 2017.",
+      "citation": "N.C. Gen. Stat. § 105-164.13(69)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not North Carolina-specific data." }
+  },
+  {
+    "slug": "indiana",
+    "state": "Indiana",
+    "stateAbbr": "IN",
+    "salesTaxExemption": {
+      "status": "exempt_conditional",
+      "thresholdUSD": null,
+      "note": "IRA-eligible bullion (gold ≥.995 fine, silver ≥.999, platinum/palladium ≥.9995) and legal tender coins (including all US coins/currency and state-approved legal tender) are exempt from Indiana sales tax with no dollar minimum. Numismatic coins, copper bullion and lower-purity bullion remain taxable at Indiana's 7% rate.",
+      "citation": "Indiana Dept. of Revenue Sales Tax Information Bulletin #50",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Indiana-specific data." }
+  },
+  {
+    "slug": "washington",
+    "state": "Washington",
+    "stateAbbr": "WA",
+    "salesTaxExemption": {
+      "status": "taxable",
+      "thresholdUSD": null,
+      "note": "Washington's long-standing sales tax exemption on precious metal and monetized bullion (in place since 1985) was repealed effective January 1, 2026. Gold and silver bullion and coin purchases in Washington are now subject to standard state and local retail sales tax.",
+      "citation": "ESSB 5794, Chapter 423, Laws of 2025",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Washington-specific data." }
+  },
+  {
+    "slug": "colorado",
+    "state": "Colorado",
+    "stateAbbr": "CO",
+    "salesTaxExemption": {
+      "status": "full_exempt",
+      "thresholdUSD": null,
+      "note": "Precious metal bullion and coins that are legal tender are exempt from Colorado state and state-collected local sales tax with no minimum purchase amount. Home-rule cities and counties that collect their own sales tax (this can include Denver) are not required to follow the state exemption, so a local tax may still apply depending on where you buy.",
+      "citation": "Colo. Rev. Stat. § 39-26-706",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Colorado-specific data." }
+  },
+  {
+    "slug": "massachusetts",
+    "state": "Massachusetts",
+    "stateAbbr": "MA",
+    "salesTaxExemption": {
+      "status": "exempt_above_threshold",
+      "thresholdUSD": 1000,
+      "note": "Gold or silver bullion, coins, and rare coins of numismatic value are exempt from Massachusetts sales tax only when a single sale totals $1,000 or more. Platinum and palladium products are fully taxable regardless of amount.",
+      "citation": "Mass. Gen. Laws ch. 64H, § 6(m)",
+      "lastVerified": "2026-07-30"
+    },
+    "cashForGold": { "pawnShopPctOfMelt": [45, 55], "specialistBuyerPctOfMelt": [70, 80], "note": "General US market ranges, not Massachusetts-specific data." }
+  }
+]

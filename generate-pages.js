@@ -8,6 +8,7 @@ const UK_URL = CONFIG.sisterSiteUrl;
 
 const KARAT_KEYS = ['24k', '22k', '18k', '14k', '10k'];
 const CITIES = JSON.parse(fs.readFileSync(path.join(ROOT, 'cities.json'), 'utf8'));
+const STATES = JSON.parse(fs.readFileSync(path.join(ROOT, 'states.json'), 'utf8'));
 const HISTORY_FILE = path.join(ROOT, 'history.json');
 const HISTORY = fs.existsSync(HISTORY_FILE) ? JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8')) : [];
 const { buildSVG, buildStats } = require('./history-chart.js');
@@ -260,6 +261,21 @@ const CITY_HUB_PAGE = {
   metaDesc: 'Live gold price per gram calculator for 20 major US cities, plus generic guidance on pawn shops, jewelers and gold-buying services in your area.',
   h1: 'Sell Gold Near Me — By City',
   intro: 'Find today\'s live gold price per gram and general guidance on where to sell gold — pawn shops, local jewelers and dedicated gold-buying services — for your city.',
+};
+
+const STATE_TAX_STATUS_LABEL = {
+  full_exempt: 'Exempt from state sales tax, no minimum purchase amount',
+  exempt_above_threshold: 'Exempt above a per-transaction dollar threshold',
+  exempt_conditional: 'Exempt if the bullion/coin meets purity or legal-tender conditions',
+  taxable: 'Subject to state sales tax',
+};
+
+const STATE_HUB_PAGE = {
+  slug: 'sell-gold-by-state',
+  title: 'Sell Gold by State — Sales Tax & Cash-for-Gold Guide (USD)',
+  metaDesc: 'Sales tax treatment of gold and silver bullion/coins, plus general cash-for-gold guidance, for 13 US states — live gold price per gram calculator included.',
+  h1: 'Sell Gold by State',
+  intro: 'Whether gold and silver bullion or coins are taxed at the point of sale varies a lot by state — some fully exempt it, some only above a dollar threshold, some only if the metal meets a purity or legal-tender test, and Washington now taxes it after repealing its exemption in 2026. Pick your state for the details.',
 };
 
 function relatedKaratLinks(excludeKey) {
@@ -1241,6 +1257,7 @@ ${siteBanner()}
 
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
+    <a class="link-card" href="/sell-gold-by-state/"><div class="t">Sell Gold by State</div><div class="sub">Sales tax &amp; cash-for-gold by state</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
     <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
@@ -1253,6 +1270,280 @@ ${eeatBlock()}
 <footer>
   <div class="container">
     <div class="disc">Gold is priced off a national spot market — the live rate is the same across every city listed. This directory provides general guidance only and does not endorse or recommend any specific business.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+</body>
+</html>
+`;
+}
+
+// State pages target "gold price per gram in [state]" / sales-tax and cash-for-gold
+// intent — same live calculator as city pages, plus a state sales-tax summary (fact-checked
+// against each state's actual statute, see states.json citations) and general cash-for-gold
+// ranges. Both disclaimer blocks below are intentionally visible on the page itself, not just
+// in states.json's internal note fields — this is financial content, so the "these are general
+// ranges, not verified per state" and "not tax advice" caveats need to be seen by the reader,
+// not just documented for maintainers.
+function buildStatePage(state) {
+  const slug = state.slug;
+  const cityLinks = CITIES.filter(c => c.stateAbbr === state.stateAbbr);
+  const tax = state.salesTaxExemption;
+  const cash = state.cashForGold;
+  const title = `Gold Price Per Gram in ${state.state} — Sales Tax & Cash-for-Gold Guide`;
+  const metaDesc = `Live gold price per gram today in ${state.state} — USD calculator by karat, whether gold/silver bullion is taxed in ${state.state}, and general cash-for-gold ranges.`;
+  const h1 = `Gold Price Per Gram in ${state.state}`;
+  const faq = [
+    { q: `Is gold or silver bullion taxed in ${state.state}?`, a: `${tax.note} This is general information, not tax advice — confirm current details with ${state.state}'s Department of Revenue (or a tax professional) before a large purchase, since exemption rules do change.` },
+    { q: `Where can I sell gold in ${state.state}?`, a: `The three common options are pawn shops, local jewelers, and dedicated gold-buying services or refiners. Each pays a different discount to spot — compare at least two quotes before selling, and ask whether they test purity in front of you.` },
+    { q: `Is the gold price different in ${state.state} than other states?`, a: `No — gold is priced off a single global spot market, so the live per-gram rate is the same across every US state, including ${state.state}. What differs by state is the sales-tax treatment of a bullion purchase, and by buyer, the discount to spot applied when you sell.` },
+  ];
+
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Gold Price Per Gram Calculator — ${state.state} (USD)",
+      "url": "${SITE_URL}/${slug}/",
+      "description": "${metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const pageForHead = { slug, title, metaDesc, keywords: `gold price per gram ${state.state.toLowerCase()}, is gold taxed in ${state.state.toLowerCase()}, sell gold ${state.state.toLowerCase()}, gold sales tax ${state.stateAbbr.toLowerCase()}` };
+
+  const cityLinksHtml = cityLinks.length
+    ? cityLinks.map(c => `<a class="link-card" href="/${c.slug}/"><div class="t">${c.city}, ${c.stateAbbr}</div><div class="sub">Live gold price &amp; where to sell</div></a>`).join('\n    ')
+    : '';
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(pageForHead, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">📍 ${state.state} · updated 3x/day</div>
+    <h1>${h1}</h1>
+    <p>Today's live gold price per gram in USD for ${state.state}, plus whether bullion is taxed here and general cash-for-gold guidance.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="10" placeholder="e.g. 10">
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          <option value="24k">24K Gold</option>
+          <option value="22k">22K Gold</option>
+          <option value="18k">18K Gold</option>
+          <option value="14k">14K Gold</option>
+          <option value="10k">10K Gold</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Gold Price →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Total value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Price per gram</div></div>
+        <div class="r-stat"><div class="sv" id="r-perOz"></div><div class="sl">Price per troy oz</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">Is Gold or Silver Bullion Taxed in ${state.state}?</h2>
+  <p><strong>${STATE_TAX_STATUS_LABEL[tax.status]}${tax.thresholdUSD ? ` (threshold: $${tax.thresholdUSD.toLocaleString('en-US')} per transaction)` : ''}.</strong> ${tax.note}</p>
+  <p style="font-size:.85rem;color:var(--muted);">Source: ${tax.citation}. Last checked ${tax.lastVerified}.</p>
+  <div class="disc" style="color:#d9c9a3;">This is general information, not personal tax advice. Sales-tax rules on bullion change over time (Washington repealed its exemption effective January 1, 2026, for example) — confirm the current rule with ${state.state}'s Department of Revenue before a large purchase.</div>
+
+  <h2 class="st">Sell Gold in ${state.state} — What Buyers Typically Pay</h2>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Buyer type</th><th style="padding:10px 14px;text-align:left;">Typical % of melt value</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">Pawn shop</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${cash.pawnShopPctOfMelt[0]}–${cash.pawnShopPctOfMelt[1]}%</td></tr>
+      <tr><td style="padding:10px 14px;">Specialist gold buyer / refiner</td><td style="padding:10px 14px;">${cash.specialistBuyerPctOfMelt[0]}–${cash.specialistBuyerPctOfMelt[1]}%</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:.85rem;color:var(--muted);">These are general US market ranges, not verified data specific to ${state.state} or any individual buyer — actual offers vary by karat, weight, and buyer. Always get at least two quotes.</p>
+  <p>There's no single "best" place to sell gold in ${state.state} — the right choice depends on what you're selling and how quickly you need payment. Get at least two quotes, ask for a written breakdown by karat and weight, and see our <a href="/cash-for-gold-price-per-gram/">cash-for-gold estimate calculator</a> for a live discount-to-spot estimate.</p>
+
+  ${cityLinksHtml ? `<h2 class="st">Cities in ${state.state}</h2>
+  <div class="link-grid">
+    ${cityLinksHtml}
+  </div>` : ''}
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    <a class="link-card" href="/sell-gold-by-state/"><div class="t">All States</div><div class="sub">Sales tax &amp; cash-for-gold by state</div></a>
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">All Cities</div><div class="sub">Sell gold near me — by city</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote — always confirm with a buyer before selling. Sales-tax information is general and not personal tax advice; cash-for-gold ranges are general market estimates, not specific to any buyer. This page does not endorse or recommend any specific business.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const TROY_OZ_G = 31.1035;
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  document.getElementById('r-total').textContent = fmtUSD(perGram*grams);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity+' gold';
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('r-perOz').textContent = fmtUSD(perGram*TROY_OZ_G);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+</script>
+</body>
+</html>
+`;
+}
+
+function buildStateHubPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "name": "${page.title}",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const stateLinks = STATES.map(s => `<a class="link-card" href="/${s.slug}/"><div class="t">${s.state}</div><div class="sub">${STATE_TAX_STATUS_LABEL[s.salesTaxExemption.status]}</div></a>`).join('\n    ');
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${jsonLd}
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">📍 ${STATES.length} US states</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container" style="padding-top:32px;">
+<div class="content">
+  <h2 class="st">Choose Your State</h2>
+  <div class="link-grid">
+    ${stateLinks}
+  </div>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    <a class="link-card" href="/sell-gold-near-me/"><div class="t">All Cities</div><div class="sub">Sell gold near me — by city</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+  </div>
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Sales-tax information is general and not personal tax advice — confirm current rules with each state's Department of Revenue before a large purchase.</div>
     <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
     <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
   </div>
@@ -1676,6 +1967,17 @@ for (const city of CITIES) {
 fs.mkdirSync(path.join(ROOT, CITY_HUB_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, CITY_HUB_PAGE.slug, 'index.html'), buildCityHubPage(CITY_HUB_PAGE));
 console.log(`✓ ${CITY_HUB_PAGE.slug}/index.html`);
+
+for (const state of STATES) {
+  const dir = path.join(ROOT, state.slug);
+  fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(path.join(dir, 'index.html'), buildStatePage(state));
+  console.log(`✓ ${state.slug}/index.html`);
+}
+
+fs.mkdirSync(path.join(ROOT, STATE_HUB_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, STATE_HUB_PAGE.slug, 'index.html'), buildStateHubPage(STATE_HUB_PAGE));
+console.log(`✓ ${STATE_HUB_PAGE.slug}/index.html`);
 
 fs.mkdirSync(path.join(ROOT, METHODOLOGY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, METHODOLOGY_PAGE.slug, 'index.html'), buildMethodologyPage(METHODOLOGY_PAGE));
