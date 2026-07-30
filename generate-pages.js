@@ -248,6 +248,13 @@ const API_DOC_PAGE = {
   h1: 'Gold Price API',
 };
 
+const EMBED_PAGE = {
+  slug: 'embed',
+  title: 'Free Embeddable Gold Price Widget — usgoldpricepergram.com',
+  metaDesc: 'Free embeddable widget showing the live US gold price per gram (24K, USD) for any website — one script tag, no key, no account required.',
+  h1: 'Embeddable Gold Price Widget',
+};
+
 const METHODOLOGY_PAGE = {
   slug: 'methodology',
   title: 'Methodology — How Gold Price Per Gram (USD) Is Calculated',
@@ -2292,6 +2299,68 @@ ${eeatBlock()}
 `;
 }
 
+function buildEmbedPage(page) {
+  const snippet = `<div id="usgpg-widget"></div>
+<script src="${SITE_URL}/embed/widget.js" async></script>`;
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">🔌 Free · one script tag · no account</div>
+    <h1>${page.h1}</h1>
+    <p>Show today's live US gold price per gram on your own site — a small self-contained badge that pulls the same live data as this site, with a link back.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="content" style="padding-top:64px;">
+  <h2 class="st">Live Preview</h2>
+  <div id="usgpg-widget"></div>
+  <script src="/embed/widget.js" async></script>
+
+  <h2 class="st">How to Embed It</h2>
+  <p>Paste this snippet anywhere in your page's HTML:</p>
+  <div class="method">
+    <div class="code">${snippet.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')}</div>
+  </div>
+  <p>That's it — no API key, no account, no build step. The widget fetches <a href="/api/">gold-data.json</a> client-side and renders a small 24K USD/gram badge with a "Gold Price Per Gram USA" link back to this site.</p>
+
+  <h2 class="st">Notes</h2>
+  <p>The widget's CSS is scoped under its own wrapper class so it won't leak styles onto your page. It refreshes once on page load — reload the page to see an updated price (it does not auto-poll). No uptime SLA; this is a static-file service, not a monitored production API — see the <a href="/api/">API documentation</a> for the underlying data.</p>
+
+  <div class="link-grid" style="margin-top:32px;">
+    <a class="link-card" href="/api/"><div class="t">API Documentation</div><div class="sub">gold-data.json &amp; history.json</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+  </div>
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">This is not a dealer quote or a regulated price feed — see the methodology page for the full calculation and its limitations.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+</body>
+</html>
+`;
+}
+
 // --- Write files ---
 for (const key of KARAT_KEYS) {
   const page = KARATS[key];
@@ -2342,6 +2411,10 @@ console.log(`✓ ${METHODOLOGY_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, API_DOC_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, API_DOC_PAGE.slug, 'index.html'), buildApiDocPage(API_DOC_PAGE));
 console.log(`✓ ${API_DOC_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, EMBED_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, EMBED_PAGE.slug, 'index.html'), buildEmbedPage(EMBED_PAGE));
+console.log(`✓ ${EMBED_PAGE.slug}/index.html`);
 
 fs.mkdirSync(path.join(ROOT, HISTORY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, HISTORY_PAGE.slug, 'index.html'), buildHistoryPage(HISTORY_PAGE));
