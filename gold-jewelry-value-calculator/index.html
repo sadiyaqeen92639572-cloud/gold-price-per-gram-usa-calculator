@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold Price History — Live Chart & Data Per Gram (USD)</title>
-<meta name="description" content="Gold price history per gram in USD, charted from real live-tracked data — not a scraped estimate. See the trend, high/low and % change since tracking began.">
-<meta name="keywords" content="gold price history, gold price chart usa, gold price per gram history, gold price today vs yesterday">
-<link rel="canonical" href="https://usgoldpricepergram.com/gold-price-history/">
+<title>Gold Jewelry Value Calculator — Ring, Chain & Bracelet Weight Estimates</title>
+<meta name="description" content="Estimate what your gold ring, wedding band, chain or bracelet is worth using typical weight presets by item type, at today's live gold price per gram (USD).">
+<meta name="keywords" content="gold ring value calculator, how much gold in a wedding ring, gold chain value calculator, gold bracelet value calculator, how much is my gold ring worth">
+<link rel="canonical" href="https://usgoldpricepergram.com/gold-jewelry-value-calculator/">
 <link rel="alternate" hreflang="en-US" href="https://usgoldpricepergram.com/">
 <link rel="alternate" hreflang="en-GB" href="https://goldpricepergram.co.uk/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.png" type="image/png">
-<meta property="og:title" content="Gold Price History — Live Chart & Data Per Gram (USD)">
-<meta property="og:description" content="Gold price history per gram in USD, charted from real live-tracked data — not a scraped estimate. See the trend, high/low and % change since tracking began.">
+<meta property="og:title" content="Gold Jewelry Value Calculator — Ring, Chain & Bracelet Weight Estimates">
+<meta property="og:description" content="Estimate what your gold ring, wedding band, chain or bracelet is worth using typical weight presets by item type, at today's live gold price per gram (USD).">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://usgoldpricepergram.com/gold-price-history/">
+<meta property="og:url" content="https://usgoldpricepergram.com/gold-jewelry-value-calculator/">
 <meta property="og:image" content="https://usgoldpricepergram.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -30,16 +30,26 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebApplication",
+      "name": "Gold Jewelry Value Calculator (USD)",
+      "url": "https://usgoldpricepergram.com/gold-jewelry-value-calculator/",
+      "description": "Estimate what your gold ring, wedding band, chain or bracelet is worth using typical weight presets by item type, at today's live gold price per gram (USD).",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
       "@type": "FAQPage",
       "mainEntity": [
-        { "@type": "Question", "name": "Where does this historical gold price data come from?", "acceptedAnswer": { "@type": "Answer", "text": "Every point on this chart is a real price this site fetched and published live, three times a day, since tracking began — not a scraped or reconstructed estimate. The archive grows automatically with each update, so the further back in time you look, the more of the chart is genuine recorded history." } },
-        { "@type": "Question", "name": "Why does the chart only cover a few weeks/months so far?", "acceptedAnswer": { "@type": "Answer", "text": "The tracker is actively building its own historical archive in real time rather than backfilling with third-party data of unknown accuracy. Longer ranges (6 months, 1 year, 5 years) will appear automatically as the site continues running — check the \"tracking since\" date on this page." } },
-        { "@type": "Question", "name": "How often is the gold price history updated?", "acceptedAnswer": { "@type": "Answer", "text": "A new data point is added roughly three times a day, in step with the live price refresh — see the methodology page for the exact schedule." } }
+        { "@type": "Question", "name": "How much gold is in a wedding ring?", "acceptedAnswer": { "@type": "Answer", "text": "It varies a lot by design, but as a rough guide, men's wedding bands typically weigh 5-8 grams and women's wedding bands typically weigh 2-4 grams — width, ring size and karat all shift this. Always weigh the actual piece for an accurate figure; the preset here is a starting estimate, not a measurement." } },
+        { "@type": "Question", "name": "Does this calculator account for gemstones?", "acceptedAnswer": { "@type": "Answer", "text": "No — it only prices the gold content. Diamonds, gemstones and other non-gold materials have no scrap gold value and are excluded entirely, so a ring's total worth (with stones) can be much higher than the gold-only estimate shown here." } },
+        { "@type": "Question", "name": "Why is my ring's actual weight different from the preset?", "acceptedAnswer": { "@type": "Answer", "text": "The presets are broad market ranges cross-checked against multiple jeweler sources, not a measurement of your specific piece — actual weight depends on the exact design, band width, ring size, karat, and manufacturer. If you know your item's real weight, enter it directly instead of using the preset." } }
       ]
     },
     {
       "@type": "Organization",
-      "name": "Gold Price Per Gram USA",
+      "name": "Gold Price Per Gram Calculator",
       "legalName": "Gesmine-Invest Limited",
       "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
       "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
@@ -128,7 +138,7 @@ footer a { color:#e9dcc0; }
 .weight-table td.wv { font-weight:700; color:var(--brand-dark); }
 .weight-table tr:last-child td { border-bottom:none; }
 </style>
-<style>.chart-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;margin:0 0 8px;box-shadow:0 8px 40px rgba(107,77,5,.10);} .chart-card svg{width:100%;height:auto;display:block;} .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;} @media (max-width:480px){.stat-row{grid-template-columns:1fr;}} .stat-row .r-stat{background:var(--brand-light);}</style>
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
 </head>
 <body>
 
@@ -136,35 +146,76 @@ footer a { color:#e9dcc0; }
 
 <header>
   <div class="container">
-    <div class="badge">📈 Real tracked data · updated 3×/day · tracking since July 7, 2026</div>
-    <h1>Gold Price History</h1>
-    <p>The gold price per gram in the US, charted from data this site has actually recorded live — no scraped or reconstructed history.</p>
+    <div class="badge">💍 Weight-preset estimates · updated 3x/day</div>
+    <h1>Gold Jewelry Value Calculator</h1>
+    <p>Don't have a scale? Pick your item type below for a typical weight range, or enter your piece's actual weight if you know it, for an instant value estimate at today's live gold price per gram.</p>
   </div>
 </header>
 
 <div class="container">
 <div class="tool-wrapper">
-  <div class="chart-card">
-    <!-- START_HISTORY_CHART -->
-<svg viewBox="0 0 760 260" width="760" height="260" role="img" aria-label="Gold price per gram history chart from Jul 7 to Jul 30, range $128.09 to $133.81">
-  <defs><linearGradient id="hgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8790a" stop-opacity="0.35"/><stop offset="100%" stop-color="#a8790a" stop-opacity="0"/></linearGradient></defs>
-  <path d="M34.0,47.8 L44.2,34.0 L54.4,70.6 L64.5,77.6 L74.7,77.6 L84.9,151.8 L95.1,151.8 L105.2,136.0 L115.4,116.2 L125.6,72.9 L135.8,95.8 L145.9,95.8 L156.1,104.2 L166.3,90.1 L176.5,71.6 L186.6,71.6 L196.8,71.6 L207.0,71.6 L217.2,71.6 L227.4,83.3 L237.5,132.3 L247.7,200.2 L257.9,199.1 L268.1,181.7 L278.2,152.5 L288.4,152.5 L298.6,179.3 L308.8,153.5 L318.9,183.7 L329.1,181.7 L339.3,212.6 L349.5,215.3 L359.6,220.3 L369.8,226.0 L380.0,207.2 L390.2,195.1 L400.4,195.1 L410.5,195.1 L420.7,195.1 L430.9,195.1 L441.1,195.1 L451.2,186.7 L461.4,203.5 L471.6,191.4 L481.8,151.1 L491.9,146.1 L502.1,113.6 L512.3,85.4 L522.5,43.7 L532.6,65.9 L542.8,111.9 L553.0,155.8 L563.2,145.4 L573.4,155.8 L583.5,150.5 L593.7,151.5 L603.9,151.5 L614.1,151.5 L624.2,151.5 L634.4,151.5 L644.6,107.2 L654.8,107.2 L664.9,134.7 L675.1,109.2 L685.3,164.6 L695.5,184.7 L705.6,173.0 L715.8,140.4 L726.0,155.5 L726.0,226 L34.0,226 Z" fill="url(#hgrad)" stroke="none"/>
-  <path d="M34.0,47.8 L44.2,34.0 L54.4,70.6 L64.5,77.6 L74.7,77.6 L84.9,151.8 L95.1,151.8 L105.2,136.0 L115.4,116.2 L125.6,72.9 L135.8,95.8 L145.9,95.8 L156.1,104.2 L166.3,90.1 L176.5,71.6 L186.6,71.6 L196.8,71.6 L207.0,71.6 L217.2,71.6 L227.4,83.3 L237.5,132.3 L247.7,200.2 L257.9,199.1 L268.1,181.7 L278.2,152.5 L288.4,152.5 L298.6,179.3 L308.8,153.5 L318.9,183.7 L329.1,181.7 L339.3,212.6 L349.5,215.3 L359.6,220.3 L369.8,226.0 L380.0,207.2 L390.2,195.1 L400.4,195.1 L410.5,195.1 L420.7,195.1 L430.9,195.1 L441.1,195.1 L451.2,186.7 L461.4,203.5 L471.6,191.4 L481.8,151.1 L491.9,146.1 L502.1,113.6 L512.3,85.4 L522.5,43.7 L532.6,65.9 L542.8,111.9 L553.0,155.8 L563.2,145.4 L573.4,155.8 L583.5,150.5 L593.7,151.5 L603.9,151.5 L614.1,151.5 L624.2,151.5 L634.4,151.5 L644.6,107.2 L654.8,107.2 L664.9,134.7 L675.1,109.2 L685.3,164.6 L695.5,184.7 L705.6,173.0 L715.8,140.4 L726.0,155.5" fill="none" stroke="#a8790a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-  <text x="34" y="250" font-size="11" fill="#7a6f5c">Jul 7</text>
-  <text x="726" y="250" font-size="11" fill="#7a6f5c" text-anchor="end">Jul 30</text>
-  <text x="34" y="22" font-size="11" fill="#7a6f5c">$133.81/g</text>
-  <text x="34" y="240" font-size="11" fill="#7a6f5c">$128.09/g</text>
-</svg>
-<script>window.GOLD_HISTORY_STATS = {"min":128.09,"max":133.81,"days":23,"latest":130.19,"changeAbs":-3.210000000000008,"changePct":-2.406296851574219,"fromDate":"July 7, 2026","toDate":"July 30, 2026","points":69};</script>
-    <!-- END_HISTORY_CHART -->
-    <p style="font-size:.82rem;color:var(--muted);margin-top:10px;text-align:center;">24K gold price per gram, USD — tracking since July 7, 2026. This is a young, still-growing archive, not a multi-year history yet.</p>
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Item type</label>
+        <select id="item" onchange="applyPreset()">
+          <option value="mensWeddingBand">Men's Wedding Band</option>
+          <option value="womensWeddingBand">Women's Wedding Band</option>
+          <option value="engagementRingSetting">Engagement Ring Setting (no stone)</option>
+          <option value="chainPerInch">Chain (per inch, medium gauge)</option>
+          <option value="braceletAvg">Bracelet (everyday, not a bangle/kada)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="6.5" placeholder="e.g. 6.5">
+        <span style="font-size:.76rem;color:var(--muted);" id="rangeCaption"></span>
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          <option value="24k">24K Gold</option>
+          <option value="22k">22K Gold</option>
+          <option value="18k">18K Gold</option>
+          <option value="14k" selected>14K Gold</option>
+          <option value="10k">10K Gold</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Gold Value →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Estimated gold value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Price per gram</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Gold content only — excludes gemstones, workmanship and any collector value. Not a dealer quote.</p>
+    </div>
   </div>
 </div>
 
 <div class="content">
-  <h2 class="st">Gold Price Per Gram USA — Trend Summary</h2>
-  <p>Since July 7, 2026, the live-tracked 24K gold price per gram has moved between <strong>$128.09</strong> and <strong>$133.81</strong>, a fall of 2.4% over 23 days (69 tracked data points).</p>
-  <p>Want today's exact figure instead of the trend? Use the <a href="/">live calculator</a> for the current price by karat, or the <a href="/cash-for-gold-price-per-gram/">cash-for-gold page</a> if you're pricing jewelry to sell.</p>
+  <h2 class="st">How These Presets Were Estimated</h2>
+  <p>The weight ranges above are broad US market estimates, cross-checked against multiple independent jeweler and appraisal sources — they are <strong>not</strong> a measurement of your specific piece. Actual weight varies by exact design, band width, ring size, karat and manufacturer. If you know your item's real weight, enter it directly instead of using the preset.</p>
+  <p style="font-size:.85rem;color:var(--muted);">Sources cross-checked: <a href="https://blog.bluestone.com/how-many-grams-is-a-gold-ring-average-weight-for-men-women/" target="_blank" rel="noopener noreferrer">BlueStone ring weight guide</a>, <a href="https://icecartel.com/blogs/news/how-much-does-a-14k-gold-ring-weigh" target="_blank" rel="noopener noreferrer">IceCartel 14K ring weight guide</a>, <a href="https://www.serendipitydiamonds.com/blog/how-many-grams-of-gold-are-in-an-engagement-ring/" target="_blank" rel="noopener noreferrer">Serendipity Diamonds engagement ring weight guide</a>.</p>
+
+  <h2 class="st">Typical Weight Ranges by Item</h2>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Item</th><th style="padding:10px 14px;text-align:left;">Typical range</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">Men's Wedding Band</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">5–8g</td></tr>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">Women's Wedding Band</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">2–4g</td></tr>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">Engagement Ring Setting (no stone)</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">3–5g</td></tr>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">Chain (per inch, medium gauge)</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">1–2g per inch</td></tr>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">Bracelet (everyday, not a bangle/kada)</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">8–20g</td></tr>
+    </tbody>
+  </table>
 
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
@@ -173,18 +224,18 @@ footer a { color:#e9dcc0; }
     <a class="link-card" href="/18k-gold-price-per-gram/"><div class="t">18K Gold</div><div class="sub">Stamped 18K</div></a>
     <a class="link-card" href="/14k-gold-price-per-gram/"><div class="t">14K Gold</div><div class="sub">Stamped 14K</div></a>
     <a class="link-card" href="/10k-gold-price-per-gram/"><div class="t">10K Gold</div><div class="sub">Stamped 10K</div></a>
-    <a class="link-card" href="/gold-price-per-ounce/"><div class="t">Per Troy Ounce</div><div class="sub">Bullion-unit pricing</div></a>
-    <a class="link-card" href="/gold-price-per-kg/"><div class="t">Per Kilogram</div><div class="sub">Bulk/wholesale pricing</div></a>
-    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Where does this historical gold price data come from?</button>
-    <div class="faq-a">Every point on this chart is a real price this site fetched and published live, three times a day, since tracking began — not a scraped or reconstructed estimate. The archive grows automatically with each update, so the further back in time you look, the more of the chart is genuine recorded history.</div></div>
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Why does the chart only cover a few weeks/months so far?</button>
-    <div class="faq-a">The tracker is actively building its own historical archive in real time rather than backfilling with third-party data of unknown accuracy. Longer ranges (6 months, 1 year, 5 years) will appear automatically as the site continues running — check the "tracking since" date on this page.</div></div>
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How often is the gold price history updated?</button>
-    <div class="faq-a">A new data point is added roughly three times a day, in step with the live price refresh — see the methodology page for the exact schedule.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How much gold is in a wedding ring?</button>
+    <div class="faq-a">It varies a lot by design, but as a rough guide, men's wedding bands typically weigh 5-8 grams and women's wedding bands typically weigh 2-4 grams — width, ring size and karat all shift this. Always weigh the actual piece for an accurate figure; the preset here is a starting estimate, not a measurement.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Does this calculator account for gemstones?</button>
+    <div class="faq-a">No — it only prices the gold content. Diamonds, gemstones and other non-gold materials have no scrap gold value and are excluded entirely, so a ring's total worth (with stones) can be much higher than the gold-only estimate shown here.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Why is my ring's actual weight different from the preset?</button>
+    <div class="faq-a">The presets are broad market ranges cross-checked against multiple jeweler sources, not a measurement of your specific piece — actual weight depends on the exact design, band width, ring size, karat, and manufacturer. If you know your item's real weight, enter it directly instead of using the preset.</div></div>
 </div>
 </div>
 
@@ -249,12 +300,45 @@ footer a { color:#e9dcc0; }
 
 <footer>
   <div class="container">
-    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote — always confirm with a buyer before selling.</div>
+    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote. Weight presets are general estimates, not a measurement of your item — always weigh the actual piece before selling.</div>
     <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
     <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
   </div>
 </footer>
 
-<script>function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }</script>
+<script>
+const PRESETS = {"mensWeddingBand":{"label":"Men's Wedding Band","weightRangeG":[5,8],"midpointG":6.5},"womensWeddingBand":{"label":"Women's Wedding Band","weightRangeG":[2,4],"midpointG":3},"engagementRingSetting":{"label":"Engagement Ring Setting (no stone)","weightRangeG":[3,5],"midpointG":4},"chainPerInch":{"label":"Chain (per inch, medium gauge)","weightRangeG":[1,2],"midpointG":1.5,"perUnit":true},"braceletAvg":{"label":"Bracelet (everyday, not a bangle/kada)","weightRangeG":[8,20],"midpointG":12}};
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function applyPreset(){
+  const key = document.getElementById('item').value;
+  const p = PRESETS[key];
+  document.getElementById('wGrams').value = p.midpointG;
+  document.getElementById('rangeCaption').textContent = 'Typical range: ' + p.weightRangeG[0] + '–' + p.weightRangeG[1] + 'g' + (p.perUnit ? ' per inch' : '') + ' — weigh the actual piece for an accurate estimate.';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  const itemLabel = document.getElementById('item').selectedOptions[0].text;
+  document.getElementById('r-total').textContent = fmtUSD(perGram*grams);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity.toUpperCase()+' · '+itemLabel;
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+applyPreset();
+</script>
 </body>
 </html>

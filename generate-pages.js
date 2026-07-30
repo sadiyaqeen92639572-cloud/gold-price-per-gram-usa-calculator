@@ -201,6 +201,33 @@ const TOLA_PAGE = {
   ],
 };
 
+// Weight ranges are broad market estimates cross-checked against multiple independent
+// jeweler/appraisal sources (see JEWELRY_PAGE's "How these presets were estimated" section
+// for citations) — not measured averages. Midpoints are just the range center, not a claimed
+// true average, and the page must show the full range + a "weigh your actual piece" caption
+// rather than implying false precision.
+const JEWELRY_PRESETS = {
+  mensWeddingBand: { label: "Men's Wedding Band", weightRangeG: [5, 8], midpointG: 6.5 },
+  womensWeddingBand: { label: "Women's Wedding Band", weightRangeG: [2, 4], midpointG: 3 },
+  engagementRingSetting: { label: 'Engagement Ring Setting (no stone)', weightRangeG: [3, 5], midpointG: 4 },
+  chainPerInch: { label: 'Chain (per inch, medium gauge)', weightRangeG: [1, 2], midpointG: 1.5, perUnit: true },
+  braceletAvg: { label: 'Bracelet (everyday, not a bangle/kada)', weightRangeG: [8, 20], midpointG: 12 },
+};
+
+const JEWELRY_PAGE = {
+  slug: 'gold-jewelry-value-calculator',
+  title: 'Gold Jewelry Value Calculator — Ring, Chain & Bracelet Weight Estimates',
+  metaDesc: 'Estimate what your gold ring, wedding band, chain or bracelet is worth using typical weight presets by item type, at today\'s live gold price per gram (USD).',
+  keywords: 'gold ring value calculator, how much gold in a wedding ring, gold chain value calculator, gold bracelet value calculator, how much is my gold ring worth',
+  h1: 'Gold Jewelry Value Calculator',
+  intro: 'Don\'t have a scale? Pick your item type below for a typical weight range, or enter your piece\'s actual weight if you know it, for an instant value estimate at today\'s live gold price per gram.',
+  faq: [
+    { q: 'How much gold is in a wedding ring?', a: 'It varies a lot by design, but as a rough guide, men\'s wedding bands typically weigh 5-8 grams and women\'s wedding bands typically weigh 2-4 grams — width, ring size and karat all shift this. Always weigh the actual piece for an accurate figure; the preset here is a starting estimate, not a measurement.' },
+    { q: 'Does this calculator account for gemstones?', a: 'No — it only prices the gold content. Diamonds, gemstones and other non-gold materials have no scrap gold value and are excluded entirely, so a ring\'s total worth (with stones) can be much higher than the gold-only estimate shown here.' },
+    { q: 'Why is my ring\'s actual weight different from the preset?', a: 'The presets are broad market ranges cross-checked against multiple jeweler sources, not a measurement of your specific piece — actual weight depends on the exact design, band width, ring size, karat, and manufacturer. If you know your item\'s real weight, enter it directly instead of using the preset.' },
+  ],
+};
+
 const HISTORY_PAGE = {
   slug: 'gold-price-history',
   title: 'Gold Price History — Live Chart & Data Per Gram (USD)',
@@ -1004,6 +1031,186 @@ renderCoinTable(window.GOLD_DATA.pricePerGram['24k']);
     el.textContent = 'Live worked example will appear once the first price update has run.';
   }
 })();
+</script>
+</body>
+</html>
+`;
+}
+
+function buildJewelryPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Gold Jewelry Value Calculator (USD)",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const presetKeys = Object.keys(JEWELRY_PRESETS);
+  const options = presetKeys.map(k => `<option value="${k}">${JEWELRY_PRESETS[k].label}</option>`).join('\n          ');
+  const presetDataJs = JSON.stringify(JEWELRY_PRESETS);
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">💍 Weight-preset estimates · updated 3x/day</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Item type</label>
+        <select id="item" onchange="applyPreset()">
+          ${options}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="${JEWELRY_PRESETS[presetKeys[0]].midpointG}" placeholder="e.g. 6.5">
+        <span style="font-size:.76rem;color:var(--muted);" id="rangeCaption"></span>
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          <option value="24k">24K Gold</option>
+          <option value="22k">22K Gold</option>
+          <option value="18k">18K Gold</option>
+          <option value="14k" selected>14K Gold</option>
+          <option value="10k">10K Gold</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Gold Value →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Estimated gold value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Price per gram</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Gold content only — excludes gemstones, workmanship and any collector value. Not a dealer quote.</p>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">How These Presets Were Estimated</h2>
+  <p>The weight ranges above are broad US market estimates, cross-checked against multiple independent jeweler and appraisal sources — they are <strong>not</strong> a measurement of your specific piece. Actual weight varies by exact design, band width, ring size, karat and manufacturer. If you know your item's real weight, enter it directly instead of using the preset.</p>
+  <p style="font-size:.85rem;color:var(--muted);">Sources cross-checked: <a href="https://blog.bluestone.com/how-many-grams-is-a-gold-ring-average-weight-for-men-women/" target="_blank" rel="noopener noreferrer">BlueStone ring weight guide</a>, <a href="https://icecartel.com/blogs/news/how-much-does-a-14k-gold-ring-weigh" target="_blank" rel="noopener noreferrer">IceCartel 14K ring weight guide</a>, <a href="https://www.serendipitydiamonds.com/blog/how-many-grams-of-gold-are-in-an-engagement-ring/" target="_blank" rel="noopener noreferrer">Serendipity Diamonds engagement ring weight guide</a>.</p>
+
+  <h2 class="st">Typical Weight Ranges by Item</h2>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Item</th><th style="padding:10px 14px;text-align:left;">Typical range</th></tr></thead>
+    <tbody>
+      ${presetKeys.map(k => `<tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${JEWELRY_PRESETS[k].label}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${JEWELRY_PRESETS[k].weightRangeG[0]}–${JEWELRY_PRESETS[k].weightRangeG[1]}g${JEWELRY_PRESETS[k].perUnit ? ' per inch' : ''}</td></tr>`).join('\n      ')}
+    </tbody>
+  </table>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${relatedKaratLinks('')}
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote. Weight presets are general estimates, not a measurement of your item — always weigh the actual piece before selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const PRESETS = ${presetDataJs};
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function applyPreset(){
+  const key = document.getElementById('item').value;
+  const p = PRESETS[key];
+  document.getElementById('wGrams').value = p.midpointG;
+  document.getElementById('rangeCaption').textContent = 'Typical range: ' + p.weightRangeG[0] + '–' + p.weightRangeG[1] + 'g' + (p.perUnit ? ' per inch' : '') + ' — weigh the actual piece for an accurate estimate.';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  const itemLabel = document.getElementById('item').selectedOptions[0].text;
+  document.getElementById('r-total').textContent = fmtUSD(perGram*grams);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity.toUpperCase()+' · '+itemLabel;
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+applyPreset();
 </script>
 </body>
 </html>
@@ -1968,6 +2175,10 @@ console.log(`✓ ${CASH_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, COIN_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, COIN_PAGE.slug, 'index.html'), buildCoinPage(COIN_PAGE));
 console.log(`✓ ${COIN_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, JEWELRY_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, JEWELRY_PAGE.slug, 'index.html'), buildJewelryPage(JEWELRY_PAGE));
+console.log(`✓ ${JEWELRY_PAGE.slug}/index.html`);
 
 for (const city of CITIES) {
   const dir = path.join(ROOT, city.slug);
