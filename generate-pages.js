@@ -241,6 +241,13 @@ const HISTORY_PAGE = {
   ],
 };
 
+const API_DOC_PAGE = {
+  slug: 'api',
+  title: 'Free Gold Price API (JSON) — usgoldpricepergram.com',
+  metaDesc: 'Free, public, no-key JSON endpoints for live US gold price per gram and price history data. Field reference, update cadence, license and a fetch() example.',
+  h1: 'Gold Price API',
+};
+
 const METHODOLOGY_PAGE = {
   slug: 'methodology',
   title: 'Methodology — How Gold Price Per Gram (USD) Is Calculated',
@@ -2159,6 +2166,132 @@ refreshBanner();
 `;
 }
 
+function buildApiDocPage(page) {
+  const historyFieldRows = [
+    ['t', 'string (ISO 8601)', 'Timestamp of this data point.'],
+    ['spotGBP', 'number', 'Spot price per troy oz, GBP (source feed currency, kept for provenance).'],
+    ['fx', 'number', 'GBP→USD rate used at this point.'],
+    ['g24k', 'number', '24K price per gram, USD.'],
+    ['g22k', 'number', '22K price per gram, USD.'],
+    ['g18k', 'number', '18K price per gram, USD.'],
+    ['g14k', 'number', '14K price per gram, USD.'],
+    ['g10k', 'number', '10K price per gram, USD.'],
+  ];
+  const dataFieldRows = [
+    ['lastUpdated', 'string (ISO 8601)', 'Timestamp of the gold spot price currently shown.'],
+    ['fxLastUpdated', 'string (ISO 8601)', 'Timestamp of the GBP→USD rate currently in use.'],
+    ['isFallback', 'boolean', 'true if either the gold spot price or the FX rate is stale (upstream fetch failed this run).'],
+    ['fallbackComponent', 'string | null', '"gold", "fx", "both", or null — which component (if any) is stale.'],
+    ['spotPricePerOzGBP', 'number', 'Spot price per troy oz, GBP.'],
+    ['fxRateGBPtoUSD', 'number', 'GBP→USD rate in use.'],
+    ['pricePerGram', 'object', 'USD price per gram, keyed "24k"/"22k"/"18k"/"14k"/"10k".'],
+    ['cashPricePerGram', 'object', 'pricePerGram × the site\'s cash-for-gold discount factor, same keys.'],
+    ['dayChange', 'object | null', 'Per-karat {abs, pct} change vs. ~24h ago (null if no data point fell in the 20-30h lookback window). Keyed same as pricePerGram.'],
+    ['note', 'string | null', 'Human-readable explanation when isFallback is true.'],
+  ];
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">🔌 Free · no API key · static JSON</div>
+    <h1>${page.h1}</h1>
+    <p>The exact data this site runs on, published as plain static JSON files — free to fetch, no key, no rate limit beyond normal static-file hosting.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="content" style="padding-top:64px;">
+  <h2 class="st">Endpoints</h2>
+  <div class="method">
+    <div class="code">
+<span>GET ${SITE_URL}/gold-data.json</span><br>
+<span>GET ${SITE_URL}/history.json</span>
+    </div>
+  </div>
+  <p>Both are plain static files (no server-side compute, no authentication) served the same way as any other page on this site — fetch them directly from client-side JS or a server.</p>
+
+  <h2 class="st">gold-data.json — Current Price Snapshot</h2>
+  <p>Overwritten on every update — always represents the latest known values, not a history.</p>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.85rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:8px 12px;text-align:left;">Field</th><th style="padding:8px 12px;text-align:left;">Type</th><th style="padding:8px 12px;text-align:left;">Description</th></tr></thead>
+    <tbody>
+      ${dataFieldRows.map(r => `<tr><td style="padding:8px 12px;border-bottom:1px solid var(--border);"><code>${r[0]}</code></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);">${r[1]}</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);">${r[2]}</td></tr>`).join('\n      ')}
+    </tbody>
+  </table>
+
+  <h2 class="st">history.json — Time Series</h2>
+  <p>A flat JSON array, oldest first, one entry per successful update (stale/fallback runs are never appended — see the <a href="/gold-price-history/">price history page</a>). Capped at the most recent 3,000 points (roughly 2.5 years at 3×/day).</p>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.85rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:8px 12px;text-align:left;">Field</th><th style="padding:8px 12px;text-align:left;">Type</th><th style="padding:8px 12px;text-align:left;">Description</th></tr></thead>
+    <tbody>
+      ${historyFieldRows.map(r => `<tr><td style="padding:8px 12px;border-bottom:1px solid var(--border);"><code>${r[0]}</code></td><td style="padding:8px 12px;border-bottom:1px solid var(--border);">${r[1]}</td><td style="padding:8px 12px;border-bottom:1px solid var(--border);">${r[2]}</td></tr>`).join('\n      ')}
+    </tbody>
+  </table>
+
+  <h2 class="st">Update Cadence</h2>
+  <p>Both files refresh on the same cron schedule as the rest of the site: <code>${CONFIG.updateSchedule}</code> (three times a day). This text is pulled directly from the site's own config at generation time, so it can't drift out of sync with the actual schedule.</p>
+
+  <h2 class="st">License &amp; Usage</h2>
+  <p>Free to use, no API key, no signup, no rate limit beyond normal static-file hosting. Attribution with a link back to <a href="${SITE_URL}/">${SITE_URL.replace('https://', '')}</a> is appreciated but not required. No uptime SLA — this is a static file on GitHub Pages, not a monitored production API. This is not a dealer quote or a regulated price feed; see the <a href="/methodology/">methodology page</a> for the full calculation and its limitations.</p>
+
+  <h2 class="st">Example</h2>
+  <div class="method">
+    <div class="code">
+<span>fetch('${SITE_URL}/gold-data.json')</span><br>
+<span>&nbsp;&nbsp;.then(r => r.json())</span><br>
+<span>&nbsp;&nbsp;.then(data => console.log(data.pricePerGram['24k']));</span>
+    </div>
+    <p id="liveApiExample" style="font-size:.85rem;color:var(--muted);"></p>
+  </div>
+
+  <div class="link-grid" style="margin-top:32px;">
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+    <a class="link-card" href="/gold-price-history/"><div class="t">Price History</div><div class="sub">Chart &amp; trend</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+  </div>
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">This is not a dealer quote or a regulated price feed — see the methodology page for the full calculation and its limitations.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const gd = window.GOLD_DATA;
+  const el = document.getElementById('liveApiExample');
+  if(gd && gd.pricePerGram && gd.pricePerGram['24k'] != null){
+    el.textContent = 'Live result right now: ' + gd.pricePerGram['24k'] + ' (24K, USD per gram, as of ' + gd.lastUpdated + ').';
+  } else {
+    el.textContent = 'Live example will appear once the first price update has run.';
+  }
+})();
+</script>
+</body>
+</html>
+`;
+}
+
 // --- Write files ---
 for (const key of KARAT_KEYS) {
   const page = KARATS[key];
@@ -2205,6 +2338,10 @@ console.log(`✓ ${STATE_HUB_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, METHODOLOGY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, METHODOLOGY_PAGE.slug, 'index.html'), buildMethodologyPage(METHODOLOGY_PAGE));
 console.log(`✓ ${METHODOLOGY_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, API_DOC_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, API_DOC_PAGE.slug, 'index.html'), buildApiDocPage(API_DOC_PAGE));
+console.log(`✓ ${API_DOC_PAGE.slug}/index.html`);
 
 fs.mkdirSync(path.join(ROOT, HISTORY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, HISTORY_PAGE.slug, 'index.html'), buildHistoryPage(HISTORY_PAGE));

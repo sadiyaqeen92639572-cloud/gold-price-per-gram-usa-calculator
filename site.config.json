@@ -38,6 +38,7 @@
     { "slug": "gold-price-per-kg",               "file": "gold-price-per-kg/index.html" },
     { "slug": "gold-price-per-pennyweight",      "file": "gold-price-per-pennyweight/index.html" },
     { "slug": "gold-price-per-tola",             "file": "gold-price-per-tola/index.html" },
-    { "slug": "methodology",                      "file": "methodology/index.html" }
+    { "slug": "methodology",                      "file": "methodology/index.html" },
+    { "slug": "api",                              "file": "api/index.html" }
   ]
 }
