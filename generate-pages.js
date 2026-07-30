@@ -241,6 +241,21 @@ const HISTORY_PAGE = {
   ],
 };
 
+const TAX_PAGE = {
+  slug: 'gold-capital-gains-tax-usa',
+  title: 'Capital Gains Tax on Gold in the US — The 28% Collectibles Rule',
+  metaDesc: 'How the IRS taxes gains on physical gold and silver in the US — the 28% collectibles rate, short vs long-term holding, gold ETFs, and 1099-B reporting thresholds.',
+  keywords: 'capital gains tax on gold, gold collectibles tax rate, is gold taxed 28%, IRS gold tax rules, gold ETF tax, 1099-B gold coins',
+  h1: 'Capital Gains Tax on Gold in the US',
+  faq: [
+    { q: 'What federal tax rate applies when I sell gold at a profit?', a: 'The IRS classifies physical gold, silver, platinum and palladium (coins and bullion) as "collectibles" under IRC §408(m). If you held it more than one year, the gain is taxed at your ordinary income rate, capped at a maximum of 28% — not a flat 28% for everyone, just a ceiling. If you held it one year or less, the gain is short-term and taxed fully at your ordinary income rate, with no 28% cap.' },
+    { q: 'Is a gold ETF taxed the same as physical gold?', a: 'It depends on the ETF\'s structure. Physically-backed gold ETFs structured as grantor trusts (e.g. GLD, IAU, SGOL) hold real bullion, so long-term gains are taxed at the same 28% collectibles rate as owning the metal directly. ETFs built on mining stocks or futures contracts are taxed as ordinary securities, at the standard 0/15/20% long-term capital gains rates instead.' },
+    { q: 'Is there an extra surtax on top of the 28% rate?', a: 'Possibly — the 3.8% Net Investment Income Tax (NIIT) can apply to collectible gains for taxpayers with modified adjusted gross income above $200,000 (single) or $250,000 (married filing jointly), on top of the regular capital gains tax.' },
+    { q: 'Does the dealer report my gold sale to the IRS?', a: 'Only above specific thresholds, and it varies by coin/product — for example, American Gold Eagles are not reportable by the dealer regardless of quantity sold, while 1oz Canadian Gold Maple Leafs become reportable at 25 coins or more in a single (or related) transaction. Not being reported does not change your obligation to report the gain yourself; the threshold only affects whether the dealer also files a 1099-B.' },
+    { q: 'Is this the same as the state sales tax on buying gold?', a: 'No — this page covers federal capital gains tax when you sell gold at a profit. Sales tax is a separate, state-level tax charged when you buy gold, and varies enormously by state (some states fully exempt bullion, some tax it, Washington now taxes it after repealing its exemption in 2026) — see our sales-tax-by-state guide for that.' },
+  ],
+};
+
 const API_DOC_PAGE = {
   slug: 'api',
   title: 'Free Gold Price API (JSON) — usgoldpricepergram.com',
@@ -1765,6 +1780,7 @@ ${siteBanner()}
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
     <a class="link-card" href="/sell-gold-near-me/"><div class="t">All Cities</div><div class="sub">Sell gold near me — by city</div></a>
+    <a class="link-card" href="/gold-capital-gains-tax-usa/"><div class="t">Capital Gains Tax</div><div class="sub">Federal tax when you sell at a profit</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
     <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
@@ -2368,6 +2384,107 @@ ${eeatBlock()}
 `;
 }
 
+function buildTaxPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${jsonLd}
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">📋 Federal tax rules · not personal advice</div>
+    <h1>${page.h1}</h1>
+    <p>Physical gold and silver are taxed differently from stocks when you sell at a profit — here's the actual IRS rule, not a rough guess.</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="content" style="padding-top:64px;">
+  <div class="disc" style="color:#d9c9a3;">This is general information, not personal tax advice. Tax situations vary by individual — consult a CPA or tax professional, or see <a href="https://www.irs.gov/publications/p550" target="_blank" rel="noopener noreferrer">IRS Publication 550</a>, before making decisions based on this page.</div>
+
+  <h2 class="st">The 28% Collectibles Rule</h2>
+  <p>The IRS classifies physical gold, silver, platinum and palladium — coins and bullion alike — as "collectibles" under <a href="https://www.law.cornell.edu/uscode/text/26/408" target="_blank" rel="noopener noreferrer">IRC §408(m)</a>, the same category as art, antiques, rare coins and stamps. This matters because collectibles are taxed differently from stocks or ETFs on regular securities:</p>
+  <div class="method">
+    <div class="code">
+<span>Held &gt; 1 year (long-term): tax rate = min(your ordinary income tax rate, 28%)</span><br>
+<span>Held ≤ 1 year (short-term): tax rate = your ordinary income tax rate (no 28% cap)</span>
+    </div>
+  </div>
+  <p>The 28% figure is a <strong>ceiling, not a flat rate</strong> — if your ordinary income tax bracket is below 28%, you pay that lower rate instead on a long-term gain. It only becomes the binding rate for taxpayers whose ordinary bracket is 28% or higher. This is a meaningfully worse deal than stocks, which get the standard 0/15/20% long-term capital gains rates.</p>
+
+  <h2 class="st">Gold ETFs — Not Automatically Exempt</h2>
+  <p>Whether an ETF gets the same 28% treatment depends on how it's structured, not on the fact that it's an ETF at all. Physically-backed gold ETFs organized as grantor trusts — <strong>GLD, IAU, SGOL</strong> and similar funds that hold real bullion — pass the same 28% collectibles rate through to long-term gains on their shares. ETFs built on mining company stocks or gold futures contracts are taxed as ordinary securities instead, at the standard long-term rates.</p>
+
+  <h2 class="st">The 3.8% Net Investment Income Tax (NIIT)</h2>
+  <p>On top of the capital gains rate, the 3.8% NIIT can apply to collectible gains for taxpayers with modified adjusted gross income above $200,000 (single) or $250,000 (married filing jointly) — meaning the effective top rate on a long-term physical gold gain can exceed 31% for high earners.</p>
+
+  <h2 class="st">Does the Dealer Report My Sale to the IRS?</h2>
+  <p>Only above specific per-product thresholds, via Form 1099-B — and the threshold varies by exact coin/product. Two concrete, commonly-asked examples:</p>
+  <ul style="margin:0 0 18px 20px;line-height:1.8;">
+    <li><strong>American Gold Eagles</strong> — not reportable by the dealer, regardless of quantity sold.</li>
+    <li><strong>1oz Canadian Gold Maple Leafs</strong> — reportable at 25 coins or more in a single (or related) transaction.</li>
+  </ul>
+  <p>Reporting thresholds affect only whether the <em>dealer</em> also files a 1099-B — they do not change your own obligation to report a taxable gain, which applies regardless of whether a 1099-B was filed.</p>
+
+  <h2 class="st">Sales Tax vs. Capital Gains Tax — Different Things</h2>
+  <p>This page covers <strong>federal capital gains tax</strong>, owed when you sell gold at a profit. It's entirely separate from <strong>state sales tax</strong>, charged when you buy gold, which varies enormously by state — see our <a href="/sell-gold-by-state/">sales-tax-by-state guide</a> for that (Texas/Arizona/Florida/Colorado/North Carolina fully exempt bullion, Washington now taxes it after repealing its exemption effective January 1, 2026, and several other states exempt only above a dollar threshold).</p>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+
+  <div class="link-grid" style="margin-top:32px;">
+    <a class="link-card" href="/sell-gold-by-state/"><div class="t">Sales Tax by State</div><div class="sub">Buying, not selling — different tax</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
+    <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">This page is general information, not personal tax advice — consult a CPA or tax professional, or see IRS Publication 550, before making decisions.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }</script>
+</body>
+</html>
+`;
+}
+
 // --- Write files ---
 for (const key of KARAT_KEYS) {
   const page = KARATS[key];
@@ -2414,6 +2531,10 @@ console.log(`✓ ${STATE_HUB_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, METHODOLOGY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, METHODOLOGY_PAGE.slug, 'index.html'), buildMethodologyPage(METHODOLOGY_PAGE));
 console.log(`✓ ${METHODOLOGY_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, TAX_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, TAX_PAGE.slug, 'index.html'), buildTaxPage(TAX_PAGE));
+console.log(`✓ ${TAX_PAGE.slug}/index.html`);
 
 fs.mkdirSync(path.join(ROOT, API_DOC_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, API_DOC_PAGE.slug, 'index.html'), buildApiDocPage(API_DOC_PAGE));
