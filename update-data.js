@@ -133,6 +133,33 @@ function injectHistoryChart(history) {
   console.log('  ✓ history chart injected');
 }
 
+// Guard band is a closed window, not "at least 20h ago" — if the site has a gap (outage,
+// failed deploy), the nearest older point could be 3-4 days back, and showing that as
+// "today's change" would be misleading. No point in the 20h-30h window means no display,
+// not a stale-but-plausible-looking number.
+function computeDayChange(history) {
+  if (!history || history.length < 2) return null;
+  const latest = history[history.length - 1];
+  const latestMs = new Date(latest.t).getTime();
+  const MIN_MS = 20 * 3600 * 1000;
+  const MAX_MS = 30 * 3600 * 1000;
+  let prior = null;
+  for (let i = history.length - 2; i >= 0; i--) {
+    const dt = latestMs - new Date(history[i].t).getTime();
+    if (dt >= MIN_MS && dt <= MAX_MS) { prior = history[i]; break; }
+    if (dt > MAX_MS) break; // history is time-ascending, so dt only grows further back — no match possible earlier either
+  }
+  if (!prior) return null;
+  const out = {};
+  for (const k of ['24k', '22k', '18k', '14k', '10k']) {
+    const field = 'g' + k;
+    if (prior[field] == null || latest[field] == null) continue;
+    const abs = latest[field] - prior[field];
+    out[k] = { abs: Number(abs.toFixed(2)), pct: Number(((abs / prior[field]) * 100).toFixed(2)) };
+  }
+  return Object.keys(out).length ? out : null;
+}
+
 function updateSitemapLastmod(todayISO) {
   if (!fs.existsSync(SITEMAP_FILE)) return;
   let xml = fs.readFileSync(SITEMAP_FILE, 'utf8');
@@ -234,6 +261,9 @@ async function main() {
     process.exit(1);
   }
 
+  const history = appendHistory(data);
+  data.dayChange = computeDayChange(history || (fs.existsSync(HISTORY_FILE) ? JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8')) : null));
+
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 
   console.log('Injecting into pages:');
@@ -251,7 +281,6 @@ async function main() {
     injectIntoPage(path.join(ROOT, state.slug, 'index.html'), data);
   }
 
-  const history = appendHistory(data);
   injectHistoryChart(history || (fs.existsSync(HISTORY_FILE) ? JSON.parse(fs.readFileSync(HISTORY_FILE, 'utf8')) : null));
 
   updateSitemapLastmod(data.lastUpdated ? data.lastUpdated.slice(0, 10) : new Date().toISOString().slice(0, 10));

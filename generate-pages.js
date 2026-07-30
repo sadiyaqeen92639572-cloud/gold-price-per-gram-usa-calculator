@@ -536,6 +536,7 @@ ${siteBanner()}
 <div class="tool-wrapper">
   <div class="tool-card">
     <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="day-change" id="dayChange" style="display:none;text-align:center;font-size:.82rem;font-weight:700;margin-bottom:12px;"></div>
     <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
     <div class="form-grid">
       <div class="form-group">
@@ -617,6 +618,17 @@ function refreshBanner(){
   const banner = document.getElementById('fallbackBanner');
   line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
   banner.style.display = gd.isFallback ? 'block' : 'none';
+  renderDayChange();
+}
+function renderDayChange(){
+  const dc = window.GOLD_DATA.dayChange;
+  const el = document.getElementById('dayChange');
+  const d = dc && dc[PURITY];
+  if(!d){ el.style.display = 'none'; return; }
+  const sign = d.abs >= 0 ? '+' : '';
+  el.style.color = d.abs >= 0 ? '#1a7a3c' : '#b3261e';
+  el.textContent = sign + fmtUSD(d.abs) + '/g (' + sign + d.pct.toFixed(2) + '%) vs ~24h ago';
+  el.style.display = 'block';
 }
 function renderWeightTable(perGram){
   if(perGram == null) return;

@@ -1,23 +1,45 @@
 {
-  "lastUpdated": "2026-07-30T08:18:10.144Z",
-  "fxLastUpdated": "2026-07-30T08:18:10.145Z",
+  "lastUpdated": "2026-07-30T10:34:35.798Z",
+  "fxLastUpdated": "2026-07-30T10:34:35.798Z",
   "isFallback": false,
   "fallbackComponent": null,
-  "spotPricePerOzGBP": 3057.91,
+  "spotPricePerOzGBP": 3047.23,
   "fxRateGBPtoUSD": 1.3289,
   "pricePerGram": {
-    "24k": 130.64,
-    "22k": 119.76,
-    "18k": 97.99,
-    "14k": 76.21,
-    "10k": 54.48
+    "24k": 130.19,
+    "22k": 119.35,
+    "18k": 97.65,
+    "14k": 75.95,
+    "10k": 54.29
   },
   "cashPricePerGram": {
-    "24k": 111.05,
-    "22k": 101.8,
-    "18k": 83.29,
-    "14k": 64.78,
-    "10k": 46.31
+    "24k": 110.66,
+    "22k": 101.45,
+    "18k": 83,
+    "14k": 64.55,
+    "10k": 46.15
   },
-  "note": null
+  "note": null,
+  "dayChange": {
+    "24k": {
+      "abs": 0.87,
+      "pct": 0.67
+    },
+    "22k": {
+      "abs": 0.8,
+      "pct": 0.67
+    },
+    "18k": {
+      "abs": 0.67,
+      "pct": 0.69
+    },
+    "14k": {
+      "abs": 0.52,
+      "pct": 0.69
+    },
+    "10k": {
+      "abs": 0.36,
+      "pct": 0.67
+    }
+  }
 }

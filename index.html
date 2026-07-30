@@ -23,7 +23,7 @@
 <meta name="twitter:image" content="https://usgoldpricepergram.com/og-image.png">
 
 <!-- START_PRICE_DATA -->
-<script>window.GOLD_DATA = {"lastUpdated":"2026-07-30T08:18:10.144Z","fxLastUpdated":"2026-07-30T08:18:10.145Z","isFallback":false,"fallbackComponent":null,"spotPricePerOzGBP":3057.91,"fxRateGBPtoUSD":1.3289,"pricePerGram":{"24k":130.64,"22k":119.76,"18k":97.99,"14k":76.21,"10k":54.48},"cashPricePerGram":{"24k":111.05,"22k":101.8,"18k":83.29,"14k":64.78,"10k":46.31},"note":null};</script>
+<script>window.GOLD_DATA = {"lastUpdated":"2026-07-30T10:34:35.798Z","fxLastUpdated":"2026-07-30T10:34:35.798Z","isFallback":false,"fallbackComponent":null,"spotPricePerOzGBP":3047.23,"fxRateGBPtoUSD":1.3289,"pricePerGram":{"24k":130.19,"22k":119.35,"18k":97.65,"14k":75.95,"10k":54.29},"cashPricePerGram":{"24k":110.66,"22k":101.45,"18k":83,"14k":64.55,"10k":46.15},"note":null,"dayChange":{"24k":{"abs":0.87,"pct":0.67},"22k":{"abs":0.8,"pct":0.67},"18k":{"abs":0.67,"pct":0.69},"14k":{"abs":0.52,"pct":0.69},"10k":{"abs":0.36,"pct":0.67}}};</script>
 <!-- END_PRICE_DATA -->
 
 <script type="application/ld+json">
@@ -168,6 +168,7 @@ footer a { color:#e9dcc0; }
 <div class="tool-wrapper">
   <div class="tool-card">
     <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="day-change" id="dayChange" style="display:none;text-align:center;font-size:.82rem;font-weight:700;margin-bottom:12px;"></div>
     <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
     <div class="form-grid">
       <div class="form-group">
@@ -347,6 +348,18 @@ function refreshBanner(){
   banner.style.display = gd.isFallback ? 'block' : 'none';
 }
 
+function renderDayChange(purity){
+  const dc = window.GOLD_DATA.dayChange;
+  const el = document.getElementById('dayChange');
+  if(!el) return;
+  const d = dc && dc[purity];
+  if(!d){ el.style.display = 'none'; return; }
+  const sign = d.abs >= 0 ? '+' : '';
+  el.style.color = d.abs >= 0 ? '#1a7a3c' : '#b3261e';
+  el.textContent = sign + fmtUSD(d.abs) + '/g (' + sign + d.pct.toFixed(2) + '%) vs ~24h ago';
+  el.style.display = 'block';
+}
+
 function renderWeightTable(perGram){
   if(perGram == null) return;
   const rows = { '1':1, '2_5':2.5, '5':5, '10':10, '20':20, '50':50, '100':100, 'ozt':TROY_OZ_G, 'kg':1000 };
@@ -372,10 +385,12 @@ function calculate(){
   document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
   document.getElementById('weightTableKarat').textContent = purity.toUpperCase();
   renderWeightTable(perGram);
+  renderDayChange(purity);
 }
 function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
 refreshBanner();
 renderWeightTable(window.GOLD_DATA.pricePerGram[document.getElementById('purity').value]);
+renderDayChange(document.getElementById('purity').value);
 </script>
 </body>
 </html>
