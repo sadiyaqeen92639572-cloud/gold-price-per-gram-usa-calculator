@@ -1,45 +1,45 @@
 {
-  "lastUpdated": "2026-08-04T14:00:56.191Z",
-  "fxLastUpdated": "2026-08-04T08:30:07.161Z",
-  "isFallback": true,
-  "fallbackComponent": "fx",
-  "spotPricePerOzGBP": 3018.375,
-  "fxRateGBPtoUSD": 1.347,
+  "lastUpdated": "2026-08-04T19:25:04.794Z",
+  "fxLastUpdated": "2026-08-04T19:25:04.794Z",
+  "isFallback": false,
+  "fallbackComponent": null,
+  "spotPricePerOzGBP": 3020.005,
+  "fxRateGBPtoUSD": 1.3446,
   "pricePerGram": {
-    "24k": 130.71,
-    "22k": 119.83,
-    "18k": 98.03,
-    "14k": 76.25,
-    "10k": 54.51
+    "24k": 130.56,
+    "22k": 119.67,
+    "18k": 97.91,
+    "14k": 76.16,
+    "10k": 54.44
   },
   "cashPricePerGram": {
-    "24k": 111.11,
-    "22k": 101.85,
-    "18k": 83.33,
-    "14k": 64.82,
-    "10k": 46.33
+    "24k": 110.98,
+    "22k": 101.72,
+    "18k": 83.23,
+    "14k": 64.73,
+    "10k": 46.28
   },
-  "note": "Fallback: FX rate fetch failed (https://api.frankfurter.dev/v1/latest?base=GBP&symbols=USD returned HTTP 520: error code: 520\n), using last known GBP→USD rate from 2026-08-04T08:30:07.161Z.",
+  "note": null,
   "dayChange": {
     "24k": {
-      "abs": 0.59,
-      "pct": 0.46
+      "abs": 0.05,
+      "pct": 0.04
     },
     "22k": {
-      "abs": 0.54,
-      "pct": 0.46
+      "abs": 0.04,
+      "pct": 0.03
     },
     "18k": {
-      "abs": 0.45,
-      "pct": 0.46
+      "abs": 0.02,
+      "pct": 0.02
     },
     "14k": {
-      "abs": 0.35,
-      "pct": 0.46
+      "abs": 0.03,
+      "pct": 0.04
     },
     "10k": {
-      "abs": 0.25,
-      "pct": 0.46
+      "abs": 0.02,
+      "pct": 0.04
     }
   }
 }
