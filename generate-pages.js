@@ -228,6 +228,27 @@ const JEWELRY_PAGE = {
   ],
 };
 
+// Deliberately NOT reusing "dealer pays below spot" as the content angle — that framing is
+// already used by CASH_PAGE above AND by the UK sister site's own /scrap-gold-price-per-gram-uk/
+// page (checked before writing this). This page's angle is specific to mixed-karat lots instead.
+const SCRAP_PAGE = {
+  slug: 'scrap-gold-calculator',
+  title: 'Scrap Gold Calculator — Value Your Mixed Gold Lot (USD)',
+  metaDesc: 'Add multiple scrap gold items — rings, chains, odd pieces, any karat, in grams, dwt or troy oz — and get one running total at today\'s live gold price. Free, USD.',
+  keywords: 'scrap gold calculator, scrap gold value calculator, scrap gold price calculator, gold karat calculator, how much is my scrap gold worth',
+  h1: 'Scrap Gold Calculator',
+  intro: 'Selling a mixed lot — broken chains, mismatched earrings, odd rings, different karats all in one box? Add each piece as its own line below, in whatever unit you weighed it in, and get one running total instead of doing the math by hand.',
+  angleTitle: 'Why a Mixed-Karat Lot Isn\'t Priced Like a Single Item',
+  angleBody: 'A single ring or chain is straightforward: one karat, one weight, one value. A scrap lot is different — many buyers weigh a mixed pile all at once and price the <strong>entire lot at its lowest karat</strong> unless you\'ve sorted it first, since testing each piece individually takes them time. Sorting by karat before you sell (a cheap at-home magnet test plus a jeweler\'s acid test, or asking the buyer to test each piece separately) can meaningfully change what you\'re offered on a mixed lot. This calculator lets you enter each piece at its own real karat and weight so you can see what the lot is actually worth sorted, before you decide whether it\'s worth the extra step.',
+  faq: [
+    { q: 'How much is my scrap gold worth?', a: 'It depends on the total gold content across everything you\'re selling — add each piece\'s weight and karat above and the calculator sums the melt value automatically. The buyer-offer range shown below the total reflects that most buyers pay a discount off that melt value, not the full amount.' },
+    { q: 'How do you calculate scrap gold value?', a: 'Melt value = weight in grams × the live price per gram for that karat. For a mixed lot, each piece is calculated at its own karat and then added together — that\'s exactly what the multi-item calculator above does, rather than assuming one karat for the whole lot.' },
+    { q: 'Does mixed-karat scrap gold sell for less than sorted gold?', a: 'Often, yes — many buyers weigh an unsorted lot together and price it at its lowest karat present, since testing each piece separately takes them extra time. Sorting your gold by karat before selling (or asking the buyer to test each piece individually) can get you closer to the lot\'s true blended value instead of the lowest-karat shortcut.' },
+    { q: 'What weight unit should I use — grams, dwt, or troy ounces?', a: 'Use whatever your scale actually reads. Many US pawn shops and jewelers weigh scrap gold in pennyweight (dwt) rather than grams, and larger lots or bars are sometimes weighed in troy ounces. Pick the matching unit for each row and the calculator converts everything to grams internally before totaling.' },
+    { q: 'What does a refiner do with scrap gold that a pawn shop doesn\'t?', a: 'A refiner melts the lot down, assays it (chemically tests the exact purity) and separates the pure gold from any alloy metals — that\'s their core business, so they\'re often set up to pay closer to true melt value on larger lots. A pawn shop or general gold buyer usually resells or sends items to a refiner themselves, so their offer typically includes an extra margin for that middle step.' },
+  ],
+};
+
 const HISTORY_PAGE = {
   slug: 'gold-price-history',
   title: 'Gold Price History — Live Chart & Data Per Gram (USD)',
@@ -816,6 +837,7 @@ ${siteBanner()}
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
     ${relatedKaratLinks('')}
+    <a class="link-card" href="/scrap-gold-calculator/"><div class="t">Scrap Gold Calculator</div><div class="sub">Value a mixed lot, multiple items</div></a>
     <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
     <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
@@ -1187,6 +1209,7 @@ ${siteBanner()}
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
     ${relatedKaratLinks('')}
+    <a class="link-card" href="/scrap-gold-calculator/"><div class="t">Scrap Gold Calculator</div><div class="sub">Value a mixed lot, multiple items</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
     <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
@@ -1240,6 +1263,208 @@ function calculate(){
 function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
 refreshBanner();
 applyPreset();
+</script>
+</body>
+</html>
+`;
+}
+
+// Scrap gold calculator — differs from CASH_PAGE (single item, cash-offer framing) and
+// JEWELRY_PAGE (single item, preset weights) by supporting MULTIPLE line items (a mixed lot,
+// each its own karat + weight + unit) summed to one total. Result shows melt/spot value as the
+// primary figure (not the single cashPricePerGram point estimate CASH_PAGE already owns) plus a
+// buyer-offer RANGE computed directly from spot, to avoid both false precision and re-presenting
+// data CASH_PAGE already leads with.
+function buildScrapPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Scrap Gold Calculator (USD)",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const karatOptions = KARAT_KEYS.map(k => `<option value="${k}"${k === '14k' ? ' selected' : ''}>${KARATS[k].label} Gold — ${KARATS[k].hallmark}</option>`).join('');
+  const gramsPerDwt = CONFIG.troyOzToGrams / CONFIG.dwtPerTroyOz;
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>
+select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}
+select:focus{outline:none;border-color:var(--brand);}
+.scrap-row{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px;}
+@media (max-width:580px){ .scrap-row{grid-template-columns:1fr 1fr;} .scrap-row .row-unit{grid-column:1;} .scrap-row .row-remove{grid-column:2;justify-self:end;} }
+.scrap-row label{font-size:.7rem;}
+.row-remove{background:#fff;border:2px solid var(--border);border-radius:8px;padding:12px 14px;cursor:pointer;color:var(--muted);font-weight:700;}
+.row-remove:hover{border-color:#c0392b;color:#c0392b;}
+.add-row-btn{width:100%;margin-top:4px;padding:12px;background:var(--brand-light);color:var(--brand-dark);border:2px dashed var(--brand);border-radius:8px;font-size:.92rem;font-weight:700;cursor:pointer;}
+.add-row-btn:hover{background:#fff;}
+.row-breakdown{font-size:.8rem;color:var(--muted);text-align:left;margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.row-breakdown div{display:flex;justify-content:space-between;padding:3px 0;}
+.buyer-range{background:var(--brand-light);border-radius:8px;padding:14px;margin-top:12px;text-align:center;}
+.buyer-range .brl{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);}
+.buyer-range .brv{font-size:1.2rem;font-weight:800;color:var(--brand-dark);margin-top:2px;}
+</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">🧮 Mixed lot · multiple items · g / dwt / troy oz</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+
+    <div id="rowsWrap"></div>
+    <button type="button" class="add-row-btn" onclick="addRow()">+ Add another item</button>
+    <button class="calc-btn" onclick="calculate()">Calculate Total →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Total melt value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="buyer-range">
+        <div class="brl">Typical buyer-offer range (est. 70–85% of melt value)</div>
+        <div class="brv" id="r-range"></div>
+      </div>
+      <div class="row-breakdown" id="r-breakdown"></div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Melt value is what the gold content is worth at today's live price. The buyer-offer range is a general industry estimate, not a quote — actual offers vary by buyer, karat mix, and whether the lot is sorted (see below).</p>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">${page.angleTitle}</h2>
+  <p>${page.angleBody}</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${relatedKaratLinks('')}
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Single item, buyer estimate</div></a>
+    <a class="link-card" href="/gold-jewelry-value-calculator/"><div class="t">Jewelry Value Calculator</div><div class="sub">Ring, chain &amp; bracelet presets</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Melt values use an indicative live rate (spot × FX). The buyer-offer range is a general industry estimate, not a dealer quote — always confirm with a buyer before selling, and consider sorting a mixed lot by karat first.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const KARAT_OPTIONS_HTML = ${JSON.stringify(karatOptions)};
+const UNIT_TO_GRAMS = { g: 1, dwt: ${JSON.stringify(gramsPerDwt)}, ozt: ${JSON.stringify(CONFIG.troyOzToGrams)} };
+let rowSeq = 0;
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function addRow(defaultKarat, defaultWeight, defaultUnit){
+  const id = 'row' + (rowSeq++);
+  const wrap = document.getElementById('rowsWrap');
+  const div = document.createElement('div');
+  div.className = 'scrap-row';
+  div.id = id;
+  div.innerHTML =
+    '<div class="form-group"><label>Karat</label><select class="row-karat">' + KARAT_OPTIONS_HTML + '</select></div>' +
+    '<div class="form-group"><label>Weight</label><input type="number" class="row-weight" min="0.01" step="0.01" value="' + (defaultWeight||1) + '"></div>' +
+    '<div class="form-group row-unit"><label>Unit</label><select class="row-unit-select"><option value="g">grams</option><option value="dwt">dwt</option><option value="ozt">troy oz</option></select></div>' +
+    '<button type="button" class="row-remove" onclick="removeRow(\\'' + id + '\\')">✕</button>';
+  wrap.appendChild(div);
+  if (defaultKarat) div.querySelector('.row-karat').value = defaultKarat;
+  if (defaultUnit) div.querySelector('.row-unit-select').value = defaultUnit;
+}
+function removeRow(id){
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const rows = document.querySelectorAll('.scrap-row');
+  if (rows.length === 0) { alert('Add at least one item.'); return; }
+  let totalMelt = 0;
+  const breakdown = [];
+  for (const row of rows) {
+    const karat = row.querySelector('.row-karat').value;
+    const weight = parseFloat(row.querySelector('.row-weight').value) || 0;
+    const unit = row.querySelector('.row-unit-select').value;
+    const perGram = gd.pricePerGram[karat];
+    if (perGram == null) { alert('Live price not yet available for ' + karat.toUpperCase() + ' — please check back shortly.'); return; }
+    if (weight <= 0) continue;
+    const grams = weight * UNIT_TO_GRAMS[unit];
+    const subtotal = grams * perGram;
+    totalMelt += subtotal;
+    breakdown.push({ label: karat.toUpperCase() + ' · ' + weight + unit + ' (' + grams.toFixed(2) + 'g)', value: fmtUSD(subtotal) });
+  }
+  if (totalMelt <= 0) { alert('Enter a weight greater than 0 for at least one item.'); return; }
+  document.getElementById('r-total').textContent = fmtUSD(totalMelt);
+  document.getElementById('r-sub').textContent = rows.length + ' item' + (rows.length > 1 ? 's' : '') + ' · melt value at live spot price';
+  document.getElementById('r-range').textContent = fmtUSD(totalMelt * 0.70) + ' – ' + fmtUSD(totalMelt * 0.85);
+  document.getElementById('r-breakdown').innerHTML = breakdown.map(b => '<div><span>' + b.label + '</span><span>' + b.value + '</span></div>').join('');
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+addRow('14k', 10, 'g');
+addRow('10k', 5, 'dwt');
 </script>
 </body>
 </html>
@@ -2505,6 +2730,10 @@ console.log(`✓ ${COIN_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, JEWELRY_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, JEWELRY_PAGE.slug, 'index.html'), buildJewelryPage(JEWELRY_PAGE));
 console.log(`✓ ${JEWELRY_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, SCRAP_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, SCRAP_PAGE.slug, 'index.html'), buildScrapPage(SCRAP_PAGE));
+console.log(`✓ ${SCRAP_PAGE.slug}/index.html`);
 
 for (const city of CITIES) {
   const dir = path.join(ROOT, city.slug);

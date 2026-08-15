@@ -33,6 +33,7 @@
     { "slug": "cash-for-gold-price-per-gram",    "file": "cash-for-gold-price-per-gram/index.html" },
     { "slug": "gold-coin-melt-value-calculator", "file": "gold-coin-melt-value-calculator/index.html" },
     { "slug": "gold-jewelry-value-calculator",   "file": "gold-jewelry-value-calculator/index.html" },
+    { "slug": "scrap-gold-calculator",           "file": "scrap-gold-calculator/index.html" },
     { "slug": "gold-price-history",              "file": "gold-price-history/index.html" },
     { "slug": "gold-price-per-ounce",            "file": "gold-price-per-ounce/index.html" },
     { "slug": "gold-price-per-kg",               "file": "gold-price-per-kg/index.html" },
