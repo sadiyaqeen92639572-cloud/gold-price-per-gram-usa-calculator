@@ -130,6 +130,7 @@ const OUNCE_PAGE = {
   unitLabel: 'troy oz', unitLabelSingular: 'troy oz', unitLabelSingularCap: 'Troy Ounce',
   gramsPerUnit: CONFIG.troyOzToGrams,
   step: '0.01', defaultValue: '1',
+  extraLinkSlugs: ['troy-ounce-vs-ounce'],
   angleTitle: 'Why Gold Is Priced Per Troy Ounce, Not a Standard Ounce',
   angleBody: 'A troy ounce (31.1035g) is heavier than the everyday avoirdupois ounce (28.35g) used for food or postage — bullion, coins and the interbank spot price are always quoted in troy ounces, a convention dating back to medieval bullion trading. If you\'re pricing a bar or an American Gold Eagle/Buffalo coin rather than jewelry, this is the unit dealers and price charts will quote.',
   faq: [
@@ -250,6 +251,142 @@ const SCRAP_PAGE = {
   ],
 };
 
+// Gold-filled (GF) is NOT a karat — it's a base metal (usually brass) with a bonded layer
+// of karat gold, expressed as a fraction of total weight (most common: 1/20, stamped "14K/20"
+// or "GF"). Melt value = weight × that fraction × the live per-gram price for the layer's karat.
+// gold-data.json's pricePerGram[karat] is ALREADY the per-karat price (24k:141.39, 14k:82.48 —
+// pre-scaled, not a 24K-fine price needing a further karat/24 multiplier) — confirmed by reading
+// the live file before writing this formula, so do NOT also multiply by karat/24 here.
+const GF_RATIOS = {
+  '1/10': { label: '1/10 (10%) — "10K/10" or "GF"', fraction: 0.10 },
+  '1/12': { label: '1/12 (~8.3%) — "12K/12" or "GF"', fraction: 1 / 12 },
+  '1/20': { label: '1/20 (5%) — "14K/20" (most common)', fraction: 0.05 },
+  '1/40': { label: '1/40 (2.5%) — "14K/40", thinner/cheaper pieces', fraction: 0.025 },
+};
+const GOLD_FILLED_PAGE = {
+  slug: 'gold-filled-value-calculator',
+  title: 'Gold-Filled Value Calculator — GF Scrap Value by Layer Ratio (USD)',
+  metaDesc: 'Estimate the melt value of gold-filled (GF) jewelry using the correct layer ratio (1/10, 1/12, 1/20, 1/40) — not a solid-karat calculation. Live USD price.',
+  keywords: 'gold filled value calculator, gold filled scrap value, gold filled calculator, GF gold value',
+  h1: 'Gold-Filled Value Calculator',
+  intro: 'Gold-filled (GF) jewelry isn\'t a karat — it\'s a base metal with a bonded layer of karat gold, weighed as a fraction of the total piece. Pick the ratio stamped on your item (commonly "14K/20" or just "GF") and its weight for an estimate that accounts for that thin layer, not the full piece as if it were solid gold.',
+  angleTitle: 'Why Most Refiners Won\'t Take Small Gold-Filled Lots',
+  angleBody: 'Because only a thin fraction of a gold-filled piece is actual gold — often just 1/20th or 1/40th of the total weight — the pure-gold yield from a small lot can be too little to cover a refiner\'s processing cost. Many refiners set a minimum lot weight (commonly somewhere in the 5-10 gram range of gold-filled material, varying by refiner) before they\'ll accept it at all, and some general pawn shops decline gold-filled entirely since it doesn\'t respond to a standard karat acid test the way solid gold does. If you have a small amount, it\'s often worth combining multiple gold-filled pieces into one lot, or checking with a refiner\'s posted minimum before mailing anything in.',
+  faq: [
+    { q: 'Is gold-filled the same as gold-plated?', a: 'No — gold-filled has a much thicker, mechanically bonded layer of karat gold (typically 1/20th or 1/40th of total weight) versus gold-plated, which is an electroplated coating often far thinner than 0.5 microns and usually not worth melting down at all.' },
+    { q: 'What does "14K/20" stamped on jewelry mean?', a: 'It means the item is gold-filled with a 14K gold layer making up 1/20th (5%) of the total weight — the number before the slash is the karat of the gold layer, and the number after is the fraction (as 1/x) of total weight that layer represents.' },
+    { q: 'Will a pawn shop buy my gold-filled jewelry?', a: 'Some will, often at a lower price than they\'d quote confidently on solid gold, since gold-filled doesn\'t respond to a simple acid test the way solid karat gold does and requires knowing the actual GF ratio to value correctly. A dedicated refiner that explicitly lists gold-filled processing is usually a better bet for anything beyond a token amount.' },
+    { q: 'How do I find the GF ratio on my jewelry?', a: 'Look for a stamp like "14K/20", "1/20 12K GF", or just "GF" — if there\'s no visible ratio stamped, a jeweler or refiner can often identify it, but don\'t assume a default ratio without checking, since 1/10, 1/12, 1/20 and 1/40 are all common and give very different melt values for the same weight.' },
+  ],
+};
+
+// White gold and yellow gold at the same karat have identical melt value — the color comes
+// from alloy metals (nickel/palladium) or a rhodium plating, neither of which adds gold content.
+// This page exists because "white gold scrap value" is searched separately from generic scrap
+// gold calculators, and users searching it often don't know the rhodium-plating fact, which is
+// the actual content gap this page fills (not a different formula from scrap-gold-calculator).
+const WHITE_GOLD_KARATS = ['10k', '14k', '18k'];
+const WHITE_GOLD_PAGE = {
+  slug: 'white-gold-scrap-value',
+  title: 'White Gold Scrap Value Calculator — Melt Value by Karat (USD)',
+  metaDesc: 'Calculate the scrap/melt value of white gold jewelry by weight and karat. White gold has the same melt value as yellow gold at the same karat — live USD price.',
+  keywords: 'white gold scrap value, white gold value calculator, white gold price per gram, is white gold worth less than yellow gold',
+  h1: 'White Gold Scrap Value Calculator',
+  intro: 'White gold sells for the same melt value as yellow gold at the same karat — the white color comes from alloy metals or a rhodium plating, neither of which adds to (or subtracts from) the actual gold content. Enter your item\'s weight and karat for the melt value at today\'s live price.',
+  angleTitle: 'Rhodium Plating Adds Shine, Not Value',
+  angleBody: 'A lot of white gold jewelry is finished with a thin rhodium plating for extra shine and a whiter tone — but rhodium plating is a surface coating so thin it contributes essentially nothing to scrap value, and it wears off with years of daily wear regardless. When a buyer melts down a white gold piece, they\'re paying for the karat gold underneath the plating (and the nickel or palladium alloy mixed into it) — at the same 10K/14K/18K melt value as an identical-karat yellow gold piece, not a premium or discount for being "white."',
+  faq: [
+    { q: 'Is white gold worth less than yellow gold?', a: 'No — at the same karat, white gold and yellow gold have identical melt value. The alloy metals that make gold appear white (nickel or palladium, sometimes with a rhodium plating) don\'t add or subtract gold content, they just change color.' },
+    { q: 'Does rhodium plating add value when selling white gold?', a: 'No. Rhodium plating is a thin cosmetic coating, not a meaningful amount of precious metal — a buyer melting the piece down is paying for the karat gold underneath, not the plating.' },
+    { q: 'Why is white gold jewelry sometimes more expensive to buy than yellow gold?', a: 'That premium (when it exists) is usually a manufacturing/finishing cost — rhodium plating, alloy processing — not a difference in scrap or melt value. On the selling side, both are valued the same way: weight × karat × the live gold price.' },
+  ],
+};
+
+// Dental gold is NOT a clean karat like jewelry — it's typically an alloy with palladium,
+// platinum or silver mixed in at proportions that vary by manufacturer and product line, and
+// there's no universal "dental karat" standard the way there is for jewelry hallmarks. A plain
+// weight × pricePerGram[karat] calculation reads as more precise than it actually is, so this
+// page leads with a disclaimer rather than a confident single number — see plan review note on
+// YMYL-adjacent estimates. Deliberately lighter on prose than gold-filled/white-gold: the karat
+// dropdown here is a nominal estimate, not a verified figure, so there's less to responsibly say.
+const DENTAL_PRESETS = {
+  crown: { label: 'Crown', weightRangeG: [2, 5], midpointG: 3.5 },
+  bridge: { label: 'Bridge (per unit)', weightRangeG: [2, 5], midpointG: 3.5 },
+  fullBridge: { label: 'Full Bridge (multiple units)', weightRangeG: [6, 15], midpointG: 10 },
+  inlay: { label: 'Inlay / Onlay', weightRangeG: [1, 3], midpointG: 2 },
+};
+const DENTAL_GOLD_KARATS = ['10k', '14k'];
+const DENTAL_GOLD_PAGE = {
+  slug: 'dental-gold-value-calculator',
+  title: 'Dental Gold Value Calculator — Crown & Bridge Estimate (USD)',
+  metaDesc: 'Estimate what a gold crown, bridge or inlay might be worth — with the disclaimer this deserves: dental gold is an alloy, and an exact value needs an assay, not just a karat guess.',
+  keywords: 'dental gold value calculator, dental gold value, how much is a gold crown worth, gold crown melt value',
+  h1: 'Dental Gold Value Calculator',
+  intro: 'This gives a rough, high-end estimate only — dental gold is typically an alloy (often with palladium, platinum or silver mixed in) rather than a clean, verified karat. Treat the number below as a starting point, not a figure to sell against.',
+  faq: [
+    { q: 'Is dental gold the same as jewelry gold?', a: 'No — dental gold is usually an alloy formulated for durability and biocompatibility in the mouth, often containing palladium, platinum or silver alongside the gold, and there\'s no single universal "dental karat" standard the way there is for jewelry hallmarks. A karat-only calculation is a rough estimate, not an exact figure.' },
+    { q: 'How much is a gold crown worth?', a: 'It depends heavily on the specific alloy, which this calculator cannot see — a rough estimate using nominal karat and weight might put a typical 2-5 gram crown in a modest range, but the presence of palladium (which has its own separate value, sometimes significant) or other alloy metals can meaningfully change that. A refiner\'s assay is the only way to get an exact figure.' },
+    { q: 'What is an assay and do I need one?', a: 'An assay is a lab test (often XRF, X-ray fluorescence) that determines the exact metal composition of an item rather than assuming it. For dental gold specifically, an assay is worth getting before selling anything beyond a token amount, since the alloy composition can swing the real value well above or below a karat-only estimate.' },
+    { q: 'Do dentists or dental labs buy back gold crowns?', a: 'Some do, and dedicated dental-gold refiners exist specifically for this — both are often better positioned to assay the actual alloy than a general pawn shop or jewelry buyer, who may default to a conservative karat-only offer precisely because they can\'t verify the palladium/platinum content on the spot.' },
+  ],
+};
+
+// Pawn shops pay two structurally different things depending on transaction type — a
+// short-term LOAN (item held as collateral, you can redeem it) pays far less than a
+// DIRECT SALE (item sold outright), because a loan carries repossession/resale risk the
+// pawnbroker prices in. Conflating the two into one number is the actual content gap here,
+// distinct from CASH_PAGE's single-discount-factor framing.
+const PAWN_SHOP_PAGE = {
+  slug: 'pawn-shop-gold-price',
+  title: 'Pawn Shop Gold Price Calculator — Loan vs. Sale Estimate (USD)',
+  metaDesc: 'Pawn shops pay two different amounts for gold: a pawn loan (collateral, redeemable) and a direct sale (outright). Estimate both ranges at today\'s live price.',
+  keywords: 'pawn shop gold price, how much do pawn shops pay for gold, pawn shop gold calculator, pawn shop gold loan',
+  h1: 'Pawn Shop Gold Price Calculator',
+  intro: 'A pawn shop doesn\'t pay one number for gold — a pawn loan (you get cash now, the item is collateral, you can redeem it later) and a direct sale (you hand it over outright) are priced very differently. Enter your weight and karat to see both estimated ranges.',
+  angleTitle: 'Why a Pawn Loan Pays Less Than an Outright Sale',
+  angleBody: 'When a pawn shop makes you a loan against gold jewelry, they\'re taking on the risk that you don\'t come back to repay it — if that happens, they have to resell the item themselves, at their own cost and effort. That risk is why pawn loan offers commonly land around 40-60% of melt value, well below the 70-85% range typical of an outright direct sale, where the shop is buying the gold once and reselling or refining it with no repossession risk to price in. If you don\'t need the item back, a direct sale (to the same pawn shop, a dedicated gold buyer, or a refiner) will generally net more than pawning it.',
+  faq: [
+    { q: 'How much do pawn shops pay for gold?', a: 'It depends on the transaction type: a pawn loan (collateral, redeemable) typically runs 40-60% of the item\'s melt value, while an outright direct sale typically runs 70-85% of melt value. Both are estimates — actual offers vary by shop, karat, and local competition.' },
+    { q: 'Is a pawn loan or a direct sale better for gold?', a: 'If you want the item back and can repay the loan, a pawn loan preserves that option, though at a lower payout. If you don\'t need the item back, a direct sale (to the same pawn shop, a dedicated gold buyer, or a refiner) typically nets more cash for the same piece.' },
+    { q: 'Why do pawn shops pay less than a jewelry store buy-back?', a: 'It varies by shop, but general pawn shops sometimes offer less than a dedicated gold-buying service or refiner because gold is one of many categories they handle, versus a business built specifically around precious metals. Comparing at least one of each before selling is worth the extra few minutes.' },
+  ],
+};
+
+// Pure content, no live price dependency — troy oz (31.1035g) vs the everyday avoirdupois
+// ounce (28.3495g) is a unit-definition question, unrelated to spot price. NOT added to
+// site.config.json's "pages" array (no GOLD_DATA marker on this page) — the mini-converter
+// below must be self-contained unit math only, never window.GOLD_DATA.
+const TROY_OUNCE_PAGE = {
+  slug: 'troy-ounce-vs-ounce',
+  title: 'Troy Ounce vs. Ounce — What\'s the Difference? (Gold Weight Explained)',
+  metaDesc: 'A troy ounce (31.1035g) is not the same as a regular ounce (28.3495g) — about 9.7% heavier. Why gold uses troy ounces, plus a quick converter.',
+  keywords: 'troy ounce vs ounce, troy ounce gold, what is a troy ounce, ounce vs troy ounce difference',
+  h1: 'Troy Ounce vs. Ounce — What\'s the Difference?',
+  intro: 'If you\'ve seen gold priced "per ounce" and wondered whether that\'s the same ounce as everything else, it isn\'t. A troy ounce (31.1035g) is about 9.7% heavier than the everyday avoirdupois ounce (28.3495g) used for groceries or body weight — and every gold, silver and platinum price you\'ll see quoted uses the troy ounce.',
+  faq: [
+    { q: 'How many grams are in a troy ounce?', a: 'A troy ounce is 31.1035 grams — heavier than the 28.3495-gram avoirdupois ("regular") ounce used for everyday items like food or body weight.' },
+    { q: 'Why does gold use troy ounces instead of regular ounces?', a: 'The troy ounce is a centuries-old unit from medieval European bullion trading that became the international standard for precious metals — gold, silver, platinum and palladium are all quoted in troy ounces by convention, not regular avoirdupois ounces.' },
+    { q: 'If I see "$/oz" for gold, is that a troy ounce?', a: 'Yes — in the precious metals and bullion industry, "oz" or "ounce" without further qualification means troy ounce by default. This is different from most other contexts (food, shipping, body weight), where "ounce" means the avoirdupois ounce instead.' },
+    { q: 'Is a troy pound the same ratio as a troy ounce?', a: 'No — a troy pound is 12 troy ounces (not 16, like an avoirdupois pound), which is why gold weight is almost always discussed in ounces or grams rather than pounds, to avoid that extra layer of confusion.' },
+  ],
+};
+
+// Pure content, no live price dependency, no GOLD_DATA marker.
+const GOLD_REAL_TEST_PAGE = {
+  slug: 'how-to-tell-if-gold-is-real',
+  title: 'How to Tell If Gold Is Real — 5 Tests You Can Do at Home',
+  metaDesc: 'Hallmark check, magnet test, water/density test, skin-discoloration check, and when to get professional XRF testing — how to tell if gold is real before you sell or buy.',
+  keywords: 'how to tell if gold is real, how to test gold at home, is my gold real, fake gold test',
+  h1: 'How to Tell If Gold Is Real',
+  intro: 'None of the tests below are a substitute for professional testing if real money is on the line — but they\'re a fast, free first check before you decide whether a piece is worth a jeweler\'s time (or your own, before you sell it).',
+  faq: [
+    { q: 'What is the most reliable at-home gold test?', a: 'The magnet test is the quickest reliable first filter — real gold is not magnetic, so if a piece sticks to a strong magnet, it\'s not solid gold (though passing the magnet test alone doesn\'t confirm authenticity, since some fakes also use non-magnetic base metals). Combining it with a hallmark check and the water test gives a more confident read, but none of these replace professional XRF testing for anything valuable.' },
+    { q: 'Does a hallmark stamp guarantee gold is real?', a: 'No — a hallmark (like "14K" or "585") is a strong signal but not proof, since a fraudulent stamp can be applied to a fake or gold-plated piece just as easily as a genuine one. Treat a hallmark as one data point, not a final answer.' },
+    { q: 'Can gold cause skin discoloration?', a: 'Real solid gold generally does not cause green or black skin marks. That discoloration usually comes from base metals (often copper) in an alloy or plating reacting with sweat and skin chemistry — so if a piece is leaving marks, it\'s worth checking further, though this alone isn\'t conclusive since alloy gold can still be genuine gold at a lower karat.' },
+    { q: 'What is XRF testing?', a: 'X-ray fluorescence (XRF) testing is the professional-grade method jewelers and refiners use to determine an item\'s exact metal composition non-destructively — it\'s the closest thing to a definitive answer, and worth the (usually small or free) cost before a significant sale or purchase.' },
+  ],
+};
+
 const HISTORY_PAGE = {
   slug: 'gold-price-history',
   title: 'Gold Price History — Live Chart & Data Per Gram (USD)',
@@ -362,6 +499,33 @@ function relatedKaratLinks(excludeKey) {
     return `<a class="link-card" href="/${c.slug}/"><div class="t">${c.label} Gold</div><div class="sub">Stamped ${c.hallmark}</div></a>`;
   }).join('\n    ');
 }
+
+// Central link-card registry — a page registers its title/sub once here, and any other
+// buildXPage() can pull a consistent card via linkCard()/linkCards() instead of hand-typing
+// the anchor HTML again. NOT a full site-wide nav refactor (existing pages outside this batch
+// keep their hardcoded "Other Pages" grids) — this exists so the 6 new pages added in this
+// batch, plus the handful of existing pages they cross-link with, don't each need their own
+// copy-pasted <a class="link-card"> markup, and so the next batch of pages has somewhere to
+// register instead of repeating this problem.
+const PAGE_REGISTRY = {
+  'gold-filled-value-calculator': { title: 'Gold-Filled Value Calculator', sub: 'GF layer ratio, not a solid karat' },
+  'white-gold-scrap-value':       { title: 'White Gold Scrap Value', sub: 'Same melt value as yellow gold' },
+  'dental-gold-value-calculator': { title: 'Dental Gold Value', sub: 'Alloy — estimate only' },
+  'pawn-shop-gold-price':         { title: 'Pawn Shop Gold Price', sub: 'Loan vs. direct-sale range' },
+  'troy-ounce-vs-ounce':          { title: 'Troy Ounce vs. Ounce', sub: 'Unit conversion explained' },
+  'how-to-tell-if-gold-is-real':  { title: 'Is My Gold Real?', sub: 'Hallmark, magnet &amp; water tests' },
+  'scrap-gold-calculator':        { title: 'Scrap Gold Calculator', sub: 'Mixed lot, multiple items' },
+  'cash-for-gold-price-per-gram': { title: 'Cash for Gold', sub: 'Single item, buyer estimate' },
+  'gold-price-per-ounce':         { title: 'Gold Price Per Ounce', sub: 'Troy ounce, bullion standard' },
+  'gold-jewelry-value-calculator':{ title: 'Jewelry Value Calculator', sub: 'Ring, chain &amp; bracelet presets' },
+  'methodology':                  { title: 'Methodology', sub: 'Data source &amp; formula' },
+};
+function linkCard(slug) {
+  const p = PAGE_REGISTRY[slug];
+  if (!p) throw new Error('linkCard: unregistered slug "' + slug + '" — add it to PAGE_REGISTRY first.');
+  return `<a class="link-card" href="/${slug}/"><div class="t">${p.title}</div><div class="sub">${p.sub}</div></a>`;
+}
+function linkCards(slugs) { return slugs.map(linkCard).join('\n    '); }
 
 function hreflangTags(karatKey) {
   const ukPath = karatKey ? UK_HREFLANG_PATH[karatKey] : '';
@@ -843,6 +1007,7 @@ ${siteBanner()}
     <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+    ${linkCards(['pawn-shop-gold-price'])}
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>
@@ -1388,6 +1553,7 @@ ${siteBanner()}
     <a class="link-card" href="/gold-jewelry-value-calculator/"><div class="t">Jewelry Value Calculator</div><div class="sub">Ring, chain &amp; bracelet presets</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+    ${linkCards(['gold-filled-value-calculator', 'white-gold-scrap-value', 'dental-gold-value-calculator'])}
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>
@@ -1467,6 +1633,848 @@ refreshBanner();
 addRow('14k', 10, 'g');
 addRow('10k', 5, 'dwt');
 </script>
+</body>
+</html>
+`;
+}
+
+function buildGoldFilledPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Gold-Filled Value Calculator (USD)",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const ratioKeys = Object.keys(GF_RATIOS);
+  const ratioOptions = ratioKeys.map(k => `<option value="${k}"${k === '1/20' ? ' selected' : ''}>${GF_RATIOS[k].label}</option>`).join('\n          ');
+  const karatOptions = ['10k', '14k'].map(k => `<option value="${k}"${k === '14k' ? ' selected' : ''}>${KARATS[k].label} Gold layer — ${KARATS[k].hallmark}</option>`).join('\n          ');
+  const ratioDataJs = JSON.stringify(GF_RATIOS);
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">🧮 GF layer ratio, not a solid karat</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Total weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="10" placeholder="e.g. 10">
+      </div>
+      <div class="form-group">
+        <label>Gold-filled ratio (stamped on item)</label>
+        <select id="ratio">
+          ${ratioOptions}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Karat of the gold layer</label>
+        <select id="purity">
+          ${karatOptions}
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Melt Value →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Estimated melt value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-fineGrams"></div><div class="sl">Fine gold content (g)</div></div>
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Layer $/gram</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Only the fine-gold layer has scrap value — the base metal underneath (usually brass) does not. Not a buyer quote.</p>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">${page.angleTitle}</h2>
+  <p>${page.angleBody}</p>
+
+  <h2 class="st">Common Gold-Filled Ratios</h2>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Ratio</th><th style="padding:10px 14px;text-align:left;">Fine gold fraction</th></tr></thead>
+    <tbody>
+      ${ratioKeys.map(k => `<tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${GF_RATIOS[k].label}</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">${(GF_RATIOS[k].fraction * 100).toFixed(1)}%</td></tr>`).join('\n      ')}
+    </tbody>
+  </table>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(['scrap-gold-calculator', 'white-gold-scrap-value', 'cash-for-gold-price-per-gram', 'methodology'])}
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Melt values use an indicative live rate (spot × FX) and the GF ratio you select, not a lab-verified test — always confirm with a buyer before selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const GF_RATIOS = ${ratioDataJs};
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const ratioKey = document.getElementById('ratio').value;
+  const purity = document.getElementById('purity').value;
+  const fraction = GF_RATIOS[ratioKey].fraction;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  const fineGrams = grams * fraction;
+  const value = fineGrams * perGram;
+  document.getElementById('r-total').textContent = fmtUSD(value);
+  document.getElementById('r-sub').textContent = grams+'g total · '+ratioKey+' · '+purity.toUpperCase()+' layer';
+  document.getElementById('r-fineGrams').textContent = fineGrams.toFixed(3)+'g';
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+</script>
+</body>
+</html>
+`;
+}
+
+function buildWhiteGoldPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "White Gold Scrap Value Calculator (USD)",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const karatOptions = WHITE_GOLD_KARATS.map(k => `<option value="${k}"${k === '14k' ? ' selected' : ''}>${KARATS[k].label} White Gold — ${KARATS[k].hallmark}</option>`).join('\n          ');
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">⚪ Same melt value as yellow gold</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="10" placeholder="e.g. 10">
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          ${karatOptions}
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Melt Value →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Melt value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="buyer-range">
+        <div class="brl">Typical buyer-offer range (est. 70–85% of melt value)</div>
+        <div class="brv" id="r-range"></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Same formula as yellow gold at the same karat — rhodium plating and alloy color add no scrap value. Not a buyer quote.</p>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">${page.angleTitle}</h2>
+  <p>${page.angleBody}</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(['scrap-gold-calculator', 'gold-filled-value-calculator', 'cash-for-gold-price-per-gram', 'methodology'])}
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Melt values use an indicative live rate (spot × FX). The buyer-offer range is a general industry estimate, not a dealer quote — always confirm with a buyer before selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  const total = grams * perGram;
+  document.getElementById('r-total').textContent = fmtUSD(total);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity.toUpperCase()+' white gold';
+  document.getElementById('r-range').textContent = fmtUSD(total * 0.70) + ' – ' + fmtUSD(total * 0.85);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+</script>
+</body>
+</html>
+`;
+}
+
+function buildDentalGoldPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Dental Gold Value Calculator (USD)",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const presetKeys = Object.keys(DENTAL_PRESETS);
+  const presetOptions = presetKeys.map(k => `<option value="${k}">${DENTAL_PRESETS[k].label}</option>`).join('\n          ');
+  const karatOptions = DENTAL_GOLD_KARATS.map(k => `<option value="${k}">${KARATS[k].label} (nominal) — ${KARATS[k].hallmark}</option>`).join('\n          ');
+  const presetDataJs = JSON.stringify(DENTAL_PRESETS);
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}.assay-warn{background:#fff3cd;border:1px solid #f0c94a;color:#5c4a00;border-radius:8px;padding:14px 16px;font-size:.86rem;margin-bottom:18px;line-height:1.6;}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">⚠ Rough estimate only — alloy, not a clean karat</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="assay-warn">This is a <strong>high-end estimate</strong> based on nominal karat only. Dental gold is an alloy — it often contains palladium, platinum or silver, which this calculator cannot see. Get a refiner's assay (XRF test) before selling anything beyond a token amount.</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Item type</label>
+        <select id="item" onchange="applyPreset()">
+          ${presetOptions}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="${DENTAL_PRESETS[presetKeys[0]].midpointG}" placeholder="e.g. 3.5">
+        <span style="font-size:.76rem;color:var(--muted);" id="rangeCaption"></span>
+      </div>
+      <div class="form-group">
+        <label>Nominal karat</label>
+        <select id="purity">
+          ${karatOptions}
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Estimate Value →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Rough estimate (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="buyer-range">
+        <div class="brl">Typical buyer-offer range (est. 70–85% of this estimate)</div>
+        <div class="brv" id="r-range"></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">This is a nominal-karat estimate, not an assay result. Palladium or other alloy content can meaningfully change the real value up or down.</p>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">Why This Is an Estimate, Not a Quote</h2>
+  <p>Jewelry gold has a hallmark you can generally trust (14K, 18K, and so on). Dental gold usually doesn't work that way — dental alloys are formulated for strength and biocompatibility in the mouth, and manufacturers mix in palladium, platinum or silver in proportions that vary by product line, with no single universal "dental karat" standard. The number above assumes your item is the nominal karat you selected with no other alloy considered — a refiner's assay (XRF test) is the only way to get an exact figure, and is worth getting before selling anything beyond a token amount.</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(['scrap-gold-calculator', 'pawn-shop-gold-price', 'how-to-tell-if-gold-is-real', 'methodology'])}
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">This is a rough, nominal-karat estimate, not an assay result or dealer quote. Dental gold is an alloy — get a professional assay before selling anything beyond a token amount.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const PRESETS = ${presetDataJs};
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function applyPreset(){
+  const key = document.getElementById('item').value;
+  const p = PRESETS[key];
+  document.getElementById('wGrams').value = p.midpointG;
+  document.getElementById('rangeCaption').textContent = 'Typical range: ' + p.weightRangeG[0] + '–' + p.weightRangeG[1] + 'g — weigh the actual piece for an accurate estimate.';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  const itemLabel = document.getElementById('item').selectedOptions[0].text;
+  const total = grams * perGram;
+  document.getElementById('r-total').textContent = fmtUSD(total);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity.toUpperCase()+' nominal · '+itemLabel;
+  document.getElementById('r-range').textContent = fmtUSD(total * 0.70) + ' – ' + fmtUSD(total * 0.85);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+applyPreset();
+</script>
+</body>
+</html>
+`;
+}
+
+function buildPawnShopPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      "name": "Pawn Shop Gold Price Calculator (USD)",
+      "url": "${SITE_URL}/${page.slug}/",
+      "description": "${page.metaDesc}",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  const options = KARAT_KEYS.map(k => `<option value="${k}">${KARATS[k].label} Gold — ${KARATS[k].hallmark}</option>`).join('\n          ');
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+<!-- START_PRICE_DATA -->
+<script>window.GOLD_DATA = ${JSON.stringify(require('./gold-data.json'))};</script>
+<!-- END_PRICE_DATA -->
+
+${jsonLd}
+${SHARED_STYLE}
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}.two-range{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;}@media (max-width:480px){.two-range{grid-template-columns:1fr;}}.two-range .buyer-range{margin-top:0;}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">💰 Loan vs. direct sale — two different numbers</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="10" placeholder="e.g. 10">
+      </div>
+      <div class="form-group">
+        <label>Karat</label>
+        <select id="purity">
+          ${options}
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Estimate Pawn Shop Offer →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Melt value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="two-range">
+        <div class="buyer-range">
+          <div class="brl">Pawn loan estimate (40–60%)</div>
+          <div class="brv" id="r-loan"></div>
+        </div>
+        <div class="buyer-range">
+          <div class="brl">Direct sale estimate (70–85%)</div>
+          <div class="brv" id="r-sale"></div>
+        </div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Both ranges are general industry estimates, not a specific pawn shop's quote — actual offers vary by shop, karat and local competition.</p>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">${page.angleTitle}</h2>
+  <p>${page.angleBody}</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(['cash-for-gold-price-per-gram', 'scrap-gold-calculator', 'dental-gold-value-calculator', 'methodology'])}
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <div class="disc">Both ranges are indicative industry estimates off the live spot rate, not a dealer or pawnbroker quote — always confirm with a specific shop before pawning or selling.</div>
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const purity = document.getElementById('purity').value;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  const total = grams * perGram;
+  document.getElementById('r-total').textContent = fmtUSD(total);
+  document.getElementById('r-sub').textContent = grams+'g · '+purity.toUpperCase()+' gold · melt value at live spot price';
+  document.getElementById('r-loan').textContent = fmtUSD(total * 0.40) + ' – ' + fmtUSD(total * 0.60);
+  document.getElementById('r-sale').textContent = fmtUSD(total * 0.70) + ' – ' + fmtUSD(total * 0.85);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+</script>
+</body>
+</html>
+`;
+}
+
+function buildTroyOuncePage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  // No GOLD_DATA marker on this page (not in site.config.json's "pages" array) — the
+  // converter below is pure unit math (troy oz <-> avoirdupois oz), no gold price involved.
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${jsonLd}
+${SHARED_STYLE}
+<style>.convert-row{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;max-width:460px;margin:24px auto;}@media (max-width:480px){.convert-row{grid-template-columns:1fr;}.convert-row .arrow{text-align:center;}}</style>
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">⚖️ Unit conversion, no price involved</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="convert-row">
+      <div class="form-group"><label>Troy ounces</label><input type="number" id="troyIn" min="0" step="0.01" value="1" oninput="fromTroy()"></div>
+      <div class="arrow">=</div>
+      <div class="form-group"><label>Regular (avoirdupois) ounces</label><input type="number" id="ozIn" min="0" step="0.01" value="1.097" oninput="fromOz()"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted);text-align:center;">Edit either field — the other updates automatically.</p>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">The Numbers</h2>
+  <div class="method">
+    <div class="code">
+<span>1 troy ounce = 31.1035 grams</span><br>
+<span>1 avoirdupois ("regular") ounce = 28.3495 grams</span><br>
+<span>1 troy ounce = 1.09714 avoirdupois ounces (about 9.7% heavier)</span>
+    </div>
+  </div>
+  <p>Grocery scales, body-weight scales and shipping labels use the avoirdupois ounce. Gold, silver, platinum and palladium prices — anywhere you see "$/oz" for a precious metal — use the troy ounce instead, a convention from medieval European bullion trading that's stuck around as the modern international standard.</p>
+
+  <h2 class="st">Why It Matters</h2>
+  <p>Mixing the two up when comparing a precious-metals price against an everyday weight (or a bullion bar's spec sheet) can lead to a meaningfully wrong value — a troy ounce is about 9.7% heavier, which is not a rounding error at any real quantity of gold. If a source doesn't specify which ounce it means for a metals weight, troy is the safe default assumption.</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(['gold-price-per-ounce', 'scrap-gold-calculator', 'how-to-tell-if-gold-is-real', 'methodology'])}
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const TROY_TO_AVDP = 1.09714;
+function fromTroy(){
+  const t = parseFloat(document.getElementById('troyIn').value) || 0;
+  document.getElementById('ozIn').value = (t * TROY_TO_AVDP).toFixed(4).replace(/0+$/,'').replace(/\\.$/,'');
+}
+function fromOz(){
+  const o = parseFloat(document.getElementById('ozIn').value) || 0;
+  document.getElementById('troyIn').value = (o / TROY_TO_AVDP).toFixed(4).replace(/0+$/,'').replace(/\\.$/,'');
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+</script>
+</body>
+</html>
+`;
+}
+
+function buildGoldRealTestPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${jsonLd}
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">🔍 5 tests, easiest to most reliable</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="content" style="padding-top:64px;">
+
+  <h2 class="st">1. Check the Hallmark</h2>
+  <p>Look for a stamp reading "24K", "18K", "14K", "10K", or a purity number like "585" (14K) or "417" (10K). This is the fastest first check — but a hallmark alone isn't proof, since a fraudulent stamp can be applied to a plated or fake piece just as easily as a genuine one. Treat it as a first data point, not a final answer.</p>
+
+  <h2 class="st">2. The Magnet Test</h2>
+  <p>Real gold is not magnetic. Hold a strong magnet near the item — if it visibly pulls or sticks, the piece contains enough ferrous (iron-based) metal that it isn't solid gold. Passing this test doesn't confirm authenticity on its own (some fakes use non-magnetic base metals like brass), but failing it is a strong sign something's wrong.</p>
+
+  <h2 class="st">3. The Water / Density Test</h2>
+  <p>Fill a glass with water and gently drop the item in. Gold is dense — a genuine piece should sink quickly and directly, not float or drift slowly down. This works best on solid items without other materials (gemstones, hollow chains) that could throw off the density.</p>
+
+  <h2 class="st">4. Skin Discoloration Check</h2>
+  <p>Genuine solid gold generally doesn't cause green or black marks on skin. That kind of discoloration is usually caused by base metals (often copper) in a lower-karat alloy or a plated layer reacting with sweat and skin chemistry — worth investigating further, though it isn't conclusive on its own since a genuine lower-karat gold alloy can still leave marks for some wearers.</p>
+
+  <h2 class="st">5. Professional XRF Testing</h2>
+  <p>X-ray fluorescence (XRF) testing is the method jewelers and refiners actually use to determine an item's exact metal composition non-destructively. For anything beyond casual curiosity — before a significant sale or purchase — this is the test worth paying for (often inexpensive or free at a refiner who wants your business), rather than relying on the at-home tests above alone.</p>
+
+  <h2 class="st">Once You've Confirmed It's Real</h2>
+  <p>If your piece checks out, the next question is usually what it's worth — our <a href="/scrap-gold-calculator/">scrap gold calculator</a> and <a href="/gold-jewelry-value-calculator/">jewelry value calculator</a> estimate melt value at today's live gold price.</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(['scrap-gold-calculator', 'gold-jewelry-value-calculator', 'dental-gold-value-calculator', 'methodology'])}
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }</script>
 </body>
 </html>
 `;
@@ -2366,7 +3374,7 @@ ${siteBanner()}
     ${relatedKaratLinks('')}
     <a class="link-card" href="/gold-price-history/"><div class="t">Price History</div><div class="sub">Chart &amp; trend</div></a>
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
-    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+    <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>${page.extraLinkSlugs ? '\n    ' + linkCards(page.extraLinkSlugs) : ''}
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>
@@ -2735,6 +3743,30 @@ console.log(`✓ ${JEWELRY_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, SCRAP_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, SCRAP_PAGE.slug, 'index.html'), buildScrapPage(SCRAP_PAGE));
 console.log(`✓ ${SCRAP_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, GOLD_FILLED_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, GOLD_FILLED_PAGE.slug, 'index.html'), buildGoldFilledPage(GOLD_FILLED_PAGE));
+console.log(`✓ ${GOLD_FILLED_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, WHITE_GOLD_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, WHITE_GOLD_PAGE.slug, 'index.html'), buildWhiteGoldPage(WHITE_GOLD_PAGE));
+console.log(`✓ ${WHITE_GOLD_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, DENTAL_GOLD_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, DENTAL_GOLD_PAGE.slug, 'index.html'), buildDentalGoldPage(DENTAL_GOLD_PAGE));
+console.log(`✓ ${DENTAL_GOLD_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, PAWN_SHOP_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, PAWN_SHOP_PAGE.slug, 'index.html'), buildPawnShopPage(PAWN_SHOP_PAGE));
+console.log(`✓ ${PAWN_SHOP_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, TROY_OUNCE_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, TROY_OUNCE_PAGE.slug, 'index.html'), buildTroyOuncePage(TROY_OUNCE_PAGE));
+console.log(`✓ ${TROY_OUNCE_PAGE.slug}/index.html`);
+
+fs.mkdirSync(path.join(ROOT, GOLD_REAL_TEST_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, GOLD_REAL_TEST_PAGE.slug, 'index.html'), buildGoldRealTestPage(GOLD_REAL_TEST_PAGE));
+console.log(`✓ ${GOLD_REAL_TEST_PAGE.slug}/index.html`);
 
 for (const city of CITIES) {
   const dir = path.join(ROOT, city.slug);

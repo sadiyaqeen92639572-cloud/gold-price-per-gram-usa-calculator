@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gold Price History — Live Chart & Data Per Gram (USD)</title>
-<meta name="description" content="Gold price history per gram in USD, charted from real live-tracked data — not a scraped estimate. See the trend, high/low and % change since tracking began.">
-<meta name="keywords" content="gold price history, gold price chart usa, gold price per gram history, gold price today vs yesterday">
-<link rel="canonical" href="https://usgoldpricepergram.com/gold-price-history/">
+<title>Gold-Filled Value Calculator — GF Scrap Value by Layer Ratio (USD)</title>
+<meta name="description" content="Estimate the melt value of gold-filled (GF) jewelry using the correct layer ratio (1/10, 1/12, 1/20, 1/40) — not a solid-karat calculation. Live USD price.">
+<meta name="keywords" content="gold filled value calculator, gold filled scrap value, gold filled calculator, GF gold value">
+<link rel="canonical" href="https://usgoldpricepergram.com/gold-filled-value-calculator/">
 <link rel="alternate" hreflang="en-US" href="https://usgoldpricepergram.com/">
 <link rel="alternate" hreflang="en-GB" href="https://goldpricepergram.co.uk/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon.png" type="image/png">
-<meta property="og:title" content="Gold Price History — Live Chart & Data Per Gram (USD)">
-<meta property="og:description" content="Gold price history per gram in USD, charted from real live-tracked data — not a scraped estimate. See the trend, high/low and % change since tracking began.">
+<meta property="og:title" content="Gold-Filled Value Calculator — GF Scrap Value by Layer Ratio (USD)">
+<meta property="og:description" content="Estimate the melt value of gold-filled (GF) jewelry using the correct layer ratio (1/10, 1/12, 1/20, 1/40) — not a solid-karat calculation. Live USD price.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://usgoldpricepergram.com/gold-price-history/">
+<meta property="og:url" content="https://usgoldpricepergram.com/gold-filled-value-calculator/">
 <meta property="og:image" content="https://usgoldpricepergram.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -30,16 +30,27 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "WebApplication",
+      "name": "Gold-Filled Value Calculator (USD)",
+      "url": "https://usgoldpricepergram.com/gold-filled-value-calculator/",
+      "description": "Estimate the melt value of gold-filled (GF) jewelry using the correct layer ratio (1/10, 1/12, 1/20, 1/40) — not a solid-karat calculation. Live USD price.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Any",
+      "inLanguage": "en-US",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    },
+    {
       "@type": "FAQPage",
       "mainEntity": [
-        { "@type": "Question", "name": "Where does this historical gold price data come from?", "acceptedAnswer": { "@type": "Answer", "text": "Every point on this chart is a real price this site fetched and published live, three times a day, since tracking began — not a scraped or reconstructed estimate. The archive grows automatically with each update, so the further back in time you look, the more of the chart is genuine recorded history." } },
-        { "@type": "Question", "name": "Why does the chart only cover a few weeks/months so far?", "acceptedAnswer": { "@type": "Answer", "text": "The tracker is actively building its own historical archive in real time rather than backfilling with third-party data of unknown accuracy. Longer ranges (6 months, 1 year, 5 years) will appear automatically as the site continues running — check the \"tracking since\" date on this page." } },
-        { "@type": "Question", "name": "How often is the gold price history updated?", "acceptedAnswer": { "@type": "Answer", "text": "A new data point is added roughly three times a day, in step with the live price refresh — see the methodology page for the exact schedule." } }
+        { "@type": "Question", "name": "Is gold-filled the same as gold-plated?", "acceptedAnswer": { "@type": "Answer", "text": "No — gold-filled has a much thicker, mechanically bonded layer of karat gold (typically 1/20th or 1/40th of total weight) versus gold-plated, which is an electroplated coating often far thinner than 0.5 microns and usually not worth melting down at all." } },
+        { "@type": "Question", "name": "What does \"14K/20\" stamped on jewelry mean?", "acceptedAnswer": { "@type": "Answer", "text": "It means the item is gold-filled with a 14K gold layer making up 1/20th (5%) of the total weight — the number before the slash is the karat of the gold layer, and the number after is the fraction (as 1/x) of total weight that layer represents." } },
+        { "@type": "Question", "name": "Will a pawn shop buy my gold-filled jewelry?", "acceptedAnswer": { "@type": "Answer", "text": "Some will, often at a lower price than they'd quote confidently on solid gold, since gold-filled doesn't respond to a simple acid test the way solid karat gold does and requires knowing the actual GF ratio to value correctly. A dedicated refiner that explicitly lists gold-filled processing is usually a better bet for anything beyond a token amount." } },
+        { "@type": "Question", "name": "How do I find the GF ratio on my jewelry?", "acceptedAnswer": { "@type": "Answer", "text": "Look for a stamp like \"14K/20\", \"1/20 12K GF\", or just \"GF\" — if there's no visible ratio stamped, a jeweler or refiner can often identify it, but don't assume a default ratio without checking, since 1/10, 1/12, 1/20 and 1/40 are all common and give very different melt values for the same weight." } }
       ]
     },
     {
       "@type": "Organization",
-      "name": "Gold Price Per Gram USA",
+      "name": "Gold Price Per Gram Calculator",
       "legalName": "Gesmine-Invest Limited",
       "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
       "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
@@ -128,7 +139,7 @@ footer a { color:#e9dcc0; }
 .weight-table td.wv { font-weight:700; color:var(--brand-dark); }
 .weight-table tr:last-child td { border-bottom:none; }
 </style>
-<style>.chart-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:24px 20px;margin:0 0 8px;box-shadow:0 8px 40px rgba(107,77,5,.10);} .chart-card svg{width:100%;height:auto;display:block;} .stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;} @media (max-width:480px){.stat-row{grid-template-columns:1fr;}} .stat-row .r-stat{background:var(--brand-light);}</style>
+<style>select{border:2px solid var(--border);border-radius:8px;padding:12px 14px;font-size:1rem;color:var(--text);background:#fff;width:100%;}select:focus{outline:none;border-color:var(--brand);}</style>
 </head>
 <body>
 
@@ -136,55 +147,89 @@ footer a { color:#e9dcc0; }
 
 <header>
   <div class="container">
-    <div class="badge">📈 Real tracked data · updated 3×/day · tracking since July 7, 2026</div>
-    <h1>Gold Price History</h1>
-    <p>The gold price per gram in the US, charted from data this site has actually recorded live — no scraped or reconstructed history.</p>
+    <div class="badge">🧮 GF layer ratio, not a solid karat</div>
+    <h1>Gold-Filled Value Calculator</h1>
+    <p>Gold-filled (GF) jewelry isn't a karat — it's a base metal with a bonded layer of karat gold, weighed as a fraction of the total piece. Pick the ratio stamped on your item (commonly "14K/20" or just "GF") and its weight for an estimate that accounts for that thin layer, not the full piece as if it were solid gold.</p>
   </div>
 </header>
 
 <div class="container">
 <div class="tool-wrapper">
-  <div class="chart-card">
-    <!-- START_HISTORY_CHART -->
-<svg viewBox="0 0 760 260" width="760" height="260" role="img" aria-label="Gold price per gram history chart from Jul 7 to Aug 25, range $128.09 to $149.88">
-  <defs><linearGradient id="hgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#a8790a" stop-opacity="0.35"/><stop offset="100%" stop-color="#a8790a" stop-opacity="0"/></linearGradient></defs>
-  <path d="M34.0,179.2 L38.6,175.6 L43.3,185.2 L47.9,187.1 L52.6,187.1 L57.2,206.5 L61.9,206.5 L66.5,202.4 L71.2,197.2 L75.8,185.8 L80.4,191.8 L85.1,191.8 L89.7,194.0 L94.4,190.3 L99.0,185.5 L103.7,185.5 L108.3,185.5 L113.0,185.5 L117.6,185.5 L122.2,188.6 L126.9,201.4 L131.5,219.2 L136.2,219.0 L140.8,214.4 L145.5,206.7 L150.1,206.7 L154.8,213.8 L159.4,207.0 L164.0,214.9 L168.7,214.4 L173.3,222.5 L178.0,223.2 L182.6,224.5 L187.3,226.0 L191.9,221.1 L196.6,217.9 L201.2,217.9 L205.8,217.9 L210.5,217.9 L215.1,217.9 L219.8,217.9 L224.4,215.7 L229.1,220.1 L233.7,216.9 L238.3,206.4 L243.0,205.0 L247.6,196.5 L252.3,189.1 L256.9,178.2 L261.6,184.0 L266.2,196.0 L270.9,207.6 L275.5,204.9 L280.1,207.6 L284.8,206.2 L289.4,206.4 L294.1,206.4 L298.7,206.4 L303.4,206.4 L308.0,206.4 L312.7,194.8 L317.3,194.8 L321.9,202.0 L326.6,195.3 L331.2,209.9 L335.9,215.2 L340.5,212.1 L345.2,203.5 L349.8,207.5 L354.5,207.5 L359.1,198.9 L363.7,197.5 L368.4,196.6 L373.0,207.1 L377.7,212.3 L382.3,212.2 L387.0,214.4 L391.6,214.4 L396.3,214.4 L400.9,214.4 L405.5,214.4 L410.2,210.2 L414.8,204.7 L419.5,209.2 L424.1,204.2 L428.8,198.9 L433.4,198.5 L438.1,173.5 L442.7,156.7 L447.3,149.3 L452.0,150.3 L456.6,146.7 L461.3,149.6 L465.9,138.9 L470.6,127.0 L475.2,128.7 L479.9,128.4 L484.5,128.4 L489.1,128.4 L493.8,128.4 L498.4,128.4 L503.1,128.4 L507.7,118.6 L512.4,126.2 L517.0,114.2 L521.7,119.1 L526.3,108.7 L530.9,118.1 L535.6,105.2 L540.2,101.5 L544.9,99.9 L549.5,114.8 L554.2,111.7 L558.8,119.5 L563.4,123.5 L568.1,113.7 L572.7,115.4 L577.4,114.6 L582.0,114.6 L586.7,114.6 L591.3,114.6 L596.0,114.6 L600.6,114.6 L605.2,114.6 L609.9,114.6 L614.5,107.3 L619.2,113.9 L623.8,104.9 L628.5,108.8 L633.1,109.9 L637.8,121.2 L642.4,123.6 L647.0,106.5 L651.7,88.9 L656.3,80.6 L661.0,88.7 L665.6,73.8 L670.3,60.2 L674.9,56.0 L679.6,45.4 L684.2,49.3 L688.8,49.3 L693.5,49.3 L698.1,49.3 L702.8,49.3 L707.4,49.3 L712.1,39.0 L716.7,34.0 L721.4,41.2 L726.0,38.1 L726.0,226 L34.0,226 Z" fill="url(#hgrad)" stroke="none"/>
-  <path d="M34.0,179.2 L38.6,175.6 L43.3,185.2 L47.9,187.1 L52.6,187.1 L57.2,206.5 L61.9,206.5 L66.5,202.4 L71.2,197.2 L75.8,185.8 L80.4,191.8 L85.1,191.8 L89.7,194.0 L94.4,190.3 L99.0,185.5 L103.7,185.5 L108.3,185.5 L113.0,185.5 L117.6,185.5 L122.2,188.6 L126.9,201.4 L131.5,219.2 L136.2,219.0 L140.8,214.4 L145.5,206.7 L150.1,206.7 L154.8,213.8 L159.4,207.0 L164.0,214.9 L168.7,214.4 L173.3,222.5 L178.0,223.2 L182.6,224.5 L187.3,226.0 L191.9,221.1 L196.6,217.9 L201.2,217.9 L205.8,217.9 L210.5,217.9 L215.1,217.9 L219.8,217.9 L224.4,215.7 L229.1,220.1 L233.7,216.9 L238.3,206.4 L243.0,205.0 L247.6,196.5 L252.3,189.1 L256.9,178.2 L261.6,184.0 L266.2,196.0 L270.9,207.6 L275.5,204.9 L280.1,207.6 L284.8,206.2 L289.4,206.4 L294.1,206.4 L298.7,206.4 L303.4,206.4 L308.0,206.4 L312.7,194.8 L317.3,194.8 L321.9,202.0 L326.6,195.3 L331.2,209.9 L335.9,215.2 L340.5,212.1 L345.2,203.5 L349.8,207.5 L354.5,207.5 L359.1,198.9 L363.7,197.5 L368.4,196.6 L373.0,207.1 L377.7,212.3 L382.3,212.2 L387.0,214.4 L391.6,214.4 L396.3,214.4 L400.9,214.4 L405.5,214.4 L410.2,210.2 L414.8,204.7 L419.5,209.2 L424.1,204.2 L428.8,198.9 L433.4,198.5 L438.1,173.5 L442.7,156.7 L447.3,149.3 L452.0,150.3 L456.6,146.7 L461.3,149.6 L465.9,138.9 L470.6,127.0 L475.2,128.7 L479.9,128.4 L484.5,128.4 L489.1,128.4 L493.8,128.4 L498.4,128.4 L503.1,128.4 L507.7,118.6 L512.4,126.2 L517.0,114.2 L521.7,119.1 L526.3,108.7 L530.9,118.1 L535.6,105.2 L540.2,101.5 L544.9,99.9 L549.5,114.8 L554.2,111.7 L558.8,119.5 L563.4,123.5 L568.1,113.7 L572.7,115.4 L577.4,114.6 L582.0,114.6 L586.7,114.6 L591.3,114.6 L596.0,114.6 L600.6,114.6 L605.2,114.6 L609.9,114.6 L614.5,107.3 L619.2,113.9 L623.8,104.9 L628.5,108.8 L633.1,109.9 L637.8,121.2 L642.4,123.6 L647.0,106.5 L651.7,88.9 L656.3,80.6 L661.0,88.7 L665.6,73.8 L670.3,60.2 L674.9,56.0 L679.6,45.4 L684.2,49.3 L688.8,49.3 L693.5,49.3 L698.1,49.3 L702.8,49.3 L707.4,49.3 L712.1,39.0 L716.7,34.0 L721.4,41.2 L726.0,38.1" fill="none" stroke="#a8790a" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
-  <text x="34" y="250" font-size="11" fill="#7a6f5c">Jul 7</text>
-  <text x="726" y="250" font-size="11" fill="#7a6f5c" text-anchor="end">Aug 25</text>
-  <text x="34" y="22" font-size="11" fill="#7a6f5c">$149.88/g</text>
-  <text x="34" y="240" font-size="11" fill="#7a6f5c">$128.09/g</text>
-</svg>
-<script>window.GOLD_HISTORY_STATS = {"min":128.09,"max":149.88,"days":49,"latest":149.41,"changeAbs":16.00999999999999,"changePct":12.001499250374806,"fromDate":"July 7, 2026","toDate":"August 25, 2026","points":150};</script>
-    <!-- END_HISTORY_CHART -->
-    <p style="font-size:.82rem;color:var(--muted);margin-top:10px;text-align:center;">24K gold price per gram, USD — tracking since July 7, 2026. This is a young, still-growing archive, not a multi-year history yet.</p>
+  <div class="tool-card">
+    <div class="refresh-line" id="refreshLine">Last refreshed: —</div>
+    <div class="fallback-banner" id="fallbackBanner">⚠ Using cached rate — live data temporarily unavailable</div>
+    <div class="form-grid" style="max-width:420px;">
+      <div class="form-group">
+        <label>Total weight (grams)</label>
+        <input type="number" id="wGrams" min="0.1" step="0.1" value="10" placeholder="e.g. 10">
+      </div>
+      <div class="form-group">
+        <label>Gold-filled ratio (stamped on item)</label>
+        <select id="ratio">
+          <option value="1/10">1/10 (10%) — "10K/10" or "GF"</option>
+          <option value="1/12">1/12 (~8.3%) — "12K/12" or "GF"</option>
+          <option value="1/20" selected>1/20 (5%) — "14K/20" (most common)</option>
+          <option value="1/40">1/40 (2.5%) — "14K/40", thinner/cheaper pieces</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Karat of the gold layer</label>
+        <select id="purity">
+          <option value="10k">10K Gold layer — 10K</option>
+          <option value="14k" selected>14K Gold layer — 14K</option>
+        </select>
+      </div>
+    </div>
+    <button class="calc-btn" onclick="calculate()">Calculate Melt Value →</button>
+
+    <div class="result" id="result">
+      <div class="result-hero">
+        <div class="rl">Estimated melt value (USD)</div>
+        <div class="ra" id="r-total"></div>
+        <div class="rs" id="r-sub"></div>
+      </div>
+      <div class="result-grid">
+        <div class="r-stat"><div class="sv" id="r-fineGrams"></div><div class="sl">Fine gold content (g)</div></div>
+        <div class="r-stat"><div class="sv" id="r-perGram"></div><div class="sl">Layer $/gram</div></div>
+      </div>
+      <p style="font-size:.76rem;color:var(--muted);margin-top:10px;text-align:center;">Only the fine-gold layer has scrap value — the base metal underneath (usually brass) does not. Not a buyer quote.</p>
+    </div>
   </div>
 </div>
 
 <div class="content">
-  <h2 class="st">Gold Price Per Gram USA — Trend Summary</h2>
-  <p>Since July 7, 2026, the live-tracked 24K gold price per gram has moved between <strong>$128.09</strong> and <strong>$149.88</strong>, a rise of 12.0% over 49 days (150 tracked data points).</p>
-  <p>Want today's exact figure instead of the trend? Use the <a href="/">live calculator</a> for the current price by karat, or the <a href="/cash-for-gold-price-per-gram/">cash-for-gold page</a> if you're pricing jewelry to sell.</p>
+  <h2 class="st">Why Most Refiners Won't Take Small Gold-Filled Lots</h2>
+  <p>Because only a thin fraction of a gold-filled piece is actual gold — often just 1/20th or 1/40th of the total weight — the pure-gold yield from a small lot can be too little to cover a refiner's processing cost. Many refiners set a minimum lot weight (commonly somewhere in the 5-10 gram range of gold-filled material, varying by refiner) before they'll accept it at all, and some general pawn shops decline gold-filled entirely since it doesn't respond to a standard karat acid test the way solid gold does. If you have a small amount, it's often worth combining multiple gold-filled pieces into one lot, or checking with a refiner's posted minimum before mailing anything in.</p>
+
+  <h2 class="st">Common Gold-Filled Ratios</h2>
+  <table style="width:100%;border-collapse:collapse;margin:18px 0;font-size:.88rem;">
+    <thead><tr style="background:var(--brand);color:#fff;"><th style="padding:10px 14px;text-align:left;">Ratio</th><th style="padding:10px 14px;text-align:left;">Fine gold fraction</th></tr></thead>
+    <tbody>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">1/10 (10%) — "10K/10" or "GF"</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">10.0%</td></tr>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">1/12 (~8.3%) — "12K/12" or "GF"</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">8.3%</td></tr>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">1/20 (5%) — "14K/20" (most common)</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">5.0%</td></tr>
+      <tr><td style="padding:10px 14px;border-bottom:1px solid var(--border);">1/40 (2.5%) — "14K/40", thinner/cheaper pieces</td><td style="padding:10px 14px;border-bottom:1px solid var(--border);">2.5%</td></tr>
+    </tbody>
+  </table>
 
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
-    <a class="link-card" href="/24k-gold-price-per-gram/"><div class="t">24K Gold</div><div class="sub">Stamped 24K</div></a>
-    <a class="link-card" href="/22k-gold-price-per-gram/"><div class="t">22K Gold</div><div class="sub">Stamped 22K</div></a>
-    <a class="link-card" href="/18k-gold-price-per-gram/"><div class="t">18K Gold</div><div class="sub">Stamped 18K</div></a>
-    <a class="link-card" href="/14k-gold-price-per-gram/"><div class="t">14K Gold</div><div class="sub">Stamped 14K</div></a>
-    <a class="link-card" href="/10k-gold-price-per-gram/"><div class="t">10K Gold</div><div class="sub">Stamped 10K</div></a>
-    <a class="link-card" href="/gold-price-per-ounce/"><div class="t">Per Troy Ounce</div><div class="sub">Bullion-unit pricing</div></a>
-    <a class="link-card" href="/gold-price-per-kg/"><div class="t">Per Kilogram</div><div class="sub">Bulk/wholesale pricing</div></a>
+    <a class="link-card" href="/scrap-gold-calculator/"><div class="t">Scrap Gold Calculator</div><div class="sub">Mixed lot, multiple items</div></a>
+    <a class="link-card" href="/white-gold-scrap-value/"><div class="t">White Gold Scrap Value</div><div class="sub">Same melt value as yellow gold</div></a>
+    <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Single item, buyer estimate</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Where does this historical gold price data come from?</button>
-    <div class="faq-a">Every point on this chart is a real price this site fetched and published live, three times a day, since tracking began — not a scraped or reconstructed estimate. The archive grows automatically with each update, so the further back in time you look, the more of the chart is genuine recorded history.</div></div>
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Why does the chart only cover a few weeks/months so far?</button>
-    <div class="faq-a">The tracker is actively building its own historical archive in real time rather than backfilling with third-party data of unknown accuracy. Longer ranges (6 months, 1 year, 5 years) will appear automatically as the site continues running — check the "tracking since" date on this page.</div></div>
-  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How often is the gold price history updated?</button>
-    <div class="faq-a">A new data point is added roughly three times a day, in step with the live price refresh — see the methodology page for the exact schedule.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Is gold-filled the same as gold-plated?</button>
+    <div class="faq-a">No — gold-filled has a much thicker, mechanically bonded layer of karat gold (typically 1/20th or 1/40th of total weight) versus gold-plated, which is an electroplated coating often far thinner than 0.5 microns and usually not worth melting down at all.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">What does "14K/20" stamped on jewelry mean?</button>
+    <div class="faq-a">It means the item is gold-filled with a 14K gold layer making up 1/20th (5%) of the total weight — the number before the slash is the karat of the gold layer, and the number after is the fraction (as 1/x) of total weight that layer represents.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">Will a pawn shop buy my gold-filled jewelry?</button>
+    <div class="faq-a">Some will, often at a lower price than they'd quote confidently on solid gold, since gold-filled doesn't respond to a simple acid test the way solid karat gold does and requires knowing the actual GF ratio to value correctly. A dedicated refiner that explicitly lists gold-filled processing is usually a better bet for anything beyond a token amount.</div></div>
+  <div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">How do I find the GF ratio on my jewelry?</button>
+    <div class="faq-a">Look for a stamp like "14K/20", "1/20 12K GF", or just "GF" — if there's no visible ratio stamped, a jeweler or refiner can often identify it, but don't assume a default ratio without checking, since 1/10, 1/12, 1/20 and 1/40 are all common and give very different melt values for the same weight.</div></div>
 </div>
 </div>
 
@@ -249,12 +294,42 @@ footer a { color:#e9dcc0; }
 
 <footer>
   <div class="container">
-    <div class="disc">Prices are an indicative live rate (spot × FX), not a dealer quote — always confirm with a buyer before selling.</div>
+    <div class="disc">Melt values use an indicative live rate (spot × FX) and the GF ratio you select, not a lab-verified test — always confirm with a buyer before selling.</div>
     <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
     <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
   </div>
 </footer>
 
-<script>function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }</script>
+<script>
+const GF_RATIOS = {"1/10":{"label":"1/10 (10%) — \"10K/10\" or \"GF\"","fraction":0.1},"1/12":{"label":"1/12 (~8.3%) — \"12K/12\" or \"GF\"","fraction":0.08333333333333333},"1/20":{"label":"1/20 (5%) — \"14K/20\" (most common)","fraction":0.05},"1/40":{"label":"1/40 (2.5%) — \"14K/40\", thinner/cheaper pieces","fraction":0.025}};
+function fmtUSD(n){ return '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function refreshBanner(){
+  const gd = window.GOLD_DATA;
+  const line = document.getElementById('refreshLine');
+  const banner = document.getElementById('fallbackBanner');
+  line.textContent = gd.lastUpdated ? 'Last refreshed: ' + new Date(gd.lastUpdated).toLocaleString('en-US', {dateStyle:'medium', timeStyle:'short'}) : 'Last refreshed: pending first update';
+  banner.style.display = gd.isFallback ? 'block' : 'none';
+}
+function calculate(){
+  const gd = window.GOLD_DATA;
+  const grams = parseFloat(document.getElementById('wGrams').value) || 0;
+  const ratioKey = document.getElementById('ratio').value;
+  const purity = document.getElementById('purity').value;
+  const fraction = GF_RATIOS[ratioKey].fraction;
+  const perGram = gd.pricePerGram[purity];
+  if(perGram == null){ alert('Live price not yet available — please check back shortly.'); return; }
+  if(grams<=0){ alert('Please enter a weight in grams.'); return; }
+  const fineGrams = grams * fraction;
+  const value = fineGrams * perGram;
+  document.getElementById('r-total').textContent = fmtUSD(value);
+  document.getElementById('r-sub').textContent = grams+'g total · '+ratioKey+' · '+purity.toUpperCase()+' layer';
+  document.getElementById('r-fineGrams').textContent = fineGrams.toFixed(3)+'g';
+  document.getElementById('r-perGram').textContent = fmtUSD(perGram);
+  document.getElementById('result').style.display='block';
+  document.getElementById('result').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+refreshBanner();
+</script>
 </body>
 </html>

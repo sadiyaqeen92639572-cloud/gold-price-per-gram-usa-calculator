@@ -40,6 +40,10 @@
     { "slug": "gold-price-per-pennyweight",      "file": "gold-price-per-pennyweight/index.html" },
     { "slug": "gold-price-per-tola",             "file": "gold-price-per-tola/index.html" },
     { "slug": "methodology",                      "file": "methodology/index.html" },
-    { "slug": "api",                              "file": "api/index.html" }
+    { "slug": "api",                              "file": "api/index.html" },
+    { "slug": "gold-filled-value-calculator",    "file": "gold-filled-value-calculator/index.html" },
+    { "slug": "white-gold-scrap-value",          "file": "white-gold-scrap-value/index.html" },
+    { "slug": "dental-gold-value-calculator",    "file": "dental-gold-value-calculator/index.html" },
+    { "slug": "pawn-shop-gold-price",            "file": "pawn-shop-gold-price/index.html" }
   ]
 }
