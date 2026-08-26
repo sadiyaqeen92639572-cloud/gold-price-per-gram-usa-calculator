@@ -130,7 +130,7 @@ const OUNCE_PAGE = {
   unitLabel: 'troy oz', unitLabelSingular: 'troy oz', unitLabelSingularCap: 'Troy Ounce',
   gramsPerUnit: CONFIG.troyOzToGrams,
   step: '0.01', defaultValue: '1',
-  extraLinkSlugs: ['troy-ounce-vs-ounce'],
+  extraLinkSlugs: ['troy-ounce-vs-ounce', 'gold-gram-converter'],
   angleTitle: 'Why Gold Is Priced Per Troy Ounce, Not a Standard Ounce',
   angleBody: 'A troy ounce (31.1035g) is heavier than the everyday avoirdupois ounce (28.35g) used for food or postage — bullion, coins and the interbank spot price are always quoted in troy ounces, a convention dating back to medieval bullion trading. If you\'re pricing a bar or an American Gold Eagle/Buffalo coin rather than jewelry, this is the unit dealers and price charts will quote.',
   faq: [
@@ -152,6 +152,7 @@ const KG_PAGE = {
   unitLabel: 'kg', unitLabelSingular: 'kg', unitLabelSingularCap: 'Kilogram',
   gramsPerUnit: 1000,
   step: '0.001', defaultValue: '1',
+  extraLinkSlugs: ['gold-gram-converter'],
   angleTitle: 'Gold Price Per Kilogram — Bulk & Bar Pricing',
   angleBody: 'A kilogram of gold is 1,000 grams — a size relevant to 1kg investment bars, or for scaling up a per-gram price to value a larger holding, estate or bulk lot without doing the multiplication by hand. Large "good delivery" bars used on COMEX/the London bullion market are around 400 troy oz (about 12.4kg), so this unit is also a useful reference point when that figure is quoted.',
   faq: [
@@ -173,6 +174,7 @@ const DWT_PAGE = {
   unitLabel: 'dwt', unitLabelSingular: 'pennyweight', unitLabelSingularCap: 'Pennyweight',
   gramsPerUnit: CONFIG.troyOzToGrams / CONFIG.dwtPerTroyOz,
   step: '0.1', defaultValue: '1',
+  extraLinkSlugs: ['gold-gram-converter'],
   angleTitle: 'Why US Pawnshops and Jewelers Weigh Gold in Pennyweight',
   angleBody: 'A pennyweight (dwt) is 1/20th of a troy ounce — about 1.555 grams — and is the everyday weighing unit at many US pawnshops and jewelry counters, where scales are often set to dwt rather than grams. If a buyer quotes you a price "per dwt" for scrap jewelry, this calculator converts that directly, so you can compare it against a per-gram or per-ounce quote from another buyer.',
   faq: [
@@ -194,6 +196,7 @@ const TOLA_PAGE = {
   unitLabel: 'tola', unitLabelSingular: 'tola', unitLabelSingularCap: 'Tola',
   gramsPerUnit: CONFIG.tolaToGrams,
   step: '0.01', defaultValue: '1',
+  extraLinkSlugs: ['gold-gram-converter'],
   angleTitle: 'The Tola — A South Asian Gold-Weight Standard, Now Priced in USD',
   angleBody: 'A tola (11.6638 grams) is the traditional unit gold is weighed and quoted in across India, Pakistan, Bangladesh, Nepal and their diaspora communities — jewelers serving South Asian-American customers in the US often price gold per tola rather than per gram or ounce, especially for bridal and 22K gold. This calculator converts the live USD per-gram price into a per-tola figure so it can be compared directly against a tola-quoted price.',
   faq: [
@@ -202,6 +205,132 @@ const TOLA_PAGE = {
     { q: 'Is tola gold usually 22K?', a: 'Very often, yes — 22K is the traditional purity for South Asian wedding and bridal gold, though tola is a unit of weight, not purity, so tola gold can be quoted at any karat.' },
   ],
 };
+
+// Pure unit-weight converter (grams/troy oz/dwt/tola/kg), no price involved — same pattern
+// as TROY_OUNCE_PAGE below, extended to all 5 units this site already prices gold in.
+// Targets "gold gram converter" / "troy ounce converter" search phrasing directly, which
+// none of the existing per-unit price pages (OUNCE_PAGE etc.) match exactly.
+const GRAM_CONVERTER_PAGE = {
+  slug: 'gold-gram-converter',
+  title: 'Gold Gram Converter — Grams, Troy Oz, DWT, Tola, Kg',
+  metaDesc: 'Convert gold weight between grams, troy ounces, pennyweight (dwt), tola and kilograms — instant, no price lookup needed.',
+  keywords: 'gold gram converter, gram to troy ounce converter, troy ounce converter, gold weight converter',
+  h1: 'Gold Gram Converter',
+  intro: 'Convert between the units gold is commonly weighed and priced in — grams, troy ounces, pennyweight (dwt), tola, and kilograms. Edit any field and the rest update instantly.',
+  faq: [
+    { q: 'How many grams are in a troy ounce?', a: 'A troy ounce is 31.1035 grams — the unit used for gold, silver and other precious metals, heavier than the everyday (avoirdupois) ounce.' },
+    { q: 'How do I convert grams to troy ounces?', a: 'Divide the gram figure by 31.1035. This converter does that instantly, alongside dwt, tola and kilogram conversions, for any of the 5 units.' },
+    { q: 'What is a pennyweight (dwt) in grams?', a: '1 pennyweight = 1/20 of a troy ounce, about 1.5552 grams — the unit many US pawnshops and jewelers use to weigh scrap gold.' },
+    { q: 'What is a tola in grams?', a: '1 tola = 11.6638 grams — the traditional gold-weight unit used across India, Pakistan, Bangladesh and Nepal.' },
+  ],
+};
+function buildGramConverterPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${jsonLd}
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">⚖️ Unit conversion, no price involved</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="tool-wrapper">
+  <div class="tool-card">
+    <div class="form-grid" style="max-width:460px;">
+      <div class="form-group"><label>Grams (g)</label><input type="number" id="uGram" min="0" step="0.01" value="1" oninput="fromUnit('uGram', 1)"></div>
+      <div class="form-group"><label>Troy Ounces</label><input type="number" id="uTroyOz" min="0" step="0.0001" value="0.03215" oninput="fromUnit('uTroyOz', ${CONFIG.troyOzToGrams})"></div>
+      <div class="form-group"><label>Pennyweight (dwt)</label><input type="number" id="uDwt" min="0" step="0.001" value="0.6430" oninput="fromUnit('uDwt', ${CONFIG.troyOzToGrams / CONFIG.dwtPerTroyOz})"></div>
+      <div class="form-group"><label>Tola</label><input type="number" id="uTola" min="0" step="0.0001" value="0.0857" oninput="fromUnit('uTola', ${CONFIG.tolaToGrams})"></div>
+      <div class="form-group"><label>Kilograms (kg)</label><input type="number" id="uKg" min="0" step="0.00001" value="0.001" oninput="fromUnit('uKg', 1000)"></div>
+    </div>
+    <p style="font-size:.8rem;color:var(--muted);text-align:center;margin-top:14px;">Edit any field — the rest update automatically.</p>
+  </div>
+</div>
+
+<div class="content">
+  <h2 class="st">Conversion Reference</h2>
+  <div class="method">
+    <div class="code">
+<span>1 troy ounce = 31.1035 grams</span><br>
+<span>1 pennyweight (dwt) = 1/20 troy oz ≈ 1.5552 grams</span><br>
+<span>1 tola = 11.6638 grams</span><br>
+<span>1 kilogram = 1,000 grams</span>
+    </div>
+  </div>
+  <p>Bullion and interbank spot prices use the troy ounce. Jewelry and scrap gold in the US are usually weighed in grams or pennyweight (dwt), while South Asian jewelers commonly quote in tola. Want the current price for a converted weight? See <a href="/gold-price-per-ounce/">gold price per ounce</a> or <a href="/">the main per-gram calculator</a>.</p>
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(['gold-price-per-ounce', 'scrap-gold-calculator', 'methodology'])}
+    <a class="link-card" href="/troy-ounce-vs-ounce/"><div class="t">Troy Ounce vs. Ounce</div><div class="sub">Troy vs. avoirdupois</div></a>
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>
+const UNIT_IDS = ['uGram', 'uTroyOz', 'uDwt', 'uTola', 'uKg'];
+const GRAMS_PER = { uGram: 1, uTroyOz: ${CONFIG.troyOzToGrams}, uDwt: ${CONFIG.troyOzToGrams / CONFIG.dwtPerTroyOz}, uTola: ${CONFIG.tolaToGrams}, uKg: 1000 };
+function fmt(n){ return (Math.round(n * 100000) / 100000).toString(); }
+function fromUnit(id, gramsPerUnit){
+  const v = parseFloat(document.getElementById(id).value) || 0;
+  const grams = v * gramsPerUnit;
+  UNIT_IDS.forEach(uid => {
+    if (uid === id) return;
+    document.getElementById(uid).value = fmt(grams / GRAMS_PER[uid]);
+  });
+}
+function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }
+</script>
+</body>
+</html>
+`;
+}
 
 // Weight ranges are broad market estimates cross-checked against multiple independent
 // jeweler/appraisal sources (see JEWELRY_PAGE's "How these presets were estimated" section
@@ -519,6 +648,7 @@ const PAGE_REGISTRY = {
   'gold-price-per-ounce':         { title: 'Gold Price Per Ounce', sub: 'Troy ounce, bullion standard' },
   'gold-jewelry-value-calculator':{ title: 'Jewelry Value Calculator', sub: 'Ring, chain &amp; bracelet presets' },
   'methodology':                  { title: 'Methodology', sub: 'Data source &amp; formula' },
+  'gold-gram-converter':          { title: 'Gold Gram Converter', sub: 'Grams, troy oz, dwt, tola, kg' },
 };
 function linkCard(slug) {
   const p = PAGE_REGISTRY[slug];
@@ -2356,7 +2486,7 @@ ${siteBanner()}
 
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
-    ${linkCards(['gold-price-per-ounce', 'scrap-gold-calculator', 'how-to-tell-if-gold-is-real', 'methodology'])}
+    ${linkCards(['gold-price-per-ounce', 'scrap-gold-calculator', 'how-to-tell-if-gold-is-real', 'methodology', 'gold-gram-converter'])}
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
   </div>
 
@@ -3815,5 +3945,9 @@ for (const unitPage of [OUNCE_PAGE, KG_PAGE, DWT_PAGE, TOLA_PAGE]) {
   fs.writeFileSync(path.join(ROOT, unitPage.slug, 'index.html'), buildUnitPage(unitPage));
   console.log(`✓ ${unitPage.slug}/index.html`);
 }
+
+fs.mkdirSync(path.join(ROOT, GRAM_CONVERTER_PAGE.slug), { recursive: true });
+fs.writeFileSync(path.join(ROOT, GRAM_CONVERTER_PAGE.slug, 'index.html'), buildGramConverterPage(GRAM_CONVERTER_PAGE));
+console.log(`✓ ${GRAM_CONVERTER_PAGE.slug}/index.html`);
 
 console.log('Done. Run update-data.js next to inject live prices.');
