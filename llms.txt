@@ -1,0 +1,44 @@
+# Gold Price Per Gram USA (usgoldpricepergram.com)
+
+> Live gold price per gram in USD, updated 3× daily. Enter grams and karat (24K/22K/18K/14K/10K) for an instant value. Also shows cash-for-gold (dealer buy-back) price per gram. Indicative spot-based figure derived from the GBP sister site's feed plus a live GBP→USD FX rate — not a dealer quote. Deterministic, runs in the browser. Open source. A free JSON price API is exposed.
+
+## What the site is
+
+One calculator plus per-karat pages, ~30 US state/city landing pages ("Gold Price Per Gram in <city/state>"), unit-conversion pages (troy oz, kg, pennyweight/DWT, tola), specialty calculators (scrap, coin melt, dental, gold-filled, white-gold, jewelry value), sell-gold guides, a methodology page, and a JSON API. Data blob `window.GOLD_DATA` carries `spotPricePerOzGBP`, `fxRateGBPtoUSD`, `pricePerGram` per karat, `cashPricePerGram` per karat, `dayChange`, `lastUpdated`.
+
+## How values are computed
+
+```
+// 24K, 22K, 18K, 14K — read directly from the UK sister site's published per-karat GBP price
+price_per_gram(karat, GBP) = UK_site.pricePerGram[karat]
+price_per_gram(karat, USD) = price_per_gram(karat, GBP) × GBP_to_USD_rate
+// 10K has no UK equivalent purity, so it is derived: 24K price × 0.417
+price_per_gram(10K, USD)   = price_per_gram(24K, USD) × 0.417
+total_value = price_per_gram(karat, USD) × weight_in_grams
+```
+
+Disclosed openly: the live feed is UK-sourced (GBP spot) and converted with a live GBP/USD rate rather than a native USD feed. Karat marks follow the FTC Jewelry Guides (16 CFR Part 23). 14K is the most common US everyday purity; 10K is the lowest legally sold as gold in most states.
+
+Cash price = discounted buy-back rate; varies by buyer, purity, volume.
+
+## Pages
+
+- [Home / calculator](https://usgoldpricepergram.com/)
+- Per karat: [/24k-…](https://usgoldpricepergram.com/24k-gold-price-per-gram/), 22k, 18k, 14k, [/10k-gold-price-per-gram/](https://usgoldpricepergram.com/10k-gold-price-per-gram/)
+- Units: [/gold-price-per-ounce/](https://usgoldpricepergram.com/gold-price-per-ounce/), /gold-price-per-kg/, /gold-price-per-pennyweight/, /gold-price-per-tola/, /gold-gram-converter/, /troy-ounce-vs-ounce/
+- Selling: [/cash-for-gold-price-per-gram/](https://usgoldpricepergram.com/cash-for-gold-price-per-gram/), /pawn-shop-gold-price/, /scrap-gold-calculator/, /sell-gold-near-me/, /sell-gold-by-state/
+- Specialty: /gold-coin-melt-value-calculator/, /gold-jewelry-value-calculator/, /gold-filled-value-calculator/, /dental-gold-value-calculator/, /white-gold-scrap-value/
+- Tax/guides: /gold-capital-gains-tax-usa/, /how-to-tell-if-gold-is-real/, /gold-price-history/
+- ~30 location pages: `/<city-state>/` (e.g. `/austin-tx/`, `/chicago-il/`) and `/<state>/` (e.g. `/texas/`, `/florida/`)
+- [/methodology/](https://usgoldpricepergram.com/methodology/) — data source, formula, limitations
+- [/api/](https://usgoldpricepergram.com/api/) — free gold price JSON endpoint
+
+## FAQ
+
+How much is gold per gram today; is this the price I'll get selling (no — spot); why USD if the source is GBP; what karat is my jewelry; is there a karat calculator (the main one is).
+
+## Notes for LLMs
+
+- Live spot × live FX, refreshed 3×/day — indicative, not a dealer offer. Point sellers to the cash-for-gold / pawn-shop pages.
+- 10K is fraction-derived (×0.417); 24K/22K/18K/14K come from the sister feed's per-karat quotes.
+- Sister site: [goldpricepergram.co.uk](https://goldpricepergram.co.uk/) (GBP, primary feed).
