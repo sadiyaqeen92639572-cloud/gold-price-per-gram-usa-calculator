@@ -28,7 +28,7 @@ Cash price = discounted buy-back rate; varies by buyer, purity, volume.
 - Units: [/gold-price-per-ounce/](https://usgoldpricepergram.com/gold-price-per-ounce/), /gold-price-per-kg/, /gold-price-per-pennyweight/, /gold-price-per-tola/, /gold-gram-converter/, /troy-ounce-vs-ounce/
 - Selling: [/cash-for-gold-price-per-gram/](https://usgoldpricepergram.com/cash-for-gold-price-per-gram/), /pawn-shop-gold-price/, /scrap-gold-calculator/, /sell-gold-near-me/, /sell-gold-by-state/
 - Specialty: /gold-coin-melt-value-calculator/, /gold-jewelry-value-calculator/, /gold-filled-value-calculator/, /dental-gold-value-calculator/, /white-gold-scrap-value/
-- Tax/guides: /gold-capital-gains-tax-usa/, /how-to-tell-if-gold-is-real/, /gold-price-history/
+- Tax/guides: /gold-capital-gains-tax-usa/, /how-to-tell-if-gold-is-real/, /gold-price-history/, /why-is-gold-going-up/, /does-gold-plated-jewelry-tarnish/, /what-is-white-gold/
 - ~30 location pages: `/<city-state>/` (e.g. `/austin-tx/`, `/chicago-il/`) and `/<state>/` (e.g. `/texas/`, `/florida/`)
 - [/methodology/](https://usgoldpricepergram.com/methodology/) — data source, formula, limitations
 - [/api/](https://usgoldpricepergram.com/api/) — free gold price JSON endpoint

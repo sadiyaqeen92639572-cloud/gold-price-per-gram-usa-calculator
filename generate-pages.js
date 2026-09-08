@@ -516,6 +516,105 @@ const GOLD_REAL_TEST_PAGE = {
   ],
 };
 
+// --- Batch of pure-content informational guides (no calculator, no live price, no
+// GOLD_DATA marker, NOT in site.config.json). All rendered by buildInfoPage(). Topics are
+// deliberately disjoint from the UK site's info batch (melting point / density / purity
+// chart) so the two properties never run duplicate content. ---
+
+const WHY_GOLD_UP_PAGE = {
+  slug: 'why-is-gold-going-up',
+  title: 'Why Is Gold Going Up? The Main Drivers of the Gold Price',
+  metaDesc: 'Gold keeps hitting records — here is why: central-bank buying, falling real interest rates, a weaker dollar and safe-haven demand. A plain-English breakdown of what moves the gold price.',
+  keywords: 'why is gold going up, what affects gold price, why is gold rising, what drives the gold price, why is gold so expensive',
+  badge: '📈 What moves the price',
+  h1: 'Why Is Gold Going Up?',
+  intro: 'Gold set a run of record highs through 2025 and 2026, and the reasons are structural rather than a single headline. Four forces do most of the work: central banks buying gold in record volume, falling real interest rates, a weaker US dollar, and steady safe-haven demand. Here is how each one pushes the price — and why each can also reverse.',
+  sections: [
+    { h2: 'The short version', html: `  <p>Gold has no yield, no earnings and no country. Its price is mostly a verdict on everything else — interest rates, the dollar, government debt and geopolitical risk. When those look shaky, money moves into gold and the price rises. Four drivers are doing most of the work right now:</p>
+  <ul style="margin:0 0 14px;padding-left:22px;">
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>Central-bank buying</strong> — official reserves have added over 1,000 tonnes a year recently, a multi-decade high.</li>
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>Falling real interest rates</strong> — when inflation-adjusted yields drop, the opportunity cost of holding gold falls with them.</li>
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>A weaker US dollar</strong> — gold is priced in dollars, so a softer dollar lifts the price.</li>
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>Safe-haven demand</strong> — conflict, debt and political uncertainty push investors toward an asset with no counterparty.</li>
+  </ul>` },
+    { h2: 'Central banks are buying gold', html: `  <p>The biggest structural change is official-sector demand. Central banks — led by China, India, Poland, Turkey and others — have been net buyers of gold at record pace since 2022, adding well over 1,000 tonnes in some years. The motive is diversification away from the US dollar and from assets that can be frozen or sanctioned: gold held in your own vaults has no counterparty and no political off-switch. This buying is also relatively price-insensitive — a central bank rebalancing its reserves keeps buying whether gold is $2,000 or $3,000 an ounce — which puts a firm floor under the market.</p>` },
+    { h2: 'Real interest rates and the Fed', html: `  <p>Gold pays no interest, so it competes with cash and government bonds. What matters is the <em>real</em> (inflation-adjusted) yield on those alternatives. When real yields are high, holding gold carries a large opportunity cost and the price tends to fall; when real yields drop toward zero or turn negative, that cost disappears and gold becomes more attractive. Expectations of Federal Reserve rate cuts — or of inflation staying above target while nominal rates hold — both lower real yields and tend to support gold. It is also why gold can fall sharply when the Fed signals higher-for-longer.</p>` },
+    { h2: 'The dollar and inflation', html: `  <p>Gold is quoted in US dollars worldwide, so the dollar's own value feeds straight into the price. When the dollar weakens against other major currencies, gold gets cheaper for non-dollar buyers and demand rises, lifting the dollar price. Over long horizons gold has roughly tracked inflation and preserved purchasing power, which is why it is called an inflation hedge — but that link is loose and slow. Over any given year or two, real yields and the dollar explain gold's moves far better than the current inflation rate does.</p>` },
+    { h2: 'Safe-haven and geopolitical demand', html: `  <p>Gold's oldest job is insurance. Wars, banking scares, sovereign-debt worries and sharp equity sell-offs tend to coincide with gold buying, because it is a liquid asset that does not depend on any government or company staying solvent. Exchange-traded funds amplify this: when investors pile into gold ETFs the funds must buy physical metal, and when sentiment reverses those flows run backwards and can pull the price down just as fast.</p>` },
+    { h2: 'What affects the gold price — the checklist', html: `  <p>Pulling it together, the recurring factors to watch are: real interest rates and Fed policy; the US dollar index; central-bank reserve buying; ETF inflows and outflows; inflation expectations (not just the headline rate); geopolitical and financial stress; and physical demand from jewellery and technology, which is smaller but sets a baseline. For the current spot-based figure by weight, use the <a href="/">live calculator</a>; for the trend over time see <a href="/gold-price-history/">gold price history</a>; and the <a href="/methodology/">methodology page</a> explains how the per-gram number is derived from the spot price.</p>` },
+  ],
+  faq: [
+    { q: 'Will gold keep going up?', a: 'No one can say. The drivers behind the current rise — central-bank buying, low real yields, a soft dollar, geopolitical risk — could persist for years or reverse within months. Gold has had long flat and falling stretches before (2013–2015, for example). Treat any confident price target with scepticism.' },
+    { q: 'Is gold a good hedge against inflation?', a: 'Over multi-decade horizons gold has roughly held its purchasing power, so in that sense yes. Over any single year or two the relationship is unreliable — gold has fallen during high-inflation periods and risen during low-inflation ones. Real interest rates and the dollar are better short-term explanations for its moves.' },
+    { q: 'Why does gold go up when the stock market falls?', a: 'In a sell-off investors move money into assets that do not depend on corporate earnings or a government staying solvent. Gold is liquid, universally accepted and has no counterparty, so it often rises — or falls less — when equities drop. The correlation is not fixed, but gold tends to be a diversifier during stress.' },
+    { q: 'What is the spot price of gold?', a: 'The spot price is the global benchmark price for immediate delivery of one troy ounce of pure gold, set continuously in the wholesale market. Every per-gram, per-karat and coin price on this site is derived from it — see the methodology page for the exact formula.' },
+    { q: 'Does gold really go up when the dollar falls?', a: 'Usually, yes. Gold is priced in US dollars, so when the dollar weakens against other currencies, gold becomes cheaper for non-dollar buyers, demand picks up, and the dollar price rises. A strengthening dollar tends to do the opposite.' },
+    { q: 'Are central banks actually buying gold?', a: 'Yes. Official-sector net purchases have run above 1,000 tonnes in several recent years — among the highest on record — driven by China, India, Poland, Turkey and others diversifying reserves away from the dollar. This is one of the main structural supports under the current price.' },
+    { q: 'Can the gold price fall?', a: 'Absolutely. Rising real interest rates, a strengthening dollar, large ETF outflows or a return of risk appetite can all push gold down, sometimes quickly. Gold is less volatile than most commodities but it is not a one-way bet.' },
+  ],
+  related: ['gold-price-history', 'gold-price-per-ounce', 'troy-ounce-vs-ounce', 'methodology'],
+};
+
+const GOLD_PLATED_TARNISH_PAGE = {
+  slug: 'does-gold-plated-jewelry-tarnish',
+  title: 'Does Gold-Plated Jewelry Tarnish? What to Expect (and Its Resale Value)',
+  metaDesc: 'Yes — gold-plated jewelry eventually tarnishes and wears through to the base metal. How long plating lasts, what speeds it up, how to slow it, and why plated pieces have almost no scrap value.',
+  keywords: 'does gold plated jewelry tarnish, does gold plated tarnish, is gold plated jewelry worth anything, gold plated vs gold filled',
+  badge: '💍 Wear, care &amp; resale',
+  h1: 'Does Gold-Plated Jewelry Tarnish?',
+  intro: 'Short answer: yes. A gold-plated piece is a thin layer of gold — usually 0.5 to 2.5 microns — bonded over a base metal such as brass or copper. That layer wears and the metal underneath oxidises, so plated jewelry dulls, discolours and eventually shows its base colour at high-contact points. Solid gold does not do this. Here is what to expect, how to slow it, and how the different "gold" finishes compare.',
+  sections: [
+    { h2: 'Why plated jewelry tarnishes', html: `  <p>The gold itself does not tarnish — pure gold is chemically inert. The problem is everything under it. Plating is measured in microns (thousandths of a millimetre), and even good-quality plating is only a few microns thick. Daily friction against skin, clothing and surfaces abrades that layer, while sweat, moisture and air reach the base metal through microscopic pores and at worn spots. Copper and brass bases oxidise and can migrate to the surface, leaving a dark or greenish film and sometimes marking your skin. Rings and bracelets wear through first because they take the most contact; earrings and pendants last longer.</p>` },
+    { h2: 'Vermeil, plated, gold-filled and solid — the difference', html: `  <p>The finishes differ mainly in how much gold sits on top and how long it lasts:</p>
+  <ul style="margin:0 0 14px;padding-left:22px;">
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>Gold-plated / gold electroplate:</strong> roughly 0.5–2.5 microns of gold over base metal. Lifespan from a few months to a couple of years of regular wear.</li>
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>Gold vermeil:</strong> plating of at least 2.5 microns over <em>sterling silver</em> rather than base metal — longer-lasting, and the substrate is itself a precious metal.</li>
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>Gold-filled:</strong> a bonded gold layer that must be at least 1/20 (5%) of total weight in the US — dozens of times thicker than plating. Often lasts decades.</li>
+    <li style="margin-bottom:6px;color:#3d3520;"><strong>Solid gold (9k–24k):</strong> gold all the way through. Does not wear off and does not tarnish; a lower karat can dull slightly from its alloy metals but polishes back.</li>
+  </ul>` },
+    { h2: 'What speeds up tarnishing', html: `  <p>Contact with water, sweat, perfume, hairspray, lotion, chlorine (pools and hot tubs) and household cleaners all accelerate wear and corrosion. So does storing pieces loose in a humid bathroom where they knock together. Taking plated jewelry off before showering, swimming, exercising and cleaning is the single biggest thing you can do to extend its life.</p>` },
+    { h2: 'How to slow it down — and replating', html: `  <p>Wipe pieces with a soft dry cloth after wearing to remove sweat and oils, store them individually in airtight bags or a lined box away from humidity, and keep them out of water. Once plating has worn through, a jeweller can re-plate most pieces for a modest fee — worthwhile for a sentimental item, rarely worth it on value grounds alone. Mild soap and water is safe for cleaning; ultrasonic cleaners and abrasive polishes strip plating faster.</p>` },
+    { h2: 'Is gold-plated jewelry worth anything?', html: `  <p>For resale or scrap, almost nothing. The recoverable gold in a plated piece is worth a fraction of a cent to a few cents — refiners generally will not process it, and buyers price plated jewelry as costume, on style and brand rather than metal content. Value lives in solid gold: the <a href="/gold-jewelry-value-calculator/">jewelry value calculator</a> and <a href="/scrap-gold-calculator/">scrap gold calculator</a> estimate melt value for solid pieces, and <a href="/gold-filled-value-calculator/">gold-filled</a> has a small but real recoverable amount. If you are not sure whether a piece is solid or plated, the checks on <a href="/how-to-tell-if-gold-is-real/">how to tell if gold is real</a> — hallmark, magnet, weight — will usually tell you.</p>` },
+  ],
+  faq: [
+    { q: 'How long before gold plating wears off?', a: 'For a ring or bracelet in daily wear, commonly a few months to about two years; earrings and pendants can look good for much longer. It depends on plating thickness, how much the piece rubs against skin and surfaces, and exposure to water, sweat and chemicals.' },
+    { q: 'Can tarnished gold-plated jewelry be cleaned?', a: 'Surface tarnish on intact plating usually comes off with a soft dry cloth or mild soap and water. Once the gold layer has actually worn through to the base metal, cleaning will not restore it — the piece needs re-plating by a jeweller.' },
+    { q: 'Does gold-filled jewelry tarnish?', a: 'It is far more resistant than plated. The bonded gold layer on gold-filled is roughly fifty times thicker than typical plating and is legally at least 5% of the item\'s weight in the US, so quality gold-filled can stay bright for decades with normal care.' },
+    { q: 'Is gold-plated jewelry worth anything for scrap?', a: 'Effectively no. The gold coating is too thin to recover economically, so refiners and gold buyers will not pay for it. Any value is as costume jewelry — brand, design and condition, not metal content.' },
+    { q: 'Does water ruin gold plating?', a: 'Water alone will not instantly ruin it, but repeated exposure — showering, swimming, washing up — speeds up wear and lets the base metal corrode. Chlorinated and salt water are worse. Take plated pieces off before contact with water.' },
+    { q: 'Can gold-plated jewelry cause green marks or a skin reaction?', a: 'Yes. As the plating wears, the base metal (often copper, sometimes nickel) reacts with sweat and can leave green or grey marks, and nickel-sensitive wearers may get a rash. Solid gold rarely causes this, though very low-karat alloys occasionally can.' },
+    { q: 'How can I tell plated from solid gold?', a: 'Check for a karat hallmark (14K, 585, 750), test with a magnet (neither sticks, but a stick means not solid gold), feel the weight (solid gold is notably heavy for its size), and look for base-metal colour showing at worn edges. XRF testing at a jeweller gives a definitive answer.' },
+  ],
+  related: ['how-to-tell-if-gold-is-real', 'gold-filled-value-calculator', 'gold-jewelry-value-calculator', 'what-is-white-gold'],
+};
+
+const WHITE_GOLD_INFO_PAGE = {
+  slug: 'what-is-white-gold',
+  title: 'What Is White Gold? Composition, Rhodium Plating and Value',
+  metaDesc: 'White gold is yellow gold alloyed with white metals (nickel or palladium) and usually finished with rhodium plating. What it is made of, why it yellows over time, how it compares to platinum, and what it is worth.',
+  keywords: 'what is white gold, what is white gold made of, white gold vs platinum, is white gold real gold, white gold value',
+  badge: '⚪ Alloy, plating &amp; value',
+  h1: 'What Is White Gold?',
+  intro: 'White gold is real gold — the same yellow metal from the ground — mixed with pale metals such as nickel, palladium or silver to neutralise its colour, then almost always coated with a thin layer of rhodium for a bright white finish. It contains exactly as much pure gold as yellow gold of the same karat. Here is what goes into it, why it turns slightly yellow over time, and how it compares with platinum.',
+  sections: [
+    { h2: 'White gold is an alloy, not a different metal', html: `  <p>Pure gold is always yellow. To make it white, refiners alloy it with white-coloured metals — historically nickel, increasingly palladium, plus silver, zinc and sometimes manganese. These metals dilute and mask the yellow. The result is a pale, slightly grey-gold colour — not the mirror-white most people picture, which is why the final step is usually a plating layer.</p>` },
+    { h2: 'What white gold is made of, by karat', html: `  <p>Karat measures pure gold content and does not change with colour. 18k white gold is 75% pure gold and 25% alloy metals; 14k is 58.5% pure gold and 41.5% alloy; 10k is 41.7% gold. The remaining percentage is where the "white" comes from — a nickel-based mix is harder and cheaper, a palladium-based mix is naturally whiter, costlier and safe for nickel-allergic wearers. A 14k white gold ring and a 14k yellow gold ring hold the identical amount of gold; only the other 41.5% differs.</p>` },
+    { h2: 'Rhodium plating — the real source of the bright white', html: `  <p>Most white gold jewelry is finished with rhodium, a rare, very hard, bright-white platinum-group metal, applied as a coating a fraction of a micron thick. Rhodium is what gives new white gold its brilliant, slightly cool shine. It wears off gradually — typically over 12 to 24 months of regular wear on a ring, longer on earrings or pendants — revealing the warmer, greyish tone of the alloy beneath. A jeweller can re-polish and re-plate for a modest fee, and many owners do it every year or two. Palladium white gold can be worn un-plated because the alloy itself is acceptably white.</p>` },
+    { h2: 'White gold vs platinum vs silver', html: `  <p>Platinum is denser, more durable, naturally white all the way through (no plating), hypoallergenic and more expensive — it develops a matte patina rather than staying mirror-bright. Sterling silver is far cheaper and whiter than un-plated white gold but soft, tarnish-prone and not ideal for holding stones long-term. White gold sits in between: harder than pure gold, lighter and cheaper than platinum, but reliant on rhodium plating to look its best. Nickel-based white gold can trigger contact dermatitis in nickel-sensitive wearers; palladium-based white gold and platinum do not.</p>` },
+    { h2: 'What white gold is worth', html: `  <p>For melt or scrap value, white gold is priced exactly like yellow gold of the same karat — on its pure gold content at the live spot price. Rhodium plating and the alloy colour add nothing recoverable. The <a href="/white-gold-scrap-value/">white gold scrap value</a> page runs that calculation, and the <a href="/14k-gold-price-per-gram/">14k</a> and <a href="/18k-gold-price-per-gram/">18k</a> per-gram pages show the current rate. To confirm a piece is solid white gold rather than rhodium-plated silver or base metal, check the karat hallmark and see <a href="/how-to-tell-if-gold-is-real/">how to tell if gold is real</a>.</p>` },
+  ],
+  faq: [
+    { q: 'Is white gold real gold?', a: 'Yes. White gold contains the same pure gold as yellow gold — 75% in 18k, 58.5% in 14k — just alloyed with white metals instead of the copper-heavy mix that keeps yellow gold yellow. The colour difference is the alloy and the rhodium finish, not the gold.' },
+    { q: 'Why is my white gold turning yellow?', a: 'The rhodium plating has worn off, exposing the natural colour of the white gold alloy underneath, which is a warm greyish tone rather than bright white. A jeweller can polish and re-plate it to restore the finish.' },
+    { q: 'How often does white gold need replating?', a: 'Typically every 12 to 24 months for a ring in regular wear, and less often for earrings or pendants that get less friction. It varies with how hard you are on the piece and your skin chemistry.' },
+    { q: 'Is white gold cheaper than yellow gold?', a: 'The gold content is worth the same at a given karat. Small retail price differences come from the alloy metals (palladium costs more than the copper in yellow gold) and the labour of rhodium plating, not from less gold.' },
+    { q: 'White gold or platinum — which is better?', a: 'Platinum is more durable, naturally white throughout, hypoallergenic and needs no plating, but it is heavier and more expensive. White gold is lighter and cheaper but needs periodic rhodium replating. Neither is "better" outright — it depends on budget and how much upkeep you want.' },
+    { q: 'Is white gold hypoallergenic?', a: 'Nickel-based white gold is not — it can cause a rash in nickel-sensitive people, roughly one in ten. Palladium-based white gold is nickel-free and safe for almost everyone; ask the jeweller which alloy a piece uses.' },
+    { q: 'How do I clean white gold?', a: 'Soak briefly in warm water with a little mild dish soap, brush gently with a soft toothbrush, rinse and pat dry with a soft cloth. Avoid chlorine, abrasive cleaners and ultrasonic machines on plated pieces. When the finish looks dull, have it professionally re-plated.' },
+  ],
+  related: ['white-gold-scrap-value', 'how-to-tell-if-gold-is-real', 'does-gold-plated-jewelry-tarnish', 'scrap-gold-calculator'],
+};
+
 const HISTORY_PAGE = {
   slug: 'gold-price-history',
   title: 'Gold Price History — Live Chart & Data Per Gram (USD)',
@@ -649,6 +748,10 @@ const PAGE_REGISTRY = {
   'gold-jewelry-value-calculator':{ title: 'Jewelry Value Calculator', sub: 'Ring, chain &amp; bracelet presets' },
   'methodology':                  { title: 'Methodology', sub: 'Data source &amp; formula' },
   'gold-gram-converter':          { title: 'Gold Gram Converter', sub: 'Grams, troy oz, dwt, tola, kg' },
+  'gold-price-history':           { title: 'Gold Price History', sub: 'Live chart &amp; trend' },
+  'why-is-gold-going-up':         { title: 'Why Is Gold Going Up?', sub: 'What drives the price' },
+  'does-gold-plated-jewelry-tarnish': { title: 'Does Gold Plating Tarnish?', sub: 'Wear, care &amp; resale value' },
+  'what-is-white-gold':           { title: 'What Is White Gold?', sub: 'Alloy, rhodium &amp; value' },
 };
 function linkCard(slug) {
   const p = PAGE_REGISTRY[slug];
@@ -2038,7 +2141,7 @@ ${siteBanner()}
 
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
-    ${linkCards(['scrap-gold-calculator', 'gold-filled-value-calculator', 'cash-for-gold-price-per-gram', 'methodology'])}
+    ${linkCards(['what-is-white-gold', 'scrap-gold-calculator', 'gold-filled-value-calculator', 'methodology'])}
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
   </div>
 
@@ -2586,7 +2689,84 @@ ${siteBanner()}
 
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
-    ${linkCards(['scrap-gold-calculator', 'gold-jewelry-value-calculator', 'dental-gold-value-calculator', 'methodology'])}
+    ${linkCards(['does-gold-plated-jewelry-tarnish', 'scrap-gold-calculator', 'gold-jewelry-value-calculator', 'methodology'])}
+    <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
+  </div>
+
+  <h2 class="st">Frequently Asked Questions</h2>
+${faqHtml(page.faq)}
+</div>
+</div>
+
+${eeatBlock()}
+
+<footer>
+  <div class="container">
+    <p><a href="/methodology/">Methodology</a> · Gold Price Per Gram USA · <a href="https://goldpricepergram.co.uk/">UK site</a></p>
+    <p style="font-size:.72rem;margin-top:8px;">Gold Price Per Gram calculators are part of Gesmine-Invest Limited, registered UK company number 14120136, registered office address at Hardy House, 269 Poynders Gardens, London, London, United Kingdom, SW4 8PQ.</p>
+  </div>
+</footer>
+
+<script>function toggleFaq(b){ b.classList.toggle('open'); b.nextElementSibling.classList.toggle('open'); }</script>
+</body>
+</html>
+`;
+}
+
+// Generic builder for the batch of pure-content informational guides (WHY_GOLD_UP_PAGE,
+// GOLD_PLATED_TARNISH_PAGE, WHITE_GOLD_INFO_PAGE). Same @graph shape as buildGoldRealTestPage:
+// FAQPage + Organization, no Article. page.sections is an array of { h2, html } blocks;
+// page.related is a list of PAGE_REGISTRY slugs; page.badge is the optional header pill text.
+function buildInfoPage(page) {
+  const jsonLd = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+${faqJsonLd(page.faq)}
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Gold Price Per Gram Calculator",
+      "legalName": "Gesmine-Invest Limited",
+      "identifier": { "@type": "PropertyValue", "propertyID": "UK Company Number", "value": "14120136" },
+      "address": { "@type": "PostalAddress", "streetAddress": "Hardy House, 269 Poynders Gardens", "addressLocality": "London", "postalCode": "SW4 8PQ", "addressCountry": "GB" }
+    }
+  ]
+}
+</script>`;
+
+  return `<!DOCTYPE html>
+<html lang="en-US">
+<head>
+${headBoilerplate(page, null)}
+
+${jsonLd}
+${SHARED_STYLE}
+</head>
+<body>
+
+${siteBanner()}
+
+<header>
+  <div class="container">
+    <div class="badge">${page.badge || '📘 Guide'}</div>
+    <h1>${page.h1}</h1>
+    <p>${page.intro}</p>
+  </div>
+</header>
+
+<div class="container">
+<div class="content" style="padding-top:64px;">
+
+${page.sections.map(s => `  <h2 class="st">${s.h2}</h2>\n${s.html}`).join('\n\n')}
+
+  <h2 class="st">Other Pages</h2>
+  <div class="link-grid">
+    ${linkCards(page.related)}
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
   </div>
 
@@ -3257,6 +3437,7 @@ ${siteBanner()}
     <a class="link-card" href="/cash-for-gold-price-per-gram/"><div class="t">Cash for Gold</div><div class="sub">Selling &amp; buyer estimate</div></a>
     <a class="link-card" href="/gold-coin-melt-value-calculator/"><div class="t">Coin Melt Value</div><div class="sub">Eagle, Krugerrand &amp; more</div></a>
     <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
+    ${linkCard('why-is-gold-going-up')}
   </div>
 </div>
 </div>
@@ -3368,6 +3549,7 @@ ${svg}
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
     ${relatedKaratLinks('')}
+    ${linkCard('why-is-gold-going-up')}
     <a class="link-card" href="/gold-price-per-ounce/"><div class="t">Per Troy Ounce</div><div class="sub">Bullion-unit pricing</div></a>
     <a class="link-card" href="/gold-price-per-kg/"><div class="t">Per Kilogram</div><div class="sub">Bulk/wholesale pricing</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
@@ -3897,6 +4079,12 @@ console.log(`✓ ${TROY_OUNCE_PAGE.slug}/index.html`);
 fs.mkdirSync(path.join(ROOT, GOLD_REAL_TEST_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, GOLD_REAL_TEST_PAGE.slug, 'index.html'), buildGoldRealTestPage(GOLD_REAL_TEST_PAGE));
 console.log(`✓ ${GOLD_REAL_TEST_PAGE.slug}/index.html`);
+
+for (const infoPage of [WHY_GOLD_UP_PAGE, GOLD_PLATED_TARNISH_PAGE, WHITE_GOLD_INFO_PAGE]) {
+  fs.mkdirSync(path.join(ROOT, infoPage.slug), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, infoPage.slug, 'index.html'), buildInfoPage(infoPage));
+  console.log(`✓ ${infoPage.slug}/index.html`);
+}
 
 for (const city of CITIES) {
   const dir = path.join(ROOT, city.slug);
