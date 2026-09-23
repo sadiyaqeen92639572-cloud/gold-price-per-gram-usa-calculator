@@ -615,6 +615,54 @@ const WHITE_GOLD_INFO_PAGE = {
   related: ['white-gold-scrap-value', 'how-to-tell-if-gold-is-real', 'does-gold-plated-jewelry-tarnish', 'scrap-gold-calculator'],
 };
 
+// Targets "best place to sell gold" / "where to sell gold" / "online gold buyers" —
+// KWE-validated cluster (best place to sell gold 4,400/mo $3.37 CPC, where to sell gold
+// 8,100/mo $2.86 CPC, online gold buyers 1,900/mo $7.87 CPC), SERP-checked Sept 2026:
+// independent review/comparison sites dominate this exact page-type, no DA90+ wall.
+// CTA links point at the site's own calculators for now — swap the "online buyer" row
+// links to CashforGoldUSA/Express Gold Cash affiliate URLs once those programs are signed
+// up for (both confirmed to run open affiliate programs, no DA90+ authority blocking this
+// page-type). Deliberately stays neutral / non-promotional in tone to match the rest of
+// the site's "does not endorse any specific business" stance until real affiliate links exist.
+const BEST_PLACE_TO_SELL_PAGE = {
+  slug: 'best-place-to-sell-gold',
+  title: 'Best Place to Sell Gold — Online Buyers vs. Local Jewelers vs. Pawn Shops',
+  metaDesc: 'Online gold buyers, local jewelers, pawn shops and coin dealers compared — payout %, speed, and when each makes sense. Get an estimate first with our free calculator.',
+  keywords: 'best place to sell gold, where to sell gold, online gold buyers, sell gold for cash',
+  badge: '⚖️ Compare your options',
+  h1: 'Best Place to Sell Gold',
+  intro: 'There is no single best place to sell gold — the right buyer depends on what you are selling, how fast you need payment, and whether you would rather have certainty or the chance of a higher offer. Here is how the four main options compare, so you can pick the right one before you get quotes.',
+  sections: [
+    { h2: 'The four main options, compared', html: `  <div class="weight-table-wrap">
+  <table class="weight-table">
+    <caption>Typical payout as % of melt value — general market ranges, not a specific buyer's quote</caption>
+    <thead><tr><th>Buyer type</th><th>Typical payout</th><th>Speed</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td>Online gold buyers (mail-in)</td><td class="wv">70–85%</td><td>3–7 days</td><td>Jewelry &amp; scrap, no local buyer nearby</td></tr>
+      <tr><td>Local jeweler / gold buyer</td><td class="wv">65–80%</td><td>Same day</td><td>Getting a quote in person, small items</td></tr>
+      <tr><td>Pawn shop (direct sale)</td><td class="wv">50–70%</td><td>Same day</td><td>Fastest cash, no shipping</td></tr>
+      <tr><td>Pawn shop (loan)</td><td class="wv">40–60%</td><td>Same day</td><td>Keeping the item, need cash short-term</td></tr>
+      <tr><td>Coin/bullion dealer</td><td class="wv">90–97%</td><td>Same day–days</td><td>Investment coins &amp; bars, not jewelry</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>These are general industry ranges, not a quote from any specific business — this page does not endorse or recommend a particular buyer. Get your item's estimated melt value first with the <a href="/scrap-gold-calculator/">scrap gold calculator</a> or <a href="/cash-for-gold-price-per-gram/">cash-for-gold estimator</a>, then compare it against whatever offer you receive.</p>` },
+    { h2: 'Online gold buyers (mail-in)', html: `  <p>Mail-in buyers send a prepaid, insured envelope or kit, you ship your gold, they test and weigh it, then send an offer you can accept or decline (with the item returned if you decline). The appeal is convenience and often a wider buyer pool than your local market, which can mean a better price than a single local shop — but you lose the ability to negotiate face-to-face or walk away with your item same-day, and payout still depends heavily on which service you use. Best for jewelry and scrap when there's no strong local buyer nearby, or when you want to compare multiple offers without visiting several shops.</p>` },
+    { h2: 'Local jewelers and gold buyers', html: `  <p>A local jeweler or dedicated gold-buying storefront tests your item on the spot (usually with acid or XRF testing), weighs it, and gives an immediate offer. You can negotiate, ask questions in person, and walk away if the offer is too low — a real advantage over mail-in. The tradeoff is a smaller pool of competing offers unless you visit several shops, and quality varies a lot by location. Always get at least two local quotes before accepting.</p>` },
+    { h2: 'Pawn shops — loan vs. direct sale', html: `  <p>Pawn shops offer two different deals that are easy to confuse: a <strong>pawn loan</strong> (they hold your item as collateral and you get it back by repaying with interest) or a <strong>direct sale</strong> (you sell outright, no buyback). Loans pay less of melt value because the shop is pricing in the risk you won't repay; direct sales pay more but you don't get the item back. See the <a href="/pawn-shop-gold-price/">pawn shop gold price</a> page for a calculator that splits out both ranges.</p>` },
+    { h2: 'Coin and bullion dealers', html: `  <p>For investment coins and bars (Gold Eagles, Krugerrands, bullion bars) rather than jewelry, a coin or bullion dealer typically pays the highest percentage of melt/spot value — often 90%+ — because the product is already in a standardized, easily-resold form with no refining needed. This is a different market from jewelry/scrap buyers; use the <a href="/gold-coin-melt-value-calculator/">coin melt value calculator</a> to check what a coin is worth before selling.</p>` },
+    { h2: 'Before you sell, whichever route you pick', html: `  <p>Get an estimate first so you know roughly what to expect — the <a href="/scrap-gold-calculator/">scrap gold calculator</a> handles mixed lots, <a href="/gold-jewelry-value-calculator/">jewelry value calculator</a> has ring/chain/bracelet presets. Confirm the item is what you think it is with <a href="/how-to-tell-if-gold-is-real/">how to tell if gold is real</a>. Then get at least two offers — ideally one online and one local — and ask each buyer for a written breakdown by karat and weight, not just a lump-sum number. A buyer unwilling to show their math is a red flag.</p>` },
+  ],
+  faq: [
+    { q: 'What is the best place to sell gold jewelry?', a: 'It depends on your priority. For the highest payout, compare at least one online mail-in buyer against a couple of local jewelers — online buyers often pay 70–85% of melt value and local shops 65–80%. For same-day cash with no shipping, a pawn shop direct sale is fastest but typically pays less (50–70%). There is no single best option; get more than one quote.' },
+    { q: 'Do online gold buyers pay more than local jewelers?', a: 'Often, but not always — online buyers typically pay 70–85% of melt value versus 65–80% locally, because they aggregate volume and compete for your business nationally rather than just against nearby shops. The gap varies a lot by which specific buyer you use, so this is a general tendency, not a guarantee.' },
+    { q: 'Is it better to sell gold to a pawn shop or a jeweler?', a: 'A pawn shop direct sale is usually fastest but pays less (50–70% of melt value); a jeweler or dedicated gold buyer often pays more (65–80%) but may take slightly longer to test and offer. If you want to keep the item and just need short-term cash, a pawn loan (not a sale) is the option — see the pawn shop gold price page.' },
+    { q: 'Should I get multiple quotes before selling gold?', a: 'Yes — payout percentages vary widely between buyer types and even between two shops of the same type, so a single quote tells you little about whether it is a good offer. Get at least two, ideally including one online buyer, and compare each against your own melt-value estimate from a calculator.' },
+    { q: 'Do coin dealers pay more than gold buyers for jewelry?', a: 'Coin and bullion dealers pay the highest percentages, but only for investment-grade coins and bars — not jewelry. Jewelry has to be melted down and refined, so it is priced by jewelry/scrap buyers, not coin dealers, regardless of how much gold it contains.' },
+  ],
+  related: ['scrap-gold-calculator', 'cash-for-gold-price-per-gram', 'pawn-shop-gold-price', 'gold-coin-melt-value-calculator', 'gold-jewelry-value-calculator', 'how-to-tell-if-gold-is-real'],
+};
+
 const HISTORY_PAGE = {
   slug: 'gold-price-history',
   title: 'Gold Price History — Live Chart & Data Per Gram (USD)',
@@ -752,6 +800,8 @@ const PAGE_REGISTRY = {
   'why-is-gold-going-up':         { title: 'Why Is Gold Going Up?', sub: 'What drives the price' },
   'does-gold-plated-jewelry-tarnish': { title: 'Does Gold Plating Tarnish?', sub: 'Wear, care &amp; resale value' },
   'what-is-white-gold':           { title: 'What Is White Gold?', sub: 'Alloy, rhodium &amp; value' },
+  'best-place-to-sell-gold':      { title: 'Best Place to Sell Gold', sub: 'Online vs. local vs. pawn shop' },
+  'gold-coin-melt-value-calculator': { title: 'Coin Melt Value', sub: 'Eagle, Krugerrand &amp; more' },
 };
 function linkCard(slug) {
   const p = PAGE_REGISTRY[slug];
@@ -1240,7 +1290,7 @@ ${siteBanner()}
     <a class="link-card" href="/sell-gold-near-me/"><div class="t">Sell Gold Near Me</div><div class="sub">By city &amp; local buyer guide</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
-    ${linkCards(['pawn-shop-gold-price'])}
+    ${linkCards(['pawn-shop-gold-price', 'best-place-to-sell-gold'])}
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>
@@ -1786,7 +1836,7 @@ ${siteBanner()}
     <a class="link-card" href="/gold-jewelry-value-calculator/"><div class="t">Jewelry Value Calculator</div><div class="sub">Ring, chain &amp; bracelet presets</div></a>
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
     <a class="link-card" href="/methodology/"><div class="t">Methodology</div><div class="sub">Data source &amp; formula</div></a>
-    ${linkCards(['gold-filled-value-calculator', 'white-gold-scrap-value', 'dental-gold-value-calculator'])}
+    ${linkCards(['gold-filled-value-calculator', 'white-gold-scrap-value', 'dental-gold-value-calculator', 'best-place-to-sell-gold'])}
   </div>
 
   <h2 class="st">Frequently Asked Questions</h2>
@@ -2465,7 +2515,7 @@ ${siteBanner()}
 
   <h2 class="st">Other Pages</h2>
   <div class="link-grid">
-    ${linkCards(['cash-for-gold-price-per-gram', 'scrap-gold-calculator', 'dental-gold-value-calculator', 'methodology'])}
+    ${linkCards(['cash-for-gold-price-per-gram', 'scrap-gold-calculator', 'dental-gold-value-calculator', 'methodology', 'best-place-to-sell-gold'])}
     <a class="link-card" href="/"><div class="t">Main Calculator</div><div class="sub">All karats in one tool</div></a>
   </div>
 
@@ -4080,7 +4130,7 @@ fs.mkdirSync(path.join(ROOT, GOLD_REAL_TEST_PAGE.slug), { recursive: true });
 fs.writeFileSync(path.join(ROOT, GOLD_REAL_TEST_PAGE.slug, 'index.html'), buildGoldRealTestPage(GOLD_REAL_TEST_PAGE));
 console.log(`✓ ${GOLD_REAL_TEST_PAGE.slug}/index.html`);
 
-for (const infoPage of [WHY_GOLD_UP_PAGE, GOLD_PLATED_TARNISH_PAGE, WHITE_GOLD_INFO_PAGE]) {
+for (const infoPage of [WHY_GOLD_UP_PAGE, GOLD_PLATED_TARNISH_PAGE, WHITE_GOLD_INFO_PAGE, BEST_PLACE_TO_SELL_PAGE]) {
   fs.mkdirSync(path.join(ROOT, infoPage.slug), { recursive: true });
   fs.writeFileSync(path.join(ROOT, infoPage.slug, 'index.html'), buildInfoPage(infoPage));
   console.log(`✓ ${infoPage.slug}/index.html`);
