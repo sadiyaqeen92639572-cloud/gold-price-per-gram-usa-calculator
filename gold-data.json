@@ -1,45 +1,45 @@
 {
-  "lastUpdated": "2026-10-14T11:04:14.518Z",
-  "fxLastUpdated": "2026-10-14T16:23:52.919Z",
-  "isFallback": true,
-  "fallbackComponent": "gold",
-  "spotPricePerOzGBP": 3139.24,
+  "lastUpdated": "2026-10-14T21:14:24.154Z",
+  "fxLastUpdated": "2026-10-14T21:14:24.154Z",
+  "isFallback": false,
+  "fallbackComponent": null,
+  "spotPricePerOzGBP": 3103.045,
   "fxRateGBPtoUSD": 1.3267,
   "pricePerGram": {
-    "24k": 133.9,
-    "22k": 122.75,
-    "18k": 100.43,
-    "14k": 78.12,
-    "10k": 55.83
+    "24k": 132.36,
+    "22k": 121.33,
+    "18k": 99.26,
+    "14k": 77.21,
+    "10k": 55.2
   },
   "cashPricePerGram": {
-    "24k": 113.82,
-    "22k": 104.34,
-    "18k": 85.37,
-    "14k": 66.4,
-    "10k": 47.46
+    "24k": 112.51,
+    "22k": 103.13,
+    "18k": 84.37,
+    "14k": 65.63,
+    "10k": 46.92
   },
-  "note": "Fallback: gold spot fetch failed (https://goldpricepergram.co.uk/gold-data.json returned HTTP 503: \n<!DOCTYPE html>\n<!--\n\nHello future GitHubber! I bet you're here to remove those nasty inline styles,\nDRY up these templates and make 'em nice and re-usable, right?\n\nPlease, don't. https://github.com/), using last known GBP spot from 2026-10-14T11:04:14.518Z with today's FX rate.",
+  "note": null,
   "dayChange": {
     "24k": {
-      "abs": -0.46,
-      "pct": -0.34
+      "abs": -1.91,
+      "pct": -1.42
     },
     "22k": {
-      "abs": -0.42,
-      "pct": -0.34
+      "abs": -1.75,
+      "pct": -1.42
     },
     "18k": {
-      "abs": -0.35,
-      "pct": -0.35
+      "abs": -1.44,
+      "pct": -1.43
     },
     "14k": {
-      "abs": -0.26,
-      "pct": -0.33
+      "abs": -1.11,
+      "pct": -1.42
     },
     "10k": {
-      "abs": -0.2,
-      "pct": -0.36
+      "abs": -0.79,
+      "pct": -1.41
     }
   }
 }
