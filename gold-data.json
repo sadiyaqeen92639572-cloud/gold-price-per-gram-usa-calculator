@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-11-14T21:55:17.903Z",
-  "fxLastUpdated": "2026-11-14T21:55:17.903Z",
+  "lastUpdated": "2026-11-15T13:21:32.133Z",
+  "fxLastUpdated": "2026-11-15T13:21:32.133Z",
   "isFallback": false,
   "fallbackComponent": null,
   "spotPricePerOzGBP": 2939.345,
@@ -22,24 +22,24 @@
   "note": null,
   "dayChange": {
     "24k": {
-      "abs": 0.16,
-      "pct": 0.13
+      "abs": 0,
+      "pct": 0
     },
     "22k": {
-      "abs": 0.15,
-      "pct": 0.13
+      "abs": 0,
+      "pct": 0
     },
     "18k": {
-      "abs": 0.12,
-      "pct": 0.13
+      "abs": 0,
+      "pct": 0
     },
     "14k": {
-      "abs": 0.09,
-      "pct": 0.12
+      "abs": 0,
+      "pct": 0
     },
     "10k": {
-      "abs": 0.06,
-      "pct": 0.12
+      "abs": 0,
+      "pct": 0
     }
   }
 }
